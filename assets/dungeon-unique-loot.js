@@ -1,11 +1,15 @@
 window.LT_DUNGEON_UNIQUE_LOOT = {
+  "sources": [
+    "https://latale.wiki.gg/wiki/Dungeons",
+    "https://latale.wiki.gg/wiki/Endgame"
+  ],
   "source": "https://latale.wiki.gg/wiki/Dungeons",
   "updated": "2026-09-15",
   "dungeons": {
     "Dragon Lair": [
       "Invoke Set"
     ],
-    "Shangri-la": [
+    "Shangri-La": [
       "Hyunmu Set"
     ],
     "Treasure Vault": [
@@ -68,6 +72,31 @@ window.LT_DUNGEON_UNIQUE_LOOT = {
     "TAID Dragon Garden": [
       "Dragon Garden Badges",
       "Dragon Garden Textbook"
+    ],
+    "Rising Dragon Temple": [
+      "Dynasty Weapons"
+    ],
+    "Hidden Cave": [
+      "Dark Wizard Badges"
+    ],
+    "Rivera City Hall": [
+      "Vigor Zekal Badge"
+    ],
+    "Ruined Palace": [
+      "Origin Armor"
+    ],
+    "Manastone Laboratory": [
+      "Elrian Weapons",
+      "Elrian's Textbook"
+    ],
+    "Challenge Choco Garden": [
+      "Sweet Mutant Potions"
+    ],
+    "Devil's Canyon": [
+      "Gallus' Badges"
+    ],
+    "Sacred Hall": [
+      "Devil Dragon Accessories"
     ],
     "Twisted Genesis": [
       "Mutant Sky Dragon's Belt"
@@ -138,7 +167,7 @@ window.LT_DUNGEON_UNIQUE_LOOT = {
       "Pharaoh's Gems",
       "Pharaoh's Charm"
     ],
-    "Champion's Memorial": [
+    "Champions' Memorial": [
       "Champion's Belt"
     ],
     "Chamber of Hell": [
@@ -239,6 +268,88 @@ window.LT_DUNGEON_UNIQUE_LOOT = {
     "Stump of Spirits": [
       "El-Larsa First Badge"
     ],
+    "Euphony of the Vanished Star": [
+      "Merlin Totem"
+    ],
+    "Twilight Cathedral": [
+      "Twilight Accessories",
+      "Modred Textbook",
+      "Ddraig Fflam Watch"
+    ],
+    "Trial of the Dark Moon": [
+      "Anshara Sticker"
+    ],
+    "Trial of the Earth": [
+      "Kishara Third Badge"
+    ],
+    "Aegir Ruins": [
+      "Gems of Divinity"
+    ],
+    "Atlas Garden": [
+      "Garden Armor",
+      "Menoeti Necklace"
+    ],
+    "Niflheim Station": [
+      "Hel Belt"
+    ],
+    "Muspelheim Tunnel": [
+      "Surtr Charm"
+    ],
+    "Moksha": [
+      "Lefica Brooch"
+    ],
+    "Tears of Nornir": [
+      "Tears Accessories",
+      "Infinity Badges"
+    ],
+    "Mushroom Swamp": [
+      "Yankas First Badge"
+    ],
+    "Gates of Lysithea": [
+      "Andreas Textbook"
+    ],
+    "Boundary of the Void": [
+      "Gnosis Totem"
+    ],
+    "Pleroma": [
+      "Pleroma Weapons",
+      "Mr. Demonic Third Badge"
+    ],
+    "Eroded Arcane Hall": [
+      "Notoria Sticker"
+    ],
+    "Pseudaria": [
+      "Sealed Gems",
+      "Sealed First Gems"
+    ],
+    "Muchkin Storage": [
+      "Bunny Bunny Belt"
+    ],
+    "Emeraldia": [
+      "Emeraldia Accessories",
+      "Dark Dragon Necklace",
+      "Dark Dragon Watch"
+    ],
+    "Helepol Fort": [
+      "Dmitrij Charm"
+    ],
+    "Trials of Iron": [
+      "Tyrhenia Brooch"
+    ],
+    "Unknown Beach": [
+      "Mutant Clawrence Badge 6"
+    ],
+    "Mare Ingenii": [
+      "Gabriella Second Badge"
+    ],
+    "Wings of Icarus": [
+      "Wings of Icarus Armor",
+      "Fredia Fourth Badge",
+      "Craft Keeper Textbook"
+    ],
+    "Justitia": [
+      "Bottle of Orange Stars"
+    ],
     "Inspirational Playground": [
       "Tireman's First Badge"
     ],
@@ -252,46 +363,8 @@ window.LT_DUNGEON_UNIQUE_LOOT = {
       "Rikimo Pelke Accessories",
       "Mirror Relic"
     ],
-    "Emeraldia": [
-      "Dark Dragon Necklace"
-    ],
-    "Wings of Icarus": [
-      "Craft Keeper Textbook",
-      "Fredia Fourth Badge"
-    ],
-    "Eroded Arcane Hall": [
-      "Notoria Sticker"
-    ],
-    "Muchkin Storage": [
-      "Bunny Bunny Belt"
-    ],
-    "Trials of Iron": [
-      "Tyrhenia Brooch"
-    ],
-    "Mushroom Swamp": [
-      "Yankas First Badge"
-    ],
-    "Mare Ingenii": [
+    "mare Ingenii": [
       "Gabriella Second Badge"
-    ],
-    "Pleroma": [
-      "Pleroma Weapons",
-      "Mr. Demonic Third Badge"
-    ],
-    "Unknown Beach": [
-      "Mutant Clawrence Badge 6"
-    ],
-    "Pseudaria": [
-      "Sealed First Gems"
-    ],
-    "Twilight Cathedral": [
-      "Twilight Accessories",
-      "Modred Textbook",
-      "Ddraig Fflam Watch"
     ]
-  },
-  "sources": [
-    "https://latale.wiki.gg/wiki/Dungeons",
-    "https://latale.wiki.gg/wiki/Endgame"
-  ]
+  }
 };

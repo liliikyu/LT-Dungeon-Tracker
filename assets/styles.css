@@ -1742,3 +1742,15 @@ html[data-theme="light"]{
 @media(max-width:760px){
   .dungeon-achievement-row{grid-template-columns:auto minmax(0,1fr) auto;}
 }
+
+/* Match Achievement + Unique Loot headings to MONSTER ILLUSTRATION */
+.dungeon-achievement-heading,
+.unique-loot-head strong{
+  color:var(--dungeon-heading-muted) !important;
+  font-size:10.5px;
+  font-weight:800;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+  opacity:1 !important;
+}
+

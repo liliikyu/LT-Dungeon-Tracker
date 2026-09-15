@@ -1773,3 +1773,30 @@ html[data-theme="light"]{
   text-transform:uppercase !important;
   opacity:1 !important;
 }
+
+/* v13.9.4.51 — prevent dungeon/field item names from clipping beside badges */
+.item-row{
+  min-width:0;
+}
+.item-row .item-main{
+  flex:1 1 0;
+  width:0;
+  min-width:0;
+  max-width:100%;
+  overflow:visible;
+}
+.item-row .item-name{
+  flex:1 1 auto;
+  min-width:0;
+  max-width:100%;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+.item-row .item-flags{
+  flex:0 0 auto;
+  min-width:max-content;
+  max-width:82px;
+}

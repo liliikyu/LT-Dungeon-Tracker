@@ -1,6 +1,6 @@
-# LaTale Dungeon Tracker — v13.9.4.64b
+# LaTale Dungeon Tracker — v13.9.4.65b
 
-### v13.9.4.64
+### v13.9.4.65
 - Removed the Fields toolbar Monster Illustration / Item Codex legend.
 - Added Soprano Snowfield to Jiendia so the current unmapped bucket can disappear.
 
@@ -10,7 +10,7 @@ Static GitHub Pages tracker with shared navigation:
 
 All three tracker pages use the same Light / Dark / System theme control and the same `?` Welcome/Help popup. Light mode uses the pink site accent; Dark mode uses blue. Semantic Illustration Book colors stay consistent: Monster Illustrations are pink and Item Codex is blue.
 
-## v13.9.4.64
+## v13.9.4.65
 
 - Restyled Dungeon Achievement sections to match the approved preview hierarchy.
 - Achievement header now shows a trophy icon, count, and Official Wiki shortcut.
@@ -38,34 +38,34 @@ Field and Dungeon completion are intentionally stored separately, even when name
 ## Fields regions
 The Fields tracker groups map locations into collapsible Jiendia, Freios, Western Freios, and Eastland regions. Unknown wiki locations remain visible under Other / Unmapped.
 
-### v13.9.4.64
+### v13.9.4.65
 - Dungeon Monster Illustration summary returned to the neutral summary-row hierarchy used by Equipment/Title; detailed illustration tracking follows the dynamic theme accent (pink in Light, blue in Dark).
 - Titles are grouped in a collapsible **Titles from Dungeons** section.
 - Fields Illustration Book popup now mirrors Dungeons with the SHINING Codex disclaimer and Category / Total / Done / Left breakdown.
 
-### v13.9.4.64
+### v13.9.4.65
 - Unified Dungeon and Field completion checkbox colors with the dynamic theme accent (Light pink / Dark blue).
 - Monster Illustration headings remain neutral rather than accent-colored.
 - Added regional aliases for Behemoth, Storm Watcher Ruins, Underworld Cave, and Snowfield.
 
 
-### v13.9.4.64
+### v13.9.4.65
 - Added multi-select region filters to Fields: All, Jiendia, Freios, Western Freios, and Eastland.
 - Reset restores the All-regions view.
 
 
-## v13.9.4.64
+## v13.9.4.65
 - Added a Dungeon Conquest placeholder section to expanded Dungeon cards (Coming Soon).
 - Added Dungeon Conquest Preview page with translated SHINING update notes and official source link.
 - Added Dungeon Conquest Preview navigation between Titles and Wiki.
 
-## v13.9.4.64 — Dungeon Unique Loot
+## v13.9.4.65 — Dungeon Unique Loot
 - Adds a **Unique Loot** section between Monster Illustration and Item Codex on expanded Dungeon cards.
 - Unique Loot is informational only and does not affect Overall Progress.
 - `assets/dungeon-unique-loot.js` is synchronized from the Official La Tale Wiki `Dungeons` page.
 - `.github/workflows/sync-unique-loot.yml` refreshes the snapshot daily and can also be run manually.
 
-## v13.9.4.64 — Unique Loot filter popover
+## v13.9.4.65 — Unique Loot filter popover
 
 - Replaces the dense Unique Loot chip row concept with one compact `Unique Loot ▾` control.
 - Opens a grouped category popover for Equipment, Special Gear, and Zodiac Materials.
@@ -74,18 +74,18 @@ The Fields tracker groups map locations into collapsible Jiendia, Freios, Wester
 - Reset clears search, level ranges, Unique Loot categories, and expanded-card state.
 
 
-## v13.9.4.64
+## v13.9.4.65
 - Adds upgrade-related Achievement information below Unique Loot on Dungeon cards.
 - Adds daily Achievement sync from the Official La Tale Wiki.
 - Fixes the Unique Loot filter popover stacking above dungeon cards on mobile.
 
 
-## v13.9.4.64
+## v13.9.4.65
 - Reordered expanded Dungeon sections: Unique Loot → Achievement → Item Codex → Monster Illustration → Dungeon Conquest → Title.
 - Simplified Achievement presentation: no trophy icon or wiki link; heading, achievement title, and objective use regular font weight.
 
 
-## v13.9.4.64b — Dungeon page cleanup
+## v13.9.4.65b — Dungeon page cleanup
 
 - Keeps expanded Dungeon order: Unique Loot → Achievement → Item Codex → Monster Illustration → Dungeon Conquest → Title.
 - Simplifies Achievement to neutral rows; removes legacy accent-card styling, trophy/wiki-link CSS, and keeps regular-weight text.
@@ -95,10 +95,10 @@ The Fields tracker groups map locations into collapsible Jiendia, Freios, Wester
 - `Laititia` remains in the wiki Unique Loot snapshot but is intentionally not synthesized as a Dungeon card because the Dungeon list remains sourced from the project Google Sheet. Add it to `Dungeon Boss Material` if it should appear in the tracker.
 
 
-## V13.9.4.64b
+## V13.9.4.65b
 - Dungeon detail order: Monster Illustration → Unique Loot → Achievement → Item Codex → Title → Dungeon Conquest.
 - Dungeon header preview meta now reads Illustration → Item Codex → Achievement → Title.
-## v13.9.4.64
+## v13.9.4.65
 - Achievement rows now show their Achievement category as secondary text, e.g. `(via Challenge)`.
 - Dungeon upgrade achievement sync stores the source category in `dungeon-achievements.js`.
 

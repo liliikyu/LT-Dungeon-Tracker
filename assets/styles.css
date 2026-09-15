@@ -1754,3 +1754,24 @@ html[data-theme="light"]{
   opacity:1 !important;
 }
 
+/* Final heading match:
+   ACHIEVEMENT text + UNIQUE LOOT match MONSTER ILLUSTRATION.
+   Achievement count stays in its original muted style. */
+.dungeon-achievement-heading,
+.unique-loot-head strong{
+  color:var(--dungeon-heading-muted) !important;
+  font-size:10.5px !important;
+  font-weight:800 !important;
+  letter-spacing:.045em !important;
+  text-transform:uppercase !important;
+  opacity:1 !important;
+}
+
+.achievement-count{
+  color:var(--muted) !important;
+  font-size:10.5px !important;
+  font-weight:400 !important;
+  letter-spacing:normal !important;
+  text-transform:none !important;
+}
+

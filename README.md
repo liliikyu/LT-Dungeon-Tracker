@@ -1,7 +1,7 @@
-# LaTale Dungeon Tracker — v13.9.4.68
+# LaTale Dungeon Tracker — v13.9.4.69
 
 
-## v13.9.4.68 — normalized dungeon data sync
+## v13.9.4.69 — normalized dungeon data sync
 
 - Rebuilt the website data layer around the live Google Sheet tabs `dungeon_id` + `dungeon_drop`.
 - `dungeon_id` is the canonical dungeon list and supplies level / entry metadata.
@@ -114,3 +114,10 @@ The Fields tracker groups map locations into collapsible Jiendia, Freios, Wester
 - Achievement rows now show their Achievement category as secondary text, e.g. `(via Challenge)`.
 - Dungeon upgrade achievement sync stores the source category in `dungeon-achievements.js`.
 
+
+
+### v13.9.4.69
+- Titles now resolve Title Set membership from `title_exchange_and_set` + `title_set_id`.
+- A title may belong to multiple Title Sets without duplicating its title record.
+- The Titles page now shows the exchange-path description as a small muted guide line beneath the dungeon/level.
+- `item_upgrade` remains intentionally excluded from website sync.

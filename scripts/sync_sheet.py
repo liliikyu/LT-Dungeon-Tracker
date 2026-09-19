@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Sync Google Sheet tabs ``dungeon_id`` + ``dungeon_drop`` into assets/data.js.
+"""Sync normalized Google Sheet tabs into assets/data.js.
 
-These two normalized tabs are the website source of truth for dungeon identity,
+``dungeon_id`` + ``dungeon_drop`` remain the source of truth for dungeon identity,
 entries, drop/codex rows, title recipes, and title unlock requirements.
+``title_set_id`` + ``title_exchange_and_set`` provide title-set membership and
+title exchange-path guidance for the Titles page.
 
 ``item_upgrade`` is intentionally NOT consumed by this website sync yet.
 No third-party Python packages are required.
@@ -22,6 +24,8 @@ from pathlib import Path
 SHEET_ID = "15aKwZohEpEwa9fOOnrcqZvAQ-JdHrVLcRTKglM2g1EQ"
 DUNGEON_ID_SHEET_NAME = "dungeon_id"
 DUNGEON_DROP_SHEET_NAME = "dungeon_drop"
+TITLE_SET_ID_SHEET_NAME = "title_set_id"
+TITLE_EXCHANGE_SET_SHEET_NAME = "title_exchange_and_set"
 OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "data.js"
 
 UPGRADE_COLUMNS = [f"upgrade_item_{n}_id" for n in range(1, 15)]
@@ -188,7 +192,12 @@ def slug(value: str | None) -> str:
     return re.sub(r"[^a-z0-9]+", "_", str(value or "").strip().lower()).strip("_")
 
 
-def build_data(dungeon_rows: list[list[str]], drop_rows: list[list[str]]) -> dict:
+def build_data(
+    dungeon_rows: list[list[str]],
+    drop_rows: list[list[str]],
+    title_set_rows: list[list[str]],
+    title_exchange_rows: list[list[str]],
+) -> dict:
     dungeon_records = rows_as_dicts(
         dungeon_rows,
         required=("dungeon_id", "dungeon_name", "dungeon_level", "entry_number_per_day"),
@@ -197,6 +206,38 @@ def build_data(dungeon_rows: list[list[str]], drop_rows: list[list[str]]) -> dic
         drop_rows,
         required=("dungeon_id", "item_type", "item_name"),
     )
+    title_set_records = rows_as_dicts(
+        title_set_rows,
+        required=("title_set_id", "title_set_name"),
+    )
+    title_exchange_records = rows_as_dicts(
+        title_exchange_rows,
+        required=("title_id", "title_exchange_path", "title_exchange_path_description"),
+    )
+
+    title_set_names = {
+        clean_text(row.get("title_set_id")): clean_text(row.get("title_set_name"))
+        for row in title_set_records
+        if clean_text(row.get("title_set_id")) and clean_text(row.get("title_set_name"))
+    }
+    title_exchange_by_id: dict[str, dict] = {}
+    for row in title_exchange_records:
+        title_id = clean_text(row.get("title_id"))
+        if not title_id:
+            continue
+        set_ids = []
+        for key, value in row.items():
+            if not key.startswith("title_set_"):
+                continue
+            set_id = clean_text(value)
+            if set_id and set_id not in set_ids:
+                set_ids.append(set_id)
+        title_exchange_by_id[title_id] = {
+            "exchangePath": clean_text(row.get("title_exchange_path")),
+            "exchangePathDescription": clean_text(row.get("title_exchange_path_description")),
+            "titleSetIds": set_ids,
+            "titleSetNames": [title_set_names.get(set_id, set_id) for set_id in set_ids],
+        }
 
     # Only populated master rows become website dungeons. Pre-filled future IDs with blank names are ignored.
     master = OrderedDict()
@@ -281,6 +322,7 @@ def build_data(dungeon_rows: list[list[str]], drop_rows: list[list[str]]) -> dic
                     reputation_required = clean_text(row.get("title_reputation_required"))
                     if unlock_type == "reputation" and amount_required is None and reputation_required:
                         amount_required = f"{humanize_identifier(reputation_required)} reputation"
+                    exchange_meta = title_exchange_by_id.get(stable_title_id, {})
                     title = {
                         "id": stable_title_id,
                         "title": title_name or stable_title_id,
@@ -290,7 +332,10 @@ def build_data(dungeon_rows: list[list[str]], drop_rows: list[list[str]]) -> dic
                         "amountRequired": amount_required,
                         "elyRequired": clean_number(row.get("title_ely_required")),
                         "materials": [],
-                        "titleSet": clean_text(row.get("title_set")),
+                        "titleSet": " | ".join(exchange_meta.get("titleSetNames", [])) or None,
+                        "titleSetIds": exchange_meta.get("titleSetIds", []),
+                        "exchangePath": exchange_meta.get("exchangePath"),
+                        "exchangePathDescription": exchange_meta.get("exchangePathDescription"),
                         "coupon": clean_text(row.get("title_coupon")),
                         "unlockType": unlock_type,
                         "reputationRequired": reputation_required,
@@ -306,8 +351,6 @@ def build_data(dungeon_rows: list[list[str]], drop_rows: list[list[str]]) -> dic
                         title["elyRequired"] = clean_number(row.get("title_ely_required"))
                     if not title.get("coupon"):
                         title["coupon"] = clean_text(row.get("title_coupon"))
-                    if not title.get("titleSet"):
-                        title["titleSet"] = clean_text(row.get("title_set"))
 
                 if unlock_type == "material" and item_name:
                     title_material_name = with_type_suffix(
@@ -368,8 +411,8 @@ def build_data(dungeon_rows: list[list[str]], drop_rows: list[list[str]]) -> dic
 
     return {
         "lastSyncedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        "generatedFrom": "Google Sheets — LT Boss Matts Tracker / dungeon_id + dungeon_drop",
-        "schemaVersion": "v7",
+        "generatedFrom": "Google Sheets — LT Boss Matts Tracker / dungeon_id + dungeon_drop + title_set_id + title_exchange_and_set",
+        "schemaVersion": "v8",
         "levelFilters": [
             {"id": "all", "label": "All"},
             {"id": "lv-1-199", "label": "Lv. 1–199"},
@@ -388,7 +431,9 @@ def build_data(dungeon_rows: list[list[str]], drop_rows: list[list[str]]) -> dic
 def main() -> None:
     dungeon_rows = fetch_rows(DUNGEON_ID_SHEET_NAME)
     drop_rows = fetch_rows(DUNGEON_DROP_SHEET_NAME)
-    data = build_data(dungeon_rows, drop_rows)
+    title_set_rows = fetch_rows(TITLE_SET_ID_SHEET_NAME)
+    title_exchange_rows = fetch_rows(TITLE_EXCHANGE_SET_SHEET_NAME)
+    data = build_data(dungeon_rows, drop_rows, title_set_rows, title_exchange_rows)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(
         "window.LT_DATA=" + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n",
@@ -396,7 +441,8 @@ def main() -> None:
     )
     print(
         f"Wrote {len(data['dungeons'])} dungeons and {len(data['titles'])} titles to {OUTPUT} "
-        f"from {DUNGEON_ID_SHEET_NAME} + {DUNGEON_DROP_SHEET_NAME}."
+        f"from {DUNGEON_ID_SHEET_NAME} + {DUNGEON_DROP_SHEET_NAME} + "
+        f"{TITLE_SET_ID_SHEET_NAME} + {TITLE_EXCHANGE_SET_SHEET_NAME}."
     )
 
 

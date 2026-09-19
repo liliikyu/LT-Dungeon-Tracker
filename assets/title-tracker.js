@@ -160,7 +160,7 @@
       const extraRequirement = "";
       return `<tr class="${state.complete ? "title-complete-row" : ""}" data-title-row="${esc(title.id)}">
         <td class="complete-cell"><input class="title-complete-check" type="checkbox" ${state.complete ? "checked" : ""} data-title-id="${esc(title.id)}" aria-label="Mark ${esc(title.title)} complete"></td>
-        <td class="title-name-cell"><span class="title-name-line"><strong>${esc(title.title)}</strong>${couponIconHtml(title)}</span><span class="title-dungeon-name">${esc(title.dungeon || "—")}${title.dungeonLevel ? ` (${esc(displayDungeonLevel(title.dungeonLevel))})` : ""}</span>${title.exchangePathDescription ? `<span class="title-dungeon-name title-exchange-path">${esc(title.exchangePathDescription)}</span>` : ""}</td>
+        <td class="title-name-cell"><span class="title-name-line"><strong>${esc(title.title)}</strong>${couponIconHtml(title)}</span><span class="title-dungeon-name">${esc(title.dungeon || "—")}${title.dungeonLevel ? ` (${esc(displayDungeonLevel(title.dungeonLevel))})` : ""}</span>${title.exchangePathDescription ? `<span class="title-dungeon-name title-exchange-path">↪ ${esc(title.exchangePathDescription)}</span>` : ""}</td>
         <td class="materials-stack-cell">${materialRows}${extraRequirement}</td>
         <td class="title-set-cell">${titleSetHtml(title.titleSet)}</td>
       </tr>`;

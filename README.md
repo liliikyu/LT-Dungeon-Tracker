@@ -1,7 +1,7 @@
-# LaTale Dungeon Tracker — v13.9.4.67
+# LaTale Dungeon Tracker — v13.9.4.68
 
 
-## v13.9.4.67 — normalized dungeon data sync
+## v13.9.4.68 — normalized dungeon data sync
 
 - Rebuilt the website data layer around the live Google Sheet tabs `dungeon_id` + `dungeon_drop`.
 - `dungeon_id` is the canonical dungeon list and supplies level / entry metadata.
@@ -67,7 +67,7 @@ The Fields tracker groups map locations into collapsible Jiendia, Freios, Wester
 
 
 ## v13.9.4.65
-- Added a Dungeon Conquest placeholder section to expanded Dungeon cards (Coming Soon).
+- Added **Dungeon Conquest (BETA)** mode. When enabled, Codex checkboxes are disabled and each dungeon exposes a Conquest completion checkbox.
 - Added Dungeon Conquest Preview page with translated SHINING update notes and official source link.
 - Added Dungeon Conquest Preview navigation between Titles and Wiki.
 

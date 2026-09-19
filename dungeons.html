@@ -7,7 +7,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=13.9.4.31">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?v=13.9.4.31">
   <title>Latale Unofficial Illustration Book</title>
-  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.44b">
+  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.68">
 </head>
 <body>
   <header class="topbar">
@@ -46,6 +46,10 @@
           <option value="incomplete">Incomplete</option>
           <option value="complete">Complete</option>
         </select>
+        <label class="conquest-beta-toggle" title="Enable Dungeon Conquest beta tracking and temporarily disable Item Codex checkboxes">
+          <input id="conquest-mode-toggle" type="checkbox">
+          <span>Dungeon Conquest (BETA)</span>
+        </label>
         <button id="expand-all" class="small-button" type="button">Expand All</button>
         <button id="clear-filters" class="small-button" type="button">Reset</button>
       </div>
@@ -122,7 +126,7 @@
       </div>
       <div class="welcome-guide-grid" aria-label="How to use the tracker">
         <article class="welcome-guide-card"><span class="tutorial-step">01</span><h2>Fields</h2><p>Browse field locations with their Monster Illustrations, Item Codex entries, and Exploration Achievements. Field progress is tracked separately from Dungeon progress.</p></article>
-        <article class="welcome-guide-card"><span class="tutorial-step">02</span><h2>Dungeons</h2><p>Search or filter dungeons, then expand a card to track Monster Illustrations, Item Codex entries, Achievements, Titles, scenario references, and overall completion.</p></article>
+        <article class="welcome-guide-card"><span class="tutorial-step">02</span><h2>Dungeons</h2><p>Search or filter dungeons, then expand a card to track Monster Illustrations, Item Codex entries, Achievements, Titles, scenario references, and optional Dungeon Conquest beta completion.</p></article>
         <article class="welcome-guide-card"><span class="tutorial-step">03</span><h2>Titles</h2><p>Track title materials, Ely or reputation requirements, title sets, coupon eligibility, and completed titlebooks.</p></article>
         <article class="welcome-guide-card"><span class="tutorial-step">04</span><h2>Saved locally</h2><p>Your completion progress is stored in this browser. Fields and Dungeons use separate completion states even when a monster or item name matches.</p></article>
       </div>
@@ -135,10 +139,10 @@
     </section>
   </div>
 
-  <aside id="progress-panel" class="dungeon-progress-panel floating-progress-panel hidden" aria-label="Illustration Book progress">
+  <aside id="progress-panel" class="dungeon-progress-panel floating-progress-panel hidden" aria-label="Dungeon illustration progress">
     <div class="dungeon-progress-head progress-panel-title">
       <div>
-        <strong>Dungeon Illustration Book Progress</strong>
+        <strong>Dungeon Illustration Progress</strong>
         <span>Dungeon progress only · separate from Fields</span>
       </div>
     </div>
@@ -153,35 +157,13 @@
       </div>
     </section>
 
-    <section class="progress-section codex-progress-section" aria-labelledby="codex-progress-heading">
-      <div class="progress-section-head">
-        <div>
-          <strong id="codex-progress-heading">Item Codex</strong>
-          <span>Codex-registerable items across all dungeons</span>
-        </div>
-        <span id="progress-total" class="progress-total"></span>
-      </div>
-      <div class="codex-disclaimer">
-        <strong>Disclaimer:</strong> Codex system is being revamped in the upcoming major update <a href="https://www.latale.com/news/notice/view/3705?category=3&amp;page=1" target="_blank" rel="noopener noreferrer"><strong><em>SHINING</em></strong></a>.
-      </div>
-      <div class="dungeon-progress-table-wrap">
-        <table class="dungeon-progress-table">
-          <thead><tr><th>Category</th><th>Total</th><th>Done</th><th>Left</th></tr></thead>
-          <tbody id="progress-summary-body"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <div class="floating-progress-actions split-progress-actions">
+    <div class="floating-progress-actions">
       <button id="clear-monster-progress" class="small-button danger-button" type="button">Clear Illustrations</button>
-      <button id="clear-progress" class="small-button danger-button" type="button">Clear Codex</button>
     </div>
   </aside>
-  <button id="progress-toggle" class="codex-fab codex-image-toggle" type="button" aria-expanded="false" aria-controls="progress-panel" aria-label="Open Codex Progress" title="Codex Progress">
-    <img id="codex-toggle-image" src="assets/codex-before.webp?v=13.3" data-closed-src="assets/codex-before.webp?v=13.3" data-open-src="assets/codex-after.webp?v=13.3" alt="" aria-hidden="true"><span class="codex-fallback" aria-hidden="true">Codex</span>
-  </button>
+  <button id="progress-toggle" class="codex-fab progress-text-fab" type="button" aria-expanded="false" aria-controls="progress-panel" aria-label="Open Dungeon Illustration Progress" title="Dungeon Illustration Progress">Progress</button>
 
-  <footer class="shell footer">Data synced from LT Boss Matts Tracker · Last synced: <time id="last-sync" datetime="">Not available</time> · Build v13.9.4.67 · Filters run entirely in your browser.</footer>
+  <footer class="shell footer">Data synced from LT Boss Matts Tracker · Last synced: <time id="last-sync" datetime="">Not available</time> · Build v13.9.4.68 · Filters run entirely in your browser.</footer>
   <script src="assets/data.js?v=13.9.4.11"></script>
   <script>
     // Wiki snapshots change independently via GitHub Actions.
@@ -204,7 +186,7 @@
         await loadScript(`assets/dungeon-unique-loot.js?ts=${stamp}`);
         await loadScript(`assets/dungeon-achievements.js?ts=${stamp}`);
         await loadScript(`assets/scenario-data.js?ts=${stamp}`);
-        await loadScript("assets/app.js?v=13.9.4.63");
+        await loadScript("assets/app.js?v=13.9.4.68");
       })();
     })();
   </script>

@@ -19,6 +19,8 @@
   const MONSTER_COMPLETION_KEY = "lt-monster-illustration-completion-v1";
   const TITLE_PROGRESS_KEY = "lt-title-progress-v1";
   const ACHIEVEMENT_COMPLETION_KEY = "lt-dungeon-achievement-completion-v1";
+  const CONQUEST_COMPLETION_KEY = "lt-dungeon-conquest-completion-v1";
+  const CONQUEST_MODE_KEY = "lt-dungeon-conquest-mode-v1";
   const MI = window.LT_MONSTER_ILLUSTRATIONS || { dungeons: {} };
 
   // Dungeon-card title names can differ from Title Tracker titlebook recipes.
@@ -200,6 +202,31 @@
 
   function saveCompletion() {
     localStorage.setItem(COMPLETION_KEY, JSON.stringify(completionState));
+  }
+
+  function loadConquestCompletion() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(CONQUEST_COMPLETION_KEY) || "{}");
+      return raw && typeof raw === "object" ? raw : {};
+    } catch {
+      return {};
+    }
+  }
+
+  const conquestCompletionState = loadConquestCompletion();
+  let conquestMode = false;
+  try { conquestMode = localStorage.getItem(CONQUEST_MODE_KEY) === "1"; } catch {}
+
+  function conquestCompletionKey(dungeonName) {
+    return normalize(dungeonName);
+  }
+
+  function saveConquestCompletion() {
+    localStorage.setItem(CONQUEST_COMPLETION_KEY, JSON.stringify(conquestCompletionState));
+  }
+
+  function saveConquestMode() {
+    try { localStorage.setItem(CONQUEST_MODE_KEY, conquestMode ? "1" : "0"); } catch {}
   }
 
   function renderLastSync() {
@@ -387,16 +414,16 @@
 
   function dungeonOverallState(dungeon) {
     const illustrations = monsterIllustrationsFor(dungeon.name);
-    const trackableItems = (dungeon.items || []).filter(isTrackable);
     const titles = titleRecordsForDungeon(dungeon.name);
     const titleProgressState = loadTitleProgress();
     const achievements = achievementsFor(dungeon.name);
     const monsterDone = illustrations.filter((monster) => monsterCompletionState[monsterCompletionKey(dungeon.name, monster)] === true).length;
-    const codexDone = trackableItems.filter((item) => completionState[itemCompletionKey(dungeon.name, item.name)] === true).length;
     const titleDone = titles.filter((title) => titleProgressState?.[title.id]?.complete === true).length;
     const achievementDone = achievements.filter((achievement) => achievementCompletionState[achievementCompletionKey(dungeon.name, achievement)] === true).length;
-    const total = illustrations.length + trackableItems.length + titles.length + achievements.length;
-    const done = monsterDone + codexDone + titleDone + achievementDone;
+    const conquestTotal = conquestMode ? 1 : 0;
+    const conquestDone = conquestMode && conquestCompletionState[conquestCompletionKey(dungeon.name)] === true ? 1 : 0;
+    const total = illustrations.length + titles.length + achievements.length + conquestTotal;
+    const done = monsterDone + titleDone + achievementDone + conquestDone;
     return { total, done, complete: total === 0 || done === total };
   }
 
@@ -421,44 +448,7 @@
   }
 
   function updateProgressSummary() {
-    const tbody = $("progress-summary-body");
-    if (!tbody) return;
-
-    const labels = { equipment: "Equipment", event: "Event", etc: "ETC", other: "Other" };
-    const counts = {
-      equipment: { total: 0, done: 0 },
-      event: { total: 0, done: 0 },
-      etc: { total: 0, done: 0 },
-      other: { total: 0, done: 0 }
-    };
-
-    for (const dungeon of dungeons) {
-      for (const item of dungeon.items || []) {
-        if (!isTrackable(item)) continue;
-        const type = itemType(item);
-        counts[type].total += 1;
-        if (completionState[itemCompletionKey(dungeon.name, item.name)] === true) counts[type].done += 1;
-      }
-    }
-
-    if (tbody) {
-      tbody.innerHTML = Object.entries(counts).map(([key, value]) => {
-        const left = Math.max(0, value.total - value.done);
-        return `<tr>
-          <th scope="row">${labels[key]}</th>
-          <td>${value.total}</td>
-          <td>${value.done}</td>
-          <td class="progress-left${left === 0 && value.total > 0 ? " complete" : ""}">${left === 0 && value.total > 0 ? "✓" : left}</td>
-        </tr>`;
-      }).join("");
-    }
-
-    const total = Object.values(counts).reduce((sum, value) => sum + value.total, 0);
-    const done = Object.values(counts).reduce((sum, value) => sum + value.done, 0);
-    const totalEl = $("progress-total");
-    if (totalEl) totalEl.textContent = total ? `${done}/${total} complete · ${total - done} left` : "No Codexable items";
-
-    // Monster Illustration progress is tracked independently from Item Codex progress.
+    // Item Codex completion is intentionally not summarized or counted here.
     let monsterTotal = 0;
     let monsterDone = 0;
     for (const dungeon of dungeons) {
@@ -545,9 +535,9 @@
           const completionKey = itemCompletionKey(dungeon.name, item.name);
           const completed = trackable && completionState[completionKey] === true;
           const checkboxHtml = trackable
-            ? `<input class="item-check" type="checkbox" ${completed ? "checked" : ""} aria-label="Mark ${esc(cleanItemName(item.name))} as completed">`
+            ? `<input class="item-check" type="checkbox" ${completed ? "checked" : ""} ${conquestMode ? "disabled" : ""} aria-label="Mark ${esc(cleanItemName(item.name))} as completed"${conquestMode ? ' title="Codex tracking is disabled while Dungeon Conquest (BETA) is enabled"' : ""}>`
             : `<span class="item-check-spacer" aria-hidden="true"></span>`;
-          return `<li class="item-row${completed ? " completed" : ""}${trackable ? " trackable" : ""}" ${trackable ? `data-completion-key="${esc(completionKey)}"` : ""}>
+          return `<li class="item-row${completed ? " completed" : ""}${trackable ? " trackable" : ""}${trackable && conquestMode ? " codex-disabled" : ""}" ${trackable ? `data-completion-key="${esc(completionKey)}"` : ""}>
             <span class="item-main">
               ${checkboxHtml}
               <span class="item-name">${esc(cleanItemName(item.name))}</span>
@@ -644,15 +634,17 @@
 
       const dungeonKey = normalize(dungeon.name);
       const hasDrops = hasAnyItems;
-      const isExpandable = hasDrops || illustrations.length > 0 || uniqueLoot.length > 0 || achievements.length > 0 || Boolean(titleText);
+      const isExpandable = conquestMode || hasDrops || illustrations.length > 0 || uniqueLoot.length > 0 || achievements.length > 0 || Boolean(titleText);
       const isExpanded = isExpandable && (expandedState.get(dungeonKey) === true);
       const trackableItems = (dungeon.items || []).filter(isTrackable);
       const completedCount = trackableItems.filter((item) => completionState[itemCompletionKey(dungeon.name, item.name)] === true).length;
       const titleRecords = titleRecordsForDungeon(dungeon.name);
       const titleProgressState = loadTitleProgress();
       const completedTitles = titleRecords.filter((title) => titleProgressState?.[title.id]?.complete === true).length;
-      const overallTotal = illustrations.length + trackableItems.length + titleRecords.length + achievements.length;
-      const overallDone = monsterDone + completedCount + completedTitles + achievementDone;
+      const conquestComplete = conquestCompletionState[conquestCompletionKey(dungeon.name)] === true;
+      const conquestTotal = conquestMode ? 1 : 0;
+      const overallTotal = illustrations.length + titleRecords.length + achievements.length + conquestTotal;
+      const overallDone = monsterDone + completedTitles + achievementDone + (conquestMode && conquestComplete ? 1 : 0);
       const overallPct = overallTotal ? Math.round((overallDone / overallTotal) * 100) : 100;
       const overallHtml = `<div class="dungeon-overall-progress" data-overall-progress>
         <span><strong>Overall Progress</strong></span>
@@ -668,7 +660,6 @@
         <span><strong>Event</strong> ${grouped.event.length}</span>
         <span><strong>ETC</strong> ${grouped.etc.length}</span>
         <span><strong>Other</strong> ${grouped.other.length}</span>
-        <span class="summary-progress"><strong>Done</strong> ${completedCount}/${trackableItems.length}</span>
       </div>`;
 
       const headerHtml = isExpandable ? `<button class="dungeon-toggle" type="button" aria-expanded="${isExpanded ? "true" : "false"}" title="${isExpanded ? "Return to summary" : "Show full list"} ${esc(dungeon.name)}">
@@ -677,7 +668,7 @@
             <div class="dungeon-name">${esc(dungeon.name)}</div>
             ${meta ? `<span class="dungeon-meta-inline">${meta}</span>` : ""}
           </div>
-          <div class="dungeon-card-submeta">${illustrations.length} ${illustrations.length > 1 ? "illustrations" : "illustration"} · ${trackableItems.length} codex · ${achievements.length} ${achievements.length > 1 ? "achievements" : "achievement"} · ${titleCount} ${titleCount > 1 ? "titles" : "title"}</div>
+          <div class="dungeon-card-submeta">${illustrations.length} ${illustrations.length > 1 ? "illustrations" : "illustration"} · ${achievements.length} ${achievements.length > 1 ? "achievements" : "achievement"} · ${titleCount} ${titleCount > 1 ? "titles" : "title"}</div>
         </div>
         <span class="dungeon-head-right">
           <span class="level-badge">${esc(displayLevel(dungeon.level))}</span>
@@ -689,19 +680,29 @@
             <div class="dungeon-name">${esc(dungeon.name)}</div>
             ${meta ? `<span class="dungeon-meta-inline">${meta}</span>` : ""}
           </div>
-          <div class="dungeon-card-submeta">${illustrations.length} ${illustrations.length > 1 ? "illustrations" : "illustration"} · ${trackableItems.length} codex · ${achievements.length} ${achievements.length > 1 ? "achievements" : "achievement"} · ${titleCount} ${titleCount > 1 ? "titles" : "title"}</div>
+          <div class="dungeon-card-submeta">${illustrations.length} ${illustrations.length > 1 ? "illustrations" : "illustration"} · ${achievements.length} ${achievements.length > 1 ? "achievements" : "achievement"} · ${titleCount} ${titleCount > 1 ? "titles" : "title"}</div>
         </div>
         <span class="level-badge">${esc(displayLevel(dungeon.level))}</span>
       </div>`;
+
+      const conquestSectionHtml = conquestMode ? `<section class="dungeon-conquest-section enabled">
+        <div class="dungeon-conquest-head">
+          <div><strong>Dungeon Conquest</strong><span class="beta-badge">BETA</span></div>
+          <label class="dungeon-conquest-check-row" data-conquest-key="${esc(conquestCompletionKey(dungeon.name))}">
+            <input class="dungeon-conquest-check" type="checkbox" ${conquestComplete ? "checked" : ""} aria-label="Mark ${esc(dungeon.name)} Dungeon Conquest as completed">
+            <span>Conquest complete</span>
+          </label>
+        </div>
+      </section>` : `<section class="dungeon-conquest-section disabled"><div class="dungeon-conquest-head"><div><strong>Dungeon Conquest</strong><span class="beta-badge">BETA</span></div><span class="conquest-disabled-note">Enable Dungeon Conquest (BETA) above to track this.</span></div></section>`;
 
       const cardContentHtml = `
         ${overallHtml}
         ${monsterSummaryHtml}
         ${summaryHtml}
-        ${isExpandable ? `<div class="dungeon-body">${monsterSectionHtml}${uniqueLootSectionHtml}${achievementSectionHtml}${columnsHtml}${titleNote}${scenarioHtml}<section class="dungeon-conquest-placeholder"><div class="dungeon-conquest-placeholder-head"><strong>Dungeon Conquest</strong><span class="coming-soon-badge">Coming Soon</span></div></section></div>` : ""}
+        ${isExpandable ? `<div class="dungeon-body">${monsterSectionHtml}${uniqueLootSectionHtml}${achievementSectionHtml}${columnsHtml}${titleNote}${scenarioHtml}${conquestSectionHtml}</div>` : ""}
       `;
 
-      return `<article class="dungeon-card${isExpanded ? " expanded" : ""}${isExpandable ? " expandable" : ""}${hasDrops ? " has-drops" : " no-drops"}" data-category="${categoryFor(dungeon.level)}" data-dungeon-key="${esc(dungeonKey)}">
+      return `<article class="dungeon-card${isExpanded ? " expanded" : ""}${isExpandable ? " expandable" : ""}${hasDrops ? " has-drops" : " no-drops"}${conquestMode ? " conquest-mode" : ""}" data-category="${categoryFor(dungeon.level)}" data-dungeon-key="${esc(dungeonKey)}">
         <header class="dungeon-head">${headerHtml}</header>
         ${cardContentHtml}
       </article>`;
@@ -797,16 +798,15 @@
     if (!card || !dungeon) return;
     const illustrations = monsterIllustrationsFor(dungeon.name);
     const monsterDone = illustrations.filter((monster) => monsterCompletionState[monsterCompletionKey(dungeon.name, monster)] === true).length;
-    const trackableItems = (dungeon.items || []).filter(isTrackable);
-    const codexDone = trackableItems.filter((item) => completionState[itemCompletionKey(dungeon.name, item.name)] === true).length;
     const titleProgressState = loadTitleProgress();
     const titles = titleRecordsForDungeon(dungeon.name);
     const titleDone = titles.filter((title) => titleProgressState?.[title.id]?.complete === true).length;
     const achievements = achievementsFor(dungeon.name);
     const achievementDone = achievements.filter((achievement) => achievementCompletionState[achievementCompletionKey(dungeon.name, achievement)] === true).length;
-    const total = illustrations.length + trackableItems.length + titles.length + achievements.length;
-    const done = monsterDone + codexDone + titleDone + achievementDone;
-    const pct = total ? Math.round((done / total) * 100) : 0;
+    const conquestDone = conquestMode && conquestCompletionState[conquestCompletionKey(dungeon.name)] === true ? 1 : 0;
+    const total = illustrations.length + titles.length + achievements.length + (conquestMode ? 1 : 0);
+    const done = monsterDone + titleDone + achievementDone + conquestDone;
+    const pct = total ? Math.round((done / total) * 100) : 100;
     const row = card.querySelector("[data-overall-progress]");
     if (!row) return;
     const count = row.querySelector(".overall-progress-count");
@@ -855,7 +855,7 @@
         if (detail) detail.textContent = `Done ${done}/${monsters.length}`;
         updateDungeonOverall(card, dungeon);
       }
-      // Keep Illustration Book Progress live while the popup is open.
+      // Keep illustration progress live while the popup is open.
       updateProgressSummary();
       if (($("completion-status")?.value || "all") !== "all") render();
       return;
@@ -885,8 +885,24 @@
       return;
     }
 
+    const conquestCheckbox = event.target.closest(".dungeon-conquest-check");
+    if (conquestCheckbox) {
+      const row = conquestCheckbox.closest("[data-conquest-key]");
+      const key = row?.dataset.conquestKey;
+      if (!key) return;
+      if (conquestCheckbox.checked) conquestCompletionState[key] = true;
+      else delete conquestCompletionState[key];
+      saveConquestCompletion();
+      const card = conquestCheckbox.closest(".dungeon-card");
+      const dungeonKey = card?.dataset.dungeonKey;
+      const dungeon = dungeons.find((entry) => normalize(entry.name) === dungeonKey);
+      if (dungeon) updateDungeonOverall(card, dungeon);
+      if (($("completion-status")?.value || "all") !== "all") render();
+      return;
+    }
+
     const checkbox = event.target.closest(".item-check");
-    if (!checkbox) return;
+    if (!checkbox || checkbox.disabled) return;
     const row = checkbox.closest(".item-row");
     const key = row?.dataset.completionKey;
     if (!key) return;
@@ -898,56 +914,41 @@
     const card = checkbox.closest(".dungeon-card");
     const dungeonKey = card?.dataset.dungeonKey;
     const dungeon = dungeons.find((entry) => normalize(entry.name) === dungeonKey);
-    const progress = card?.querySelector(".summary-progress");
-    if (dungeon && progress) {
-      const trackableItems = dungeon.items.filter(isTrackable);
-      const done = trackableItems.filter((item) => completionState[itemCompletionKey(dungeon.name, item.name)] === true).length;
-      progress.innerHTML = `<strong>Done</strong> ${done}/${trackableItems.length}`;
-      updateDungeonOverall(card, dungeon);
-    }
-
-    // Keep the Codex Progress popup live while it is open.
-    updateProgressSummary();
+    if (dungeon) updateDungeonOverall(card, dungeon);
     if (($("completion-status")?.value || "all") !== "all") render();
   });
 
   const progressToggle = $("progress-toggle");
   const progressPanel = $("progress-panel");
-  const clearProgress = $("clear-progress");
   const clearMonsterProgress = $("clear-monster-progress");
+  const conquestModeToggle = $("conquest-mode-toggle");
 
-  function syncCodexToggleVisual() {
+  function syncProgressToggleVisual() {
     if (!progressToggle || !progressPanel) return;
     const isOpen = !progressPanel.classList.contains("hidden");
     progressToggle.hidden = false;
     progressToggle.style.removeProperty("display");
     progressToggle.setAttribute("aria-expanded", String(isOpen));
-    progressToggle.setAttribute("aria-label", isOpen ? "Close Codex Progress" : "Open Codex Progress");
-    const toggleImage = $("codex-toggle-image");
-    if (toggleImage) {
-      progressToggle.classList.remove("image-failed");
-      toggleImage.onerror = () => progressToggle.classList.add("image-failed");
-      toggleImage.onload = () => progressToggle.classList.remove("image-failed");
-      toggleImage.src = isOpen ? toggleImage.dataset.openSrc : toggleImage.dataset.closedSrc;
-    }
+    progressToggle.setAttribute("aria-label", isOpen ? "Close Dungeon Illustration Progress" : "Open Dungeon Illustration Progress");
   }
 
-  progressToggle.addEventListener("click", () => {
+  progressToggle?.addEventListener("click", () => {
     const willOpen = progressPanel.classList.contains("hidden");
     progressPanel.classList.toggle("hidden", !willOpen);
-    progressToggle.setAttribute("aria-expanded", String(willOpen));
-    progressToggle.setAttribute("aria-label", willOpen ? "Close Codex Progress" : "Open Codex Progress");
-    syncCodexToggleVisual();
+    syncProgressToggleVisual();
     if (willOpen) updateProgressSummary();
   });
 
-  clearProgress.addEventListener("click", () => {
-    if (!confirm("Clear all saved Codex progress for the Dungeons tab?")) return;
-    for (const key of Object.keys(completionState)) delete completionState[key];
-    saveCompletion();
-    render();
-    updateProgressSummary();
-  });
+  if (conquestModeToggle) {
+    conquestModeToggle.checked = conquestMode;
+    conquestModeToggle.addEventListener("change", () => {
+      conquestMode = conquestModeToggle.checked;
+      saveConquestMode();
+      document.body.classList.toggle("conquest-mode-active", conquestMode);
+      render();
+    });
+  }
+  document.body.classList.toggle("conquest-mode-active", conquestMode);
 
   if (clearMonsterProgress) clearMonsterProgress.addEventListener("click", () => {
     if (!confirm("Clear all saved Monster Illustration progress for the Dungeons tab?")) return;
@@ -959,14 +960,21 @@
 
 
   window.addEventListener("pageshow", () => {
-    syncCodexToggleVisual();
+    syncProgressToggleVisual();
     render();
     updateProgressSummary();
   });
   window.addEventListener("storage", (event) => {
-    if (event.key === TITLE_PROGRESS_KEY) render();
+    if ([TITLE_PROGRESS_KEY, CONQUEST_COMPLETION_KEY, CONQUEST_MODE_KEY].includes(event.key)) {
+      if (event.key === CONQUEST_MODE_KEY) {
+        conquestMode = localStorage.getItem(CONQUEST_MODE_KEY) === "1";
+        if (conquestModeToggle) conquestModeToggle.checked = conquestMode;
+        document.body.classList.toggle("conquest-mode-active", conquestMode);
+      }
+      render();
+    }
   });
-  syncCodexToggleVisual();
+  syncProgressToggleVisual();
 
 
   // Welcome / help popup. Show once per browser session, and reopen from the ? button.

@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-"""Sync the public Google Sheet into assets/data.js.
+"""Sync Google Sheet tabs ``dungeon_id`` + ``dungeon_drop`` into assets/data.js.
 
-Source layout: tab "Dungeon Boss Material" in LT Boss Matts Tracker.
+These two normalized tabs are the website source of truth for dungeon identity,
+entries, drop/codex rows, title recipes, and title unlock requirements.
+
+``item_upgrade`` is intentionally NOT consumed by this website sync yet.
 No third-party Python packages are required.
 """
 from __future__ import annotations
@@ -12,14 +15,16 @@ import json
 import re
 import urllib.parse
 import urllib.request
-from pathlib import Path
+from collections import OrderedDict
 from datetime import datetime, timezone
+from pathlib import Path
 
 SHEET_ID = "15aKwZohEpEwa9fOOnrcqZvAQ-JdHrVLcRTKglM2g1EQ"
-DUNGEON_SHEET_NAME = "Dungeon Boss Material"
-TITLE_MATERIAL_SHEET_ROWS = (32, 33, 34)  # Material 1/2/3, 1-based Google Sheet rows
-ELY_SHEET_ROW = 35  # 1-based Google Sheet row number
+DUNGEON_ID_SHEET_NAME = "dungeon_id"
+DUNGEON_DROP_SHEET_NAME = "dungeon_drop"
 OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "data.js"
+
+UPGRADE_COLUMNS = [f"upgrade_item_{n}_id" for n in range(1, 15)]
 
 
 def fetch_rows(sheet_name: str) -> list[list[str]]:
@@ -27,105 +32,53 @@ def fetch_rows(sheet_name: str) -> list[list[str]]:
         f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?"
         + urllib.parse.urlencode({"tqx": "out:csv", "sheet": sheet_name})
     )
-    req = urllib.request.Request(url, headers={"User-Agent": "lt-boss-material-register-sync/1.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "lt-normalized-dungeon-sync/2.0"})
     with urllib.request.urlopen(req, timeout=60) as response:
         text = response.read().decode("utf-8-sig")
     return list(csv.reader(io.StringIO(text)))
 
 
-def clean_number(value: str):
-    value = (value or "").strip()
-    if not value:
+def normalized_header(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", str(value or "").strip().lower()).strip("_")
+
+
+def clean_text(value):
+    text = str(value or "").strip()
+    return text or None
+
+
+def clean_number(value):
+    text = str(value or "").strip().replace(",", "")
+    if not text:
         return None
     try:
-        number = float(value.replace(",", ""))
+        number = float(text)
         return int(number) if number.is_integer() else number
     except ValueError:
-        return value
+        return clean_text(value)
 
 
-def normalized_label(value: str) -> str:
-    return re.sub(r"[^a-z0-9]+", " ", str(value or "").strip().lower()).strip()
+def is_truthy(value) -> bool:
+    return str(value or "").strip().lower() in {"true", "yes", "y", "1", "x"}
 
 
-def find_label(labels: dict[str, int], *aliases: str):
-    normalized = {normalized_label(label): index for label, index in labels.items()}
-    for alias in aliases:
-        key = normalized_label(alias)
-        if key in normalized:
-            return normalized[key]
-    return None
-
-
-def clean_ely(value: str):
-    text = str(value or "").strip()
-    if not text or text == "-":
-        return None
-    # Supports raw numbers as well as cells formatted like "5,000,000 Ely".
-    match = re.search(r"([0-9][0-9,]*(?:\.[0-9]+)?)", text)
-    if match:
-        number = float(match.group(1).replace(",", ""))
-        return int(number) if number.is_integer() else number
-    return text
-
-
-def split_cell(value: str) -> list[str]:
-    if value is None:
-        return []
-    text = str(value).replace("\r\n", "\n").replace("\r", "\n").strip()
-    if not text or text == "-":
-        return []
+def rows_as_dicts(rows: list[list[str]], *, required: tuple[str, ...]) -> list[dict[str, str]]:
+    if not rows:
+        raise RuntimeError("Google Sheet returned no rows.")
+    headers = [normalized_header(value) for value in rows[0]]
+    missing = [name for name in required if name not in headers]
+    if missing:
+        raise RuntimeError(f"Missing expected columns: {', '.join(missing)}")
     result = []
-    for line in text.split("\n"):
-        line = line.strip()
-        if not line or line == "-" or line.startswith("->"):
-            continue
-        result.append(line)
+    for source_row in rows[1:]:
+        padded = source_row + [""] * max(0, len(headers) - len(source_row))
+        row = {headers[i]: padded[i] if i < len(padded) else "" for i in range(len(headers))}
+        if any(str(value or "").strip() for value in row.values()):
+            result.append(row)
     return result
 
 
-def normalize_type_tag(name: str, force_equipment: bool = False) -> str:
-    name = re.sub(r"\s+", " ", name).strip()
-    name = re.sub(r"\(\s*equip\s*\)", "(Equipment)", name, flags=re.I)
-    name = re.sub(r"\(\s*equipment\s*\)", "(Equipment)", name, flags=re.I)
-    name = re.sub(r"\(\s*event\s*\)", "(Event)", name, flags=re.I)
-    name = re.sub(r"\(\s*etc\s*\)", "(ETC)", name, flags=re.I)
-    name = re.sub(r"\(\s*consume\s*\)", "(Consume)", name, flags=re.I)
-    if force_equipment and "(Equipment)" not in name:
-        name += " (Equipment)"
-    return name
-
-
-def item_key(name: str) -> str:
-    value = name.lower()
-    value = re.sub(r"\((event|etc|consume|equipment|equip)\)", "", value)
-    value = re.sub(r"\s*-\s*d5 only\s*$", "", value)
-    value = re.sub(r"[^a-z0-9]+", " ", value)
-    return " ".join(value.split())
-
-
-def add_item(items, name, *, codex=False, title=False, badge5=False, force_equipment=False):
-    name = normalize_type_tag(name, force_equipment)
-    if name.lower() in {"not yet", "n/a", "na"}:
-        return
-    key = item_key(name)
-    if not key:
-        return
-    existing = next((item for item in items if item["_key"] == key), None)
-    if existing is None:
-        existing = {"_key": key, "name": name, "codex": False, "titleMaterial": False, "badge5Material": False}
-        items.append(existing)
-    elif (
-        re.search(r"\((Event|ETC|Consume|Equipment)\)$", name, re.I)
-        and not re.search(r"\((Event|ETC|Consume|Equipment)\)$", existing["name"], re.I)
-    ):
-        existing["name"] = name
-    existing["codex"] = existing["codex"] or bool(codex)
-    existing["titleMaterial"] = existing["titleMaterial"] or bool(title)
-    existing["badge5Material"] = existing["badge5Material"] or bool(badge5)
-
-
-def level_info(raw: str):
+def level_info(raw):
     text = str(raw or "").strip().upper().replace(" ", "")
     match = re.match(r"^SL(?:V)?\.?([0-9]+)", text)
     if match:
@@ -151,294 +104,272 @@ def level_info(raw: str):
     return "Unknown", None, "Other"
 
 
-def build_dungeon_data(rows: list[list[str]]) -> dict:
-    if len(rows) < 36:
-        raise RuntimeError("Google Sheet returned too few rows; check sharing and tab name.")
+def display_type_suffix(category: str | None) -> str:
+    value = str(category or "").strip().lower()
+    return {
+        "equipment": "Equipment",
+        "event": "Event",
+        "etc": "ETC",
+        "consume": "Consume",
+    }.get(value, "")
 
-    width = max(len(row) for row in rows)
-    rows = [row + [""] * (width - len(row)) for row in rows]
 
-    # Resolve row numbers from the labels in column B so small layout shifts are safer.
-    labels = {row[1].strip(): i for i, row in enumerate(rows) if len(row) > 1 and row[1].strip()}
-    required = ["Dng Lv", "Dng Name", "Entry Number per Day", "Drop 1", "Badge 5 Mats", "Codexable Battle Equipment", "Title"]
-    missing = [label for label in required if label not in labels]
-    if missing:
-        raise RuntimeError(f"Missing expected sheet labels: {', '.join(missing)}")
+def category_from_item_type(item_type: str | None) -> str | None:
+    value = str(item_type or "").strip().lower()
+    if not value:
+        return None
+    if value in {"upgrade_material", "upgrade_material_asc"}:
+        return "event"
+    if value in {"misc", "miisc"}:
+        return "etc"
+    if value == "consume":
+        return "consume"
+    if value in {"bank", "zodiac"}:
+        return None
+    # Remaining populated item_type values are equipment/progression item categories.
+    return "equipment"
 
-    drop_rows = [labels[f"Drop {n}"] for n in range(1, 11)]
-    badge_row = labels["Badge 5 Mats"]
-    codex_equipment_row = labels["Codexable Battle Equipment"]
-    codex_rows = []
-    for prefix, count in (("Codexable Event", 6), ("Codexable ETC", 8)):
-        for n in range(1, count + 1):
-            key = f"{prefix} {n}"
-            if key in labels:
-                codex_rows.append(labels[key])
 
-    title_row = labels["Title"]
-    title_amount_row = find_label(labels, "Title Amount Req.", "Title Amount Required", "Amount Required")
-    # Title material rows are fixed in the source sheet. Reading the exact rows prevents
-    # label/layout drift from silently dropping Material 2 or Material 3.
-    title_material_rows = [row_num - 1 for row_num in TITLE_MATERIAL_SHEET_ROWS]
-    if any(row_index >= len(rows) for row_index in title_material_rows):
-        raise RuntimeError("Expected title Material 1/2/3 on Google Sheet rows 32-34, but the sheet is too short.")
-    # Ely is stored in a fixed dedicated row in the source sheet.
-    # Google Sheets row 35 => zero-based CSV row index 34.
-    title_ely_row = ELY_SHEET_ROW - 1
-    if title_ely_row >= len(rows):
-        raise RuntimeError(f"Expected Ely requirements on Google Sheet row {ELY_SHEET_ROW}, but the sheet is too short.")
-    title_set_row = find_label(labels, "Ttile Set", "Title Set", "Title Set (Not incl. Scenario)")
-    coupon_row = find_label(labels, "Instance Dungeon Guaranteed Titlebook Coupon II")
+def with_type_suffix(name: str, category: str | None) -> str:
+    name = str(name or "").strip()
+    if not name:
+        return ""
+    suffix = display_type_suffix(category)
+    if not suffix or re.search(r"\((?:Equipment|Event|ETC|Consume)\)\s*$", name, re.I):
+        return name
+    return f"{name} ({suffix})"
 
-    dungeons = []
-    titles = []
-    previous_title_context = None
-    for col in range(2, width):
-        name = rows[labels["Dng Name"]][col].strip()
-        raw_level = rows[labels["Dng Lv"]][col].strip()
-        entries = clean_number(rows[labels["Entry Number per Day"]][col])
-        items = []
-        drops = []
-        codex_items = []
 
-        for row_index in drop_rows:
-            for raw_item in split_cell(rows[row_index][col]):
-                item = normalize_type_tag(raw_item)
-                if item.lower() == "not yet":
-                    continue
-                drops.append(item)
-                add_item(items, item)
+def item_key(name: str) -> str:
+    value = str(name or "").lower()
+    value = re.sub(r"\((event|etc|consume|equipment|equip)\)", "", value)
+    value = re.sub(r"[^a-z0-9]+", " ", value)
+    return " ".join(value.split())
 
-        badge_materials = []
-        for raw_item in split_cell(rows[badge_row][col]):
-            item = normalize_type_tag(raw_item)
-            if item.lower() == "not yet":
-                continue
-            badge_materials.append(item)
-            add_item(items, item, badge5=True)
 
-        for raw_item in split_cell(rows[codex_equipment_row][col]):
-            item = normalize_type_tag(raw_item, force_equipment=True)
-            codex_items.append(item)
-            add_item(items, item, codex=True, force_equipment=True)
+def add_item(items: list[dict], name: str, **flags) -> None:
+    name = str(name or "").strip()
+    if not name or name.lower() in {"not yet", "n/a", "na"}:
+        return
+    key = item_key(name)
+    if not key:
+        return
+    existing = next((item for item in items if item["_key"] == key), None)
+    if existing is None:
+        existing = {
+            "_key": key,
+            "name": name,
+            "codex": False,
+            "titleMaterial": False,
+            "badge5Material": False,
+        }
+        items.append(existing)
+    elif re.search(r"\((?:Event|ETC|Consume|Equipment)\)\s*$", name, re.I) and not re.search(
+        r"\((?:Event|ETC|Consume|Equipment)\)\s*$", existing["name"], re.I
+    ):
+        existing["name"] = name
+    for flag_name in ("codex", "titleMaterial", "badge5Material"):
+        existing[flag_name] = existing[flag_name] or bool(flags.get(flag_name))
 
-        for row_index in codex_rows:
-            for raw_item in split_cell(rows[row_index][col]):
-                item = normalize_type_tag(raw_item)
-                if item.lower() == "not yet":
-                    continue
-                codex_items.append(item)
-                add_item(items, item, codex=True)
 
-        title_name = rows[title_row][col].strip()
-        materials = []
-        if title_name and title_name not in {"-", "Not yet"}:
-            for row_index in title_material_rows:
-                for raw_item in split_cell(rows[row_index][col]):
-                    if re.fullmatch(r"[\d,]+\s+Ely", raw_item, flags=re.I):
-                        continue
-                    item = normalize_type_tag(raw_item)
-                    materials.append(item)
-                    add_item(items, item, title=True)
+def normalize_unlock_type(value: str | None) -> str | None:
+    text = str(value or "").strip().lower()
+    return text or None
 
-            amount_required = clean_number(rows[title_amount_row][col]) if title_amount_row is not None else None
-            ely_required = clean_ely(rows[title_ely_row][col]) if title_ely_row is not None else None
 
-            # Row 35 is authoritative for Ely. For backward compatibility with older
-            # sheet snapshots, recover an Ely value from a legacy material cell only
-            # when row 35 is blank, then keep Ely out of the material list.
-            if ely_required is None:
-                for row_index in title_material_rows:
-                    for raw_item in split_cell(rows[row_index][col]):
-                        if re.fullmatch(r"[\d,]+\s+Ely", raw_item, flags=re.I):
-                            ely_required = clean_ely(raw_item)
-                            break
-                    if ely_required is not None:
-                        break
+def humanize_identifier(value: str | None) -> str | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    return re.sub(r"[_-]+", " ", text).strip().title()
 
-            # A non-numeric Amount Required is itself the unlock condition. Do not
-            # duplicate obsolete free-text requirement notes from Material 1/2/3.
-            # Explicit item rows with type tags remain valid.
-            if isinstance(amount_required, str) and amount_required.strip():
-                materials = [m for m in materials if re.search(r"\((?:Event|ETC|Equipment|Consume)\)\s*$", m, re.I)]
 
-            # Support multiple title columns for the same dungeon (e.g. BP/BQ).
-            # A secondary title column may intentionally leave Dungeon Name / Lv blank.
-            # First prefer the current column, then the immediately previous title context,
-            # then scan a few columns left for the nearest populated dungeon metadata.
-            title_dungeon = name or None
-            title_level = raw_level or None
-            if not title_dungeon and previous_title_context is not None:
-                title_dungeon, title_level = previous_title_context
-            if not title_dungeon:
-                for left_col in range(col - 1, max(1, col - 5), -1):
-                    inherited_name = rows[labels["Dng Name"]][left_col].strip()
-                    if inherited_name:
-                        title_dungeon = inherited_name
-                        title_level = rows[labels["Dng Lv"]][left_col].strip() or None
-                        break
-            if title_dungeon:
-                previous_title_context = (title_dungeon, title_level)
+def slug(value: str | None) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", str(value or "").strip().lower()).strip("_")
 
-            titles.append({
-                "id": f"title-{len(titles) + 1}",
-                "title": title_name,
-                "dungeon": title_dungeon,
-                "dungeonLevel": title_level,
-                "amountRequired": amount_required,
-                "elyRequired": ely_required,
-                "materials": materials,
-                "titleSet": rows[title_set_row][col].strip() or None if title_set_row is not None else None,
-                "coupon": rows[coupon_row][col].strip() or None if coupon_row is not None else None,
-            })
-        else:
-            # Do not carry a dungeon across unrelated non-title columns.
-            previous_title_context = None
 
-        if not name:
+def build_data(dungeon_rows: list[list[str]], drop_rows: list[list[str]]) -> dict:
+    dungeon_records = rows_as_dicts(
+        dungeon_rows,
+        required=("dungeon_id", "dungeon_name", "dungeon_level", "entry_number_per_day"),
+    )
+    drop_records = rows_as_dicts(
+        drop_rows,
+        required=("dungeon_id", "item_type", "item_name"),
+    )
+
+    # Only populated master rows become website dungeons. Pre-filled future IDs with blank names are ignored.
+    master = OrderedDict()
+    for row in dungeon_records:
+        dungeon_id = clean_text(row.get("dungeon_id"))
+        dungeon_name = clean_text(row.get("dungeon_name"))
+        if not dungeon_id or not dungeon_name:
             continue
+        row = dict(row)
+        row["dungeon_name"] = dungeon_name
+        if dungeon_id in master:
+            raise RuntimeError(f"Duplicate dungeon_id in {DUNGEON_ID_SHEET_NAME}: {dungeon_id}")
+        master[dungeon_id] = row
 
-        # Known source-sheet corrections for Twilight Cathedral Codex labels.
-        # The source sheet has drifted here; keep runtime data aligned with the official Item Codex.
-        if name == "Twilight Cathedral":
-            twilight_codex_items = [
-                "Lucent Modred Textbook (Equipment)",
-                "Lucent Twilight Tattoo (Equipment)",
-                "Lucent Twilight Stockings (Equipment)",
-                "Lucent Twilight Glasses (Equipment)",
-                "Lucent Holy Tattoo (Equipment)",
-                "Lucent Holy Stockings (Equipment)",
-                "Lucent Holy Glasses (Equipment)",
-            ]
-            # Remove any sheet-provided Codex rows for this dungeon while preserving drops/title materials.
-            items = [item for item in items if not item.get("codex")]
-            codex_items = twilight_codex_items[:]
-            for codex_item in twilight_codex_items:
-                add_item(items, codex_item, codex=True, force_equipment=True)
+    grouped_drops: dict[str, list[dict[str, str]]] = {dungeon_id: [] for dungeon_id in master}
+    for row in drop_records:
+        dungeon_id = clean_text(row.get("dungeon_id"))
+        if not dungeon_id:
+            continue
+        if dungeon_id not in master:
+            raise RuntimeError(
+                f"{DUNGEON_DROP_SHEET_NAME} references {dungeon_id}, but it does not exist as a populated row in {DUNGEON_ID_SHEET_NAME}."
+            )
+        grouped_drops[dungeon_id].append(row)
 
-        # Known source-sheet correction for Zerenis Headquarters Codex.
-        # Prevent truncated "Magi..." values and keep the full four-item set.
-        if name == "Zerenis Headquarters":
-            zerenis_codex_items = [
-                "Dean's Charm +9 (Equipment)",
-                "Magic Academy Red Badge +9 (Equipment)",
-                "Magic Academy Yellow Badge +9 (Equipment)",
-                "Magic Academy Blue Badge +9 (Equipment)",
-            ]
-            items = [item for item in items if not item.get("codex")]
-            codex_items = zerenis_codex_items[:]
-            for codex_item in zerenis_codex_items:
-                add_item(items, codex_item, codex=True, force_equipment=True)
+    titles_by_id: OrderedDict[str, dict] = OrderedDict()
+    dungeons = []
 
-        # Known source-sheet correction for Purgatory Azreal Codex.
-        if name == "Purgatory Azreal":
-            purgatory_codex_items = [
-                "Lucent Angel Textbook (Equipment)",
-                "Lucent Prosperity Gloves (Equipment)",
-                "Lucent Prosperity Armor (Equipment)",
-                "Lucent Prosperity Fauld (Equipment)",
-                "Lucent Prosperity Boots (Equipment)",
-                "Lucent Prosperity Helmet (Equipment)",
-            ]
-            items = [item for item in items if not item.get("codex")]
-            codex_items = purgatory_codex_items[:]
-            for codex_item in purgatory_codex_items:
-                add_item(items, codex_item, codex=True, force_equipment=True)
-
-        # Known source-sheet corrections for Frozen World Codex labels.
-        # Keep runtime data aligned with the official Item Codex names.
-        if name == "Frozen World":
-            frozen_world_name_fixes = {
-                "Lucent Evil Boots (Equipment)": "Lucent Evil Shoes (Equipment)",
-                "Luce... (Equipment)": "Lucent Evil Headpiece (Equipment)",
-            }
-            codex_items = [frozen_world_name_fixes.get(item, item) for item in codex_items]
-            for item in items:
-                item["name"] = frozen_world_name_fixes.get(item["name"], item["name"])
-
+    for dungeon_id, meta in master.items():
+        dungeon_name = clean_text(meta.get("dungeon_name"))
+        raw_level = clean_text(meta.get("dungeon_level")) or ""
         level_type, numeric_level, category = level_info(raw_level)
+        entries = clean_number(meta.get("entry_number_per_day"))
+        account_limited = is_truthy(meta.get("entry_limit_per_account"))
+        rows = grouped_drops.get(dungeon_id, [])
 
+        items: list[dict] = []
+        drops: list[str] = []
+        codex_items: list[str] = []
+        badge_materials: list[str] = []
 
+        for row in rows:
+            item_name = clean_text(row.get("item_name"))
+            item_type = str(row.get("item_type") or "").strip().lower()
+            if item_name:
+                if item_name not in drops:
+                    drops.append(item_name)
 
-        # Do not expose reputation requirements as dungeon loot rows.
-        items = [
-            item for item in items
-            if item.get("name", "").strip()
-            != "Achieved the required level of King of Monsters reputation"
-        ]
+                codex = is_truthy(row.get("codex_material"))
+                codex_name = clean_text(row.get("codex_name")) or item_name
+                row_category = clean_text(row.get("codex_category")) if codex else None
+                display_category = row_category or category_from_item_type(item_type)
+                codex_display = with_type_suffix(codex_name, display_category) if codex else ""
+                unlock_type = normalize_unlock_type(row.get("title_unlock_type"))
+                title_material = unlock_type == "material" and bool(clean_text(row.get("title_id")) or clean_text(row.get("title_name")))
+                upgrade_targets = [clean_text(row.get(col)) for col in UPGRADE_COLUMNS if clean_text(row.get(col))]
+                badge5 = any(str(target).lower().endswith("_badge_5") for target in upgrade_targets)
 
-        # Legend Questing hoard drops.
-        # These are Codex/ETC drops that are also explicitly useful later in Legend quests.
+                display_name = codex_display or with_type_suffix(item_name, display_category)
+                add_item(items, display_name, codex=codex, titleMaterial=title_material, badge5Material=badge5)
+                if codex and codex_display and codex_display not in codex_items:
+                    codex_items.append(codex_display)
+                if badge5 and item_name not in badge_materials:
+                    badge_materials.append(item_name)
+
+            title_id = clean_text(row.get("title_id"))
+            title_name = clean_text(row.get("title_name"))
+            if title_id or title_name:
+                stable_title_id = title_id or f"{dungeon_id}_title_{len(titles_by_id) + 1}"
+                unlock_type = normalize_unlock_type(row.get("title_unlock_type"))
+                title = titles_by_id.get(stable_title_id)
+                if title is not None and title_name and title.get("title") != title_name:
+                    fallback_id = f"{stable_title_id}_{slug(title_name)}"
+                    print(
+                        f"WARNING: title_id {stable_title_id!r} is used for both {title.get('title')!r} and {title_name!r}; "
+                        f"using temporary generated id {fallback_id!r}. Fix title_id in {DUNGEON_DROP_SHEET_NAME}."
+                    )
+                    stable_title_id = fallback_id
+                    title = titles_by_id.get(stable_title_id)
+                if title is None:
+                    amount_required = clean_number(row.get("title_amount_mats_required"))
+                    reputation_required = clean_text(row.get("title_reputation_required"))
+                    if unlock_type == "reputation" and amount_required is None and reputation_required:
+                        amount_required = f"{humanize_identifier(reputation_required)} reputation"
+                    title = {
+                        "id": stable_title_id,
+                        "title": title_name or stable_title_id,
+                        "dungeon": dungeon_name,
+                        "dungeonId": dungeon_id,
+                        "dungeonLevel": raw_level or None,
+                        "amountRequired": amount_required,
+                        "elyRequired": clean_number(row.get("title_ely_required")),
+                        "materials": [],
+                        "titleSet": clean_text(row.get("title_set")),
+                        "coupon": clean_text(row.get("title_coupon")),
+                        "unlockType": unlock_type,
+                        "reputationRequired": reputation_required,
+                    }
+                    titles_by_id[stable_title_id] = title
+                else:
+                    # Fill optional values from another material row if the first row was blank.
+                    if not title.get("title") and title_name:
+                        title["title"] = title_name
+                    if title.get("amountRequired") is None:
+                        title["amountRequired"] = clean_number(row.get("title_amount_mats_required"))
+                    if title.get("elyRequired") is None:
+                        title["elyRequired"] = clean_number(row.get("title_ely_required"))
+                    if not title.get("coupon"):
+                        title["coupon"] = clean_text(row.get("title_coupon"))
+                    if not title.get("titleSet"):
+                        title["titleSet"] = clean_text(row.get("title_set"))
+
+                if unlock_type == "material" and item_name:
+                    title_material_name = with_type_suffix(
+                        item_name, clean_text(row.get("codex_category")) or category_from_item_type(item_type)
+                    )
+                    if title_material_name not in title["materials"]:
+                        title["materials"].append(title_material_name)
+
+        # Preserve existing special metadata that is independent of the Google Sheet layout.
         legend_questing_by_dungeon = {
-            "Rivera City Hall": [
-                "Odd Magical Ring (ETC)",
-                "Odd Magical Bracelet (ETC)",
-            ],
-            "Big Tube": [
-                "Bollywood Treasure Box (ETC)",
-            ],
+            "Rivera City Hall": {"Odd Magical Ring", "Odd Magical Bracelet"},
+            "Big Tube": {"Bollywood Treasure Box"},
         }
-        if name in legend_questing_by_dungeon:
-            legend_names = legend_questing_by_dungeon[name]
-            legend_bare = {
-                re.sub(r"\s*\((?:ETC|Event|Equipment|Other)\)\s*$", "", value).strip()
-                for value in legend_names
-            }
-            items = [
-                item for item in items
-                if re.sub(r"\s*\((?:ETC|Event|Equipment|Other)\)\s*$", "", item.get("name", "")).strip()
-                not in legend_bare
-            ]
-            codex_items = [
-                value for value in codex_items
-                if re.sub(r"\s*\((?:ETC|Event|Equipment|Other)\)\s*$", "", value).strip()
-                not in legend_bare
-            ]
-            for legend_item in legend_names:
-                add_item(items, legend_item, codex=True)
-                codex_items.append(legend_item)
-            for item in items:
-                base_name = re.sub(r"\s*\((?:ETC|Event|Equipment|Other)\)\s*$", "", item.get("name", "")).strip()
-                item["legendQuesting"] = base_name in legend_bare
-
-        # Awakening Questing metadata for the three requested Event drops.
-        awakening_questing_items = {
-            "Black Rose Ornament",
-            "Kyrie's Fang",
-            "Windy Seed Jewel Fragment",
-        }
+        awakening_questing_items = {"Black Rose Ornament", "Kyrie's Fang", "Windy Seed Jewel Fragment"}
         for item in items:
-            base_name = re.sub(r"\s*\(Event\)\s*$", "", item.get("name", "")).strip()
-            if base_name == "Windy Seed Jewel Frrament":
+            bare = re.sub(r"\s*\((?:ETC|Event|Equipment|Other|Consume)\)\s*$", "", item.get("name", ""), flags=re.I).strip()
+            if bare in legend_questing_by_dungeon.get(dungeon_name, set()):
+                item["legendQuesting"] = True
+            if bare == "Windy Seed Jewel Frrament":
                 item["name"] = "Windy Seed Jewel Fragment (Event)"
-                base_name = "Windy Seed Jewel Fragment"
-            if base_name in awakening_questing_items:
+                bare = "Windy Seed Jewel Fragment"
+            if bare in awakening_questing_items:
                 item["awakeningQuesting"] = True
-            else:
-                item.pop("awakeningQuesting", None)
 
         dungeons.append({
-            "id": f"dungeon-{len(dungeons) + 1}",
+            "id": dungeon_id,
+            "dungeonId": dungeon_id,
             "level": raw_level,
             "numericLevel": numeric_level,
             "levelType": level_type,
             "levelCategory": category,
-            "name": name,
+            "name": dungeon_name,
             "entriesPerDay": entries,
-            "entryScope": "account" if name in {"Unknown Forest", "Unknown Beach"} else None,
+            "entryScope": "account" if account_limited else None,
+            "bossName": clean_text(meta.get("boss_name")),
+            "miniBosses": [
+                value for value in (clean_text(meta.get("mini_boss_1")), clean_text(meta.get("mini_boss_2"))) if value
+            ],
             "drops": drops,
             "badgeMaterials": badge_materials,
             "codexItems": codex_items,
             "loot": [
-                {"name": item["name"], "codex": item["codex"], "titleMaterial": item["titleMaterial"], "badge5Material": item["badge5Material"]}
+                {
+                    key: value
+                    for key, value in {
+                        "name": item["name"],
+                        "codex": item["codex"],
+                        "titleMaterial": item["titleMaterial"],
+                        "badge5Material": item["badge5Material"],
+                        "awakeningQuesting": item.get("awakeningQuesting"),
+                        "legendQuesting": item.get("legendQuesting"),
+                    }.items()
+                    if value is not None
+                }
                 for item in items
             ],
         })
 
     return {
         "lastSyncedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        "generatedFrom": "Google Sheets — LT Boss Matts Tracker / Dungeon Boss Material",
-        "schemaVersion": "v6",
+        "generatedFrom": "Google Sheets — LT Boss Matts Tracker / dungeon_id + dungeon_drop",
+        "schemaVersion": "v7",
         "levelFilters": [
             {"id": "all", "label": "All"},
             {"id": "lv-1-199", "label": "Lv. 1–199"},
@@ -450,22 +381,23 @@ def build_dungeon_data(rows: list[list[str]]) -> dict:
             {"id": "slv-1-plus", "label": "SLv. 1+"},
         ],
         "dungeons": dungeons,
-        "titles": titles,
+        "titles": list(titles_by_id.values()),
     }
 
 
 def main() -> None:
-    # Single source of truth: every dungeon and title field is read only from
-    # the horizontal "Dungeon Boss Material" sheet.  The website intentionally
-    # ignores the separate Title Tracker tab to avoid cross-sheet inconsistencies.
-    dungeon_rows = fetch_rows(DUNGEON_SHEET_NAME)
-    data = build_dungeon_data(dungeon_rows)
+    dungeon_rows = fetch_rows(DUNGEON_ID_SHEET_NAME)
+    drop_rows = fetch_rows(DUNGEON_DROP_SHEET_NAME)
+    data = build_data(dungeon_rows, drop_rows)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(
         "window.LT_DATA=" + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n",
         encoding="utf-8",
     )
-    print(f"Wrote {len(data['dungeons'])} dungeons and {len(data['titles'])} titles to {OUTPUT}")
+    print(
+        f"Wrote {len(data['dungeons'])} dungeons and {len(data['titles'])} titles to {OUTPUT} "
+        f"from {DUNGEON_ID_SHEET_NAME} + {DUNGEON_DROP_SHEET_NAME}."
+    )
 
 
 if __name__ == "__main__":

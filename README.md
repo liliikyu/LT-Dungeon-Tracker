@@ -1,4 +1,15 @@
-# LaTale Dungeon Tracker — v13.9.4.65b
+# LaTale Dungeon Tracker — v13.9.4.67
+
+
+## v13.9.4.67 — normalized dungeon data sync
+
+- Rebuilt the website data layer around the live Google Sheet tabs `dungeon_id` + `dungeon_drop`.
+- `dungeon_id` is the canonical dungeon list and supplies level / entry metadata.
+- `dungeon_drop` supplies drop rows, Codex flags, title requirements, and upgrade-target relationships.
+- Blank boss fields are valid, so bossless/daily-drop dungeon rows can still sync normally.
+- Reserved `dng_###` rows with no dungeon name are ignored until populated.
+- `item_upgrade` is intentionally excluded from the website sync for now.
+- The GitHub Action continues regenerating only `assets/data.js`; Wiki-derived illustration, unique-loot, achievement, field, and scenario assets remain independent.
 
 ### v13.9.4.65
 - Removed the Fields toolbar Monster Illustration / Item Codex legend.
@@ -20,7 +31,8 @@ All three tracker pages use the same Light / Dark / System theme control and the
 
 ## Data sources
 
-- Dungeons and Titles: project Google Sheet (`Dungeon Boss Material`)
+- Dungeons and Titles: project Google Sheet (`dungeon_id` + `dungeon_drop`)
+- `dungeon_id` is the canonical dungeon master list; `dungeon_drop` supplies item/drop, Codex, title, and upgrade-target relationships.
 - Dungeon Monster Illustrations: Official La Tale Wiki
 - Fields Monster Illustrations and Item Codex: Official La Tale Wiki
 
@@ -92,7 +104,7 @@ The Fields tracker groups map locations into collapsible Jiendia, Freios, Wester
 - Ignores placeholder Unique Loot values such as `None` both during sync and at render time.
 - Adds `Watch` and `Relic` to the Unique Loot category filter.
 - Retains the mobile Unique Loot popover stacking fix.
-- `Laititia` remains in the wiki Unique Loot snapshot but is intentionally not synthesized as a Dungeon card because the Dungeon list remains sourced from the project Google Sheet. Add it to `Dungeon Boss Material` if it should appear in the tracker.
+- `Laititia` remains in the wiki Unique Loot snapshot but is intentionally not synthesized as a Dungeon card because the Dungeon list remains sourced from the project Google Sheet. Add it to `dungeon_id` if it should appear in the tracker.
 
 
 ## V13.9.4.65b

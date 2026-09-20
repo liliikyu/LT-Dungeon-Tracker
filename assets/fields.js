@@ -357,8 +357,12 @@
   $("reset-field-filter").addEventListener("click",()=>{$("field-search").value="";if($("field-completion-status"))$("field-completion-status").value="all";chooseAllRegions();render()});
   $("expand-all-fields").addEventListener("click",()=>{const all=expanded.size===entries.length;expanded.clear();if(!all)entries.forEach(f=>expanded.add(f.name));render()});
   function updateProgress(){
-    const allM=entries.flatMap(f=>f.illustrations.map(n=>key(f.name,n)));
-    const codexEntries=conquestMode?[]:entries.flatMap(f=>f.codex.map(entry=>({field:f.name,name:codexName(entry),category:codexCategory(entry)})));
+    const allM=entries.flatMap(f=>f.illustrations.map(entry=>key(sourceFieldOf(entry,f.name),illustrationName(entry))));
+    const codexEntries=conquestMode?[]:entries.flatMap(f=>f.codex.map(entry=>({
+      field:sourceFieldOf(entry,f.name),
+      name:codexName(entry),
+      category:codexCategory(entry)
+    })));
     const allC=codexEntries.map(x=>key(x.field,x.name));
     const md=allM.filter(k=>monsters[k]).length,cd=allC.filter(k=>codex[k]).length;
     $("field-monster-total").textContent=`${md}/${allM.length} complete · ${allM.length-md} left`;
@@ -378,8 +382,7 @@
     conquestMode=!!e.detail?.enabled;
     document.body.classList.toggle("conquest-mode-active",conquestMode);
     render();
-    updateProgressSummary();
   });
-  window.addEventListener("storage",e=>{if(e.key===CONQUEST_MODE_KEY){try{conquestMode=localStorage.getItem(CONQUEST_MODE_KEY)==="1"}catch{conquestMode=false}document.body.classList.toggle("conquest-mode-active",conquestMode);render();updateProgressSummary();}});
+  window.addEventListener("storage",e=>{if(e.key===CONQUEST_MODE_KEY){try{conquestMode=localStorage.getItem(CONQUEST_MODE_KEY)==="1"}catch{conquestMode=false}document.body.classList.toggle("conquest-mode-active",conquestMode);render();}});
   document.body.classList.toggle("conquest-mode-active",conquestMode);
 })();

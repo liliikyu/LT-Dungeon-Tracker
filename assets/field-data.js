@@ -63,7 +63,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 105
+      "wiki_order": 103
     },
     "Aie Island": {
       "illustrations": [
@@ -93,7 +93,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 115
+      "wiki_order": 113
     },
     "Aircraft Crash Site": {
       "illustrations": [
@@ -135,7 +135,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 78
+      "wiki_order": 76
     },
     "Aircraft Crash Site 3": {
       "illustrations": [
@@ -183,7 +183,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 94
+      "wiki_order": 92
     },
     "Amalrune Desert": {
       "illustrations": [
@@ -213,7 +213,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 102
+      "wiki_order": 100
     },
     "Ancient Forest": {
       "illustrations": [
@@ -459,7 +459,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Aurora Forest"
         }
       ],
-      "wiki_order": 89
+      "wiki_order": 87
     },
     "Aurora Forest 3": {
       "illustrations": [
@@ -501,7 +501,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 113
+      "wiki_order": 111
     },
     "Base Snowfield": {
       "illustrations": [
@@ -706,7 +706,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 101
+      "wiki_order": 99
     },
     "Cherry Lake": {
       "illustrations": [
@@ -794,7 +794,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Chunsik Castle"
         }
       ],
-      "wiki_order": 76
+      "wiki_order": 74
     },
     "Chunsik Land": {
       "illustrations": [
@@ -877,7 +877,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Collapsed Tower"
         }
       ],
-      "wiki_order": 80
+      "wiki_order": 78
     },
     "Cookie Garden": {
       "illustrations": [
@@ -949,7 +949,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 100
+      "wiki_order": 98
     },
     "Coral Forest": {
       "illustrations": [
@@ -1059,7 +1059,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 117
+      "wiki_order": 115
     },
     "D labo bay - Asgard": {
       "illustrations": [],
@@ -1268,7 +1268,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 111
+      "wiki_order": 109
     },
     "Desert Area": {
       "illustrations": [
@@ -1361,7 +1361,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 91
+      "wiki_order": 89
     },
     "Doll Street": {
       "illustrations": [
@@ -1391,7 +1391,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 98
+      "wiki_order": 96
     },
     "Dragon Lair": {
       "illustrations": [],
@@ -1540,7 +1540,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 110
+      "wiki_order": 108
     },
     "El Anoir Mountains": {
       "illustrations": [
@@ -1679,7 +1679,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 118
+      "wiki_order": 116
     },
     "Empyrean": {
       "illustrations": [
@@ -1934,7 +1934,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 79
+      "wiki_order": 77
     },
     "Glaston Admin Area": {
       "illustrations": [
@@ -1958,7 +1958,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 124
+      "wiki_order": 122
     },
     "Hangar": {
       "illustrations": [
@@ -2023,7 +2023,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 121
+      "wiki_order": 119
     },
     "Jade Forest": {
       "illustrations": [
@@ -2093,7 +2093,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Jade Forest"
         }
       ],
-      "wiki_order": 83
+      "wiki_order": 81
     },
     "Jude Capital": {
       "illustrations": [
@@ -2129,7 +2129,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 95
+      "wiki_order": 93
     },
     "Jungle Area": {
       "illustrations": [
@@ -2236,7 +2236,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 112
+      "wiki_order": 110
     },
     "Ktuka Ruins": {
       "illustrations": [
@@ -2332,7 +2332,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 123
+      "wiki_order": 121
     },
     "Laran Road": {
       "illustrations": [
@@ -2362,7 +2362,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 119
+      "wiki_order": 117
     },
     "Liliput": {
       "illustrations": [
@@ -2428,7 +2428,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 126
+      "wiki_order": 124
     },
     "Marin Island": {
       "illustrations": [
@@ -2470,7 +2470,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 90
+      "wiki_order": 88
     },
     "Monster Tower": {
       "illustrations": [
@@ -2566,7 +2566,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 104
+      "wiki_order": 102
     },
     "Moros": {
       "illustrations": [
@@ -2596,7 +2596,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 107
+      "wiki_order": 105
     },
     "Mossy Temple": {
       "illustrations": [
@@ -2662,7 +2662,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 82
+      "wiki_order": 80
     },
     "Mountain Area": {
       "illustrations": [
@@ -2784,7 +2784,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 88
+      "wiki_order": 86
     },
     "Nightmare Village": {
       "illustrations": [
@@ -2892,7 +2892,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "North El Anoir Plains"
         }
       ],
-      "wiki_order": 77
+      "wiki_order": 75
     },
     "Orca Beach": {
       "illustrations": [
@@ -2952,7 +2952,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 116
+      "wiki_order": 114
     },
     "Oscar Road": {
       "illustrations": [
@@ -2976,7 +2976,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 125
+      "wiki_order": 123
     },
     "Owl Castle": {
       "illustrations": [
@@ -3081,7 +3081,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 109
+      "wiki_order": 107
     },
     "Pneumia": {
       "illustrations": [
@@ -3111,7 +3111,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 114
+      "wiki_order": 112
     },
     "Pyramid": {
       "illustrations": [
@@ -3241,7 +3241,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Quartz Cave"
         }
       ],
-      "wiki_order": 84
+      "wiki_order": 82
     },
     "Red Crop Field": {
       "illustrations": [
@@ -3295,7 +3295,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 87
+      "wiki_order": 85
     },
     "Royal Dragon Place 3": {
       "illustrations": [
@@ -3331,7 +3331,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 127
+      "wiki_order": 125
     },
     "Saurus Field": {
       "illustrations": [
@@ -3789,7 +3789,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Storm Watcher Ruins"
         }
       ],
-      "wiki_order": 85
+      "wiki_order": 83
     },
     "Storm Watcher Ruins 3": {
       "illustrations": [
@@ -3831,7 +3831,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 81
+      "wiki_order": 79
     },
     "Sunset Plains": {
       "illustrations": [],
@@ -3858,54 +3858,6 @@ window.LT_FIELD_DATA = {
         }
       ],
       "wiki_order": 1000000000
-    },
-    "Taid: Empyrean": {
-      "illustrations": [
-        {
-          "name": "Asura Tiger Master",
-          "group": "Lv. 181 ~ 200",
-          "level": "Lv. 181 ~ 200",
-          "sourceField": "Taid: Empyrean"
-        },
-        {
-          "name": "Asura Choen Pam",
-          "group": "Lv. 181 ~ 200",
-          "level": "Lv. 181 ~ 200",
-          "sourceField": "Taid: Empyrean"
-        },
-        {
-          "name": "King Asura",
-          "group": "Lv. 181 ~ 200",
-          "level": "Lv. 181 ~ 200",
-          "sourceField": "Taid: Empyrean"
-        }
-      ],
-      "codex": [],
-      "wiki_order": 74
-    },
-    "Taid: Flower Valley": {
-      "illustrations": [
-        {
-          "name": "Fairy Coa",
-          "group": "Lv. 181 ~ 200",
-          "level": "Lv. 181 ~ 200",
-          "sourceField": "Taid: Flower Valley"
-        },
-        {
-          "name": "Fairy Oberon and Titania",
-          "group": "Lv. 181 ~ 200",
-          "level": "Lv. 181 ~ 200",
-          "sourceField": "Taid: Flower Valley"
-        },
-        {
-          "name": "Fairy Mountain Kong",
-          "group": "Lv. 181 ~ 200",
-          "level": "Lv. 181 ~ 200",
-          "sourceField": "Taid: Flower Valley"
-        }
-      ],
-      "codex": [],
-      "wiki_order": 75
     },
     "Temple Courtyard": {
       "illustrations": [
@@ -3935,7 +3887,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 92
+      "wiki_order": 90
     },
     "Temple Interior": {
       "illustrations": [
@@ -3971,7 +3923,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 93
+      "wiki_order": 91
     },
     "Temple Pluton": {
       "illustrations": [],
@@ -4191,7 +4143,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 96
+      "wiki_order": 94
     },
     "Twilight Cornfield": {
       "illustrations": [
@@ -4227,7 +4179,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 86
+      "wiki_order": 84
     },
     "Undercity Construction": {
       "illustrations": [
@@ -4269,7 +4221,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 103
+      "wiki_order": 101
     },
     "Underworld Canal": {
       "illustrations": [
@@ -4408,7 +4360,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 122
+      "wiki_order": 120
     },
     "Velfa Library": {
       "illustrations": [
@@ -4474,7 +4426,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 120
+      "wiki_order": 118
     },
     "Wailing Coast": {
       "illustrations": [],
@@ -4515,7 +4467,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 99
+      "wiki_order": 97
     },
     "Webfoot Octopus Temple": {
       "illustrations": [
@@ -4701,7 +4653,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 128
+      "wiki_order": 126
     },
     "White Chapel": {
       "illustrations": [
@@ -4797,7 +4749,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 97
+      "wiki_order": 95
     },
     "Xenadia Earth Garden Central Area": {
       "illustrations": [
@@ -4857,7 +4809,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 106
+      "wiki_order": 104
     },
     "Zisk Plains": {
       "illustrations": [
@@ -4887,7 +4839,7 @@ window.LT_FIELD_DATA = {
         }
       ],
       "codex": [],
-      "wiki_order": 108
+      "wiki_order": 106
     }
   }
 };

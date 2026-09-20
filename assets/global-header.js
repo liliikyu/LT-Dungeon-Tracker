@@ -40,6 +40,52 @@
     }
   });
 
+  // Extra tools menu lives with the utility actions, separate from the
+  // Illustration Book's primary navigation.
+  const topbarActions=document.querySelector(".topbar-actions");
+  const themeButton=document.getElementById("theme-toggle");
+  if(topbarActions && !document.getElementById("extra-tools-toggle")){
+    const wrap=document.createElement("div");
+    wrap.className="extra-tools-menu";
+    wrap.innerHTML=`
+      <button id="extra-tools-toggle" class="extra-tools-toggle" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span>EX</span><span class="extra-tools-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div id="extra-tools-dropdown" class="extra-tools-dropdown hidden" role="menu" aria-label="Extra tools">
+        <div class="extra-tools-heading">Extra Tools</div>
+        <a class="extra-tools-item" href="item-upgrade.html" role="menuitem">
+          <span class="extra-tools-item-copy"><strong>Item Upgrade Tracker</strong><small>Upgrade chains & material costs</small></span>
+        </a>
+      </div>`;
+    if(themeButton?.parentElement===topbarActions) themeButton.insertAdjacentElement("afterend",wrap);
+    else topbarActions.appendChild(wrap);
+
+    const exToggle=wrap.querySelector("#extra-tools-toggle");
+    const exDropdown=wrap.querySelector("#extra-tools-dropdown");
+    const closeExtraMenu=()=>{
+      exDropdown.classList.add("hidden");
+      exToggle.setAttribute("aria-expanded","false");
+    };
+    const openExtraMenu=()=>{
+      exDropdown.classList.remove("hidden");
+      exToggle.setAttribute("aria-expanded","true");
+    };
+    exToggle.addEventListener("click",(event)=>{
+      event.stopPropagation();
+      exDropdown.classList.contains("hidden") ? openExtraMenu() : closeExtraMenu();
+    });
+    document.addEventListener("click",(event)=>{
+      if(!wrap.contains(event.target)) closeExtraMenu();
+    });
+    document.addEventListener("keydown",(event)=>{
+      if(event.key==="Escape" && !exDropdown.classList.contains("hidden")){
+        closeExtraMenu();
+        exToggle.focus();
+      }
+    });
+  }
+
+
   // Dungeon Conquest Preview is presented as a site-native popup rather than
   // navigating away from the tracker page.
   const previewLinks=[...document.querySelectorAll('a[href$="conquest-preview.html"]')];

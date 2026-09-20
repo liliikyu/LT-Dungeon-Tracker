@@ -51,16 +51,16 @@
           <option value="incomplete">Incomplete</option>
           <option value="complete">Complete</option>
         </select>
-        <select id="title-category" class="compact-select" aria-label="Title requirement category filter">
-          <option value="all">All categories</option>
-          <option value="reputation">Reputation</option>
-          <option value="30">30 materials</option>
-          <option value="300">300 materials</option>
-          <option value="1000">1000 materials</option>
-          <option value="3000">3000 materials</option>
-          <option value="6000">6000 materials</option>
-        </select>
         <button id="reset-title-progress" class="small-button danger-button" type="button">Clear Progress</button>
+      </div>
+      <div class="range-row" id="title-category-filters" aria-label="Title requirement categories">
+        <label class="range-chip all-chip"><input type="checkbox" value="all" checked><span>All categories</span></label>
+        <label class="range-chip"><input type="checkbox" value="reputation"><span>Reputation</span></label>
+        <label class="range-chip"><input type="checkbox" value="30"><span>30 materials</span></label>
+        <label class="range-chip"><input type="checkbox" value="300"><span>300 materials</span></label>
+        <label class="range-chip"><input type="checkbox" value="1000"><span>1000 materials</span></label>
+        <label class="range-chip"><input type="checkbox" value="3000"><span>3000 materials</span></label>
+        <label class="range-chip"><input type="checkbox" value="6000"><span>6000 materials</span></label>
       </div>
       <div class="title-progress-strip">
         <span><strong id="title-complete-count">0</strong> complete</span>
@@ -122,6 +122,6 @@
   <footer class="shell footer">Data synced from LT Boss Matts Tracker · Last synced: <time id="last-sync" datetime="">Not available</time> · Build v13.9.4.69 · Title progress is saved in this browser.</footer>
   <script src="assets/data.js?v=13.9.4.69"></script>
   <script src="assets/global-header.js?v=13.9.4.69-fix3"></script>
-  <script src="assets/title-tracker.js?v=13.9.4.69-category-filter"></script>
+  <script src="assets/title-tracker.js?v=13.9.4.69-category-multiselect"></script>
 </body>
 </html>

@@ -28,6 +28,7 @@
   const nav=trackerTabLinks[0]?.closest(".site-nav");
   if(nav) nav.setAttribute("role","tablist");
   trackerTabLinks.forEach((link)=>{
+    link.classList.add("tracker-tab-link");
     link.setAttribute("role","tab");
     link.setAttribute("aria-selected",link.classList.contains("active")?"true":"false");
     const url=new URL(link.href,location.href);

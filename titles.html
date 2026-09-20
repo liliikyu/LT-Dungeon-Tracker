@@ -7,7 +7,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=13.9.4.31">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?v=13.9.4.31">
   <title>Latale Unofficial Illustration Book</title>
-  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.70-header-fix">
+  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.71-title-set-view">
 </head>
 <body class="title-tracker-page">
   <header class="topbar">
@@ -67,6 +67,11 @@
         <span><strong id="title-complete-count">0</strong> complete</span>
         <span><strong id="title-total-count">0</strong> total</span>
         <span class="title-progress-track" aria-hidden="true"><i id="title-progress-bar"></i></span>
+        <div class="title-view-switch" role="group" aria-label="Title view">
+          <span class="title-view-label">View:</span>
+          <button id="title-view-list" class="title-view-option active" type="button" aria-pressed="true">List</button>
+          <button id="title-view-sets" class="title-view-option" type="button" aria-pressed="false">Sets</button>
+        </div>
       </div>
     </section>
 
@@ -76,7 +81,7 @@
         <span><span id="dungeon-title-section-count">0 titles</span> · <b aria-hidden="true">▾</b></span>
       </button>
       <div class="title-dungeon-section-body">
-        <section class="title-table-wrap" aria-label="Dungeon title tracking table">
+        <section id="title-list-view" class="title-table-wrap" aria-label="Dungeon title tracking table">
           <table class="title-table">
             <thead>
               <tr>
@@ -89,6 +94,10 @@
             <tbody id="title-table-body"></tbody>
           </table>
           <div id="title-empty-state" class="empty-state hidden">No titles match the current filters.</div>
+        </section>
+        <section id="title-set-view" class="title-set-view hidden" aria-label="Titles grouped by title set">
+          <div id="title-set-grid" class="title-set-grid"></div>
+          <div id="title-set-empty-state" class="empty-state hidden">No titles match the current filters.</div>
         </section>
       </div>
     </section>
@@ -120,9 +129,9 @@
     </section>
   </div>
 
-  <footer class="shell footer">Data synced from LT Boss Matts Tracker · Last synced: <time id="last-sync" datetime="">Not available</time> · Build v13.9.4.69 · Title progress is saved in this browser.</footer>
+  <footer class="shell footer">Data synced from LT Boss Matts Tracker · Last synced: <time id="last-sync" datetime="">Not available</time> · Build v13.9.4.71 · Title progress is saved in this browser.</footer>
   <script src="assets/data.js?v=13.9.4.69"></script>
   <script src="assets/global-header.js?v=13.9.4.69-tabs2"></script>
-  <script src="assets/title-tracker.js?v=13.9.4.69-category-multiselect"></script>
+  <script src="assets/title-tracker.js?v=13.9.4.71-title-set-view"></script>
 </body>
 </html>

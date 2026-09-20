@@ -202,7 +202,8 @@
       "jungle area ktuka ruins":"Jungle Area",
       "royal dragon place":"Royal Dragon Palace",
       "base snowfield":"Base/Soprano Snowfield",
-      "soprano snowfield":"Base/Soprano Snowfield"
+      "soprano snowfield":"Base/Soprano Snowfield",
+      "scrap valey entrance":"Scrap Valley Entrance"
     };
     if(explicit[raw]) return explicit[raw];
     // Wiki variants such as "Royal Dragon Palace 3" and

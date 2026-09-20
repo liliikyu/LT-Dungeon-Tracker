@@ -320,6 +320,8 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
             if not dungeon:
                 continue
             section = DUNGEON_MONSTER_LEVEL_FIXES.get((dungeon, name), table_section)
+            if re.match(r"^Mutant\s+", name, flags=re.I):
+                section = "Mutant Monster"
             level = section if re.match(r"^(?:S?Lv\.)", section or "", flags=re.I) else ""
             if section:
                 section_by_monster[(dungeon, name)] = section

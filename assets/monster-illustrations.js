@@ -4578,14 +4578,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "TAID Choco Garden": [
       {
         "name": "Mutant Gingerbread Man",
-        "group": "Boss Monster",
+        "group": "Mutant Monster",
         "level": ""
       }
     ],
     "Twisted Genesis": [
       {
         "name": "Mutant Sky Dragon",
-        "group": "Boss Monster",
+        "group": "Mutant Monster",
         "level": ""
       },
       {
@@ -4632,7 +4632,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Sunset Forest": [
       {
         "name": "Mutant Flower Snake",
-        "group": "Boss Monster",
+        "group": "Mutant Monster",
         "level": ""
       },
       {
@@ -4664,21 +4664,21 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Garden of the Priring": [
       {
         "name": "Mutant Jewelring",
-        "group": "Boss Monster",
+        "group": "Mutant Monster",
         "level": ""
       }
     ],
     "Unknown Forest": [
       {
         "name": "Mutant Ent",
-        "group": "Boss Monster",
+        "group": "Mutant Monster",
         "level": ""
       }
     ],
     "Unknown Beach": [
       {
         "name": "Mutant Clawrence",
-        "group": "Boss Monster",
+        "group": "Mutant Monster",
         "level": ""
       }
     ],

@@ -9,26 +9,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Grell",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Abyss Ruins"
         },
         {
           "name": "Hippocampus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Abyss Ruins"
         },
         {
           "name": "Camper",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Abyss Ruins"
         },
         {
           "name": "Corala",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Abyss Ruins"
         }
       ],
@@ -39,26 +39,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hungry Grayjewel",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Adrica"
         },
         {
           "name": "DS",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Adrica"
         },
         {
           "name": "Flag Agnus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Adrica"
         },
         {
           "name": "Sleepy Tremendes",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Adrica"
         }
       ],
@@ -69,26 +69,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Pigma No.1",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Aie Island"
         },
         {
           "name": "Sheep Dolly",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Aie Island"
         },
         {
           "name": "Red Controller",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Aie Island"
         },
         {
           "name": "Negligent Focalo",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Aie Island"
         }
       ],
@@ -99,38 +99,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Imperial Engineer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Aircraft Crash Site"
         },
         {
           "name": "Imperial Evil Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Aircraft Crash Site"
         },
         {
           "name": "Evil Drone Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Aircraft Crash Site"
         },
         {
           "name": "Advanced Ranger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Aircraft Crash Site"
         },
         {
           "name": "Imperial Advanced Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Aircraft Crash Site"
         },
         {
           "name": "Advanced Drone Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Aircraft Crash Site"
         }
       ],
@@ -153,32 +153,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Yellow Aki Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Aki City"
         },
         {
           "name": "Blaster Kitty Bot",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Aki City"
         },
         {
           "name": "Boxer Bot",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Aki City"
         },
         {
           "name": "Acid Lava Bubble",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Aki City"
         },
         {
           "name": "Venom Lava Bubble",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Aki City"
         }
       ],
@@ -189,26 +189,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Priestess of Fear",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Amalrune Desert"
         },
         {
           "name": "Sandstorm Fighter",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Amalrune Desert"
         },
         {
           "name": "Ra's Bodyguard",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Amalrune Desert"
         },
         {
           "name": "Desert Nakba",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Amalrune Desert"
         }
       ],
@@ -219,20 +219,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Blue Wolf",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Ancient Forest"
         },
         {
           "name": "Fusu Husu",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Ancient Forest"
         },
         {
           "name": "Wild Boar",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Ancient Forest"
         }
       ],
@@ -249,14 +249,14 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Ant Fighter",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Ant Cave"
         },
         {
           "name": "Ant Queen",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Ant Cave"
         }
       ],
@@ -273,26 +273,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Lime Dragon",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Aqua Garden"
         },
         {
           "name": "Baby Earth Dragon",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Aqua Garden"
         },
         {
           "name": "Baby Wind Dragon",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Aqua Garden"
         },
         {
           "name": "Baby Water Dragon",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Aqua Garden"
         }
       ],
@@ -303,26 +303,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hameha",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Aquarium"
         },
         {
           "name": "Swellfish",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Aquarium"
         },
         {
           "name": "Shachi",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Aquarium"
         },
         {
           "name": "Shirena",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Aquarium"
         }
       ],
@@ -354,44 +354,44 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Frog G",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Arcadia"
         },
         {
           "name": "White-Tailed Gumiho",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Arcadia"
         },
         {
           "name": "Privaring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Arcadia"
         },
         {
           "name": "Great Monkey",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Arcadia"
         },
         {
           "name": "Mouth Peach",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Arcadia"
         },
         {
           "name": "Black Tiger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Arcadia"
         },
         {
           "name": "White Tiger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Arcadia"
         }
       ],
@@ -418,32 +418,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Gardener Head",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Aurora Forest"
         },
         {
           "name": "Flower Bush",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Aurora Forest"
         },
         {
           "name": "Aurora Guardian",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Aurora Forest"
         },
         {
           "name": "Ace of Diamonds",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Aurora Forest"
         },
         {
           "name": "Ace of Clubs",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Aurora Forest"
         }
       ],
@@ -477,26 +477,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Recently Gamiel",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Avalon"
         },
         {
           "name": "Apple Tariel",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Avalon"
         },
         {
           "name": "Green Beaked Harab",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Avalon"
         },
         {
           "name": "Gha'agsheblah of Destruction",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Avalon"
         }
       ],
@@ -507,14 +507,14 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "White Beetle G",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Base Snowfield"
         },
         {
           "name": "Shaggy",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Base Snowfield"
         }
       ],
@@ -531,44 +531,44 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Super Germs",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Behemoth's Stomach"
         },
         {
           "name": "Super Germs Leader",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Behemoth's Stomach"
         },
         {
           "name": "Nurse White",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Behemoth's Stomach"
         },
         {
           "name": "Doctor Red",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Behemoth's Stomach"
         },
         {
           "name": "Germ Spore",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Behemoth's Stomach"
         },
         {
           "name": "Germ Spore Leader",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Behemoth's Stomach"
         },
         {
           "name": "Puke",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Behemoth's Stomach"
         }
       ],
@@ -579,26 +579,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Shinden Kai",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Bifrost"
         },
         {
           "name": "Gotha",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Bifrost"
         },
         {
           "name": "Mustang",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Bifrost"
         },
         {
           "name": "Lightning",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Bifrost"
         }
       ],
@@ -620,26 +620,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Niez",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Bongolle Train"
         },
         {
           "name": "Zal",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Bongolle Train"
         },
         {
           "name": "Rattlesnake",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Bongolle Train"
         },
         {
           "name": "Calamity Jane",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Bongolle Train"
         }
       ],
@@ -676,32 +676,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Destructive Spirit of Fire",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Burning City"
         },
         {
           "name": "Corrupted Spirit of Water",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Burning City"
         },
         {
           "name": "Corrupted Darkness",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Burning City"
         },
         {
           "name": "Evil Servant",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Burning City"
         },
         {
           "name": "Corrupted Spirit of Wind",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Burning City"
         }
       ],
@@ -712,32 +712,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hound",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Cherry Lake"
         },
         {
           "name": "Kappa",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Cherry Lake"
         },
         {
           "name": "Warrior Kobold",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Cherry Lake"
         },
         {
           "name": "Cherry Ghost",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Cherry Lake"
         },
         {
           "name": "White Cherry Ghost",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Cherry Lake"
         }
       ],
@@ -759,26 +759,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Pierrot",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Castle"
         },
         {
           "name": "Medium Set",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Castle"
         },
         {
           "name": "Gandolf",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Castle"
         },
         {
           "name": "Large Set",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Castle"
         }
       ],
@@ -800,26 +800,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Heart 3",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Land"
         },
         {
           "name": "Spade 5",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Land"
         },
         {
           "name": "Living Sword",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Land"
         },
         {
           "name": "Checkers Knight",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Land"
         }
       ],
@@ -830,20 +830,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "DigDig",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Tunnel"
         },
         {
           "name": "BokuBoku",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Tunnel"
         },
         {
           "name": "HaniHani",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Chunsik Tunnel"
         }
       ],
@@ -865,8 +865,8 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Melted Container",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Collapsed Tower"
         }
       ],
@@ -883,38 +883,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Fish Bread",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Cookie Garden"
         },
         {
           "name": "Twin Ice Cream",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Cookie Garden"
         },
         {
           "name": "Large Twin Ice Cream",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Cookie Garden"
         },
         {
           "name": "Burger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Cookie Garden"
         },
         {
           "name": "Hot Fish Bread",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Cookie Garden"
         },
         {
           "name": "Gingerbread Man",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Cookie Garden"
         }
       ],
@@ -925,26 +925,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hermit Crab Warrior",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Coral City"
         },
         {
           "name": "Stingray Bodyguard",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Coral City"
         },
         {
           "name": "Coral Lobster Private",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Coral City"
         },
         {
           "name": "Sawfish Coral Dragon Soldier",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Coral City"
         }
       ],
@@ -955,50 +955,50 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Summer Entity",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Coral Forest"
         },
         {
           "name": "Autumn Entity",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Coral Forest"
         },
         {
           "name": "Shadow Entity",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Coral Forest"
         },
         {
           "name": "Chocoring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Coral Forest"
         },
         {
           "name": "Mintring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Coral Forest"
         },
         {
           "name": "Gobust",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Coral Forest"
         },
         {
           "name": "Homme Ninja siblings",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Coral Forest"
         },
         {
           "name": "Carrot Tribe SCV",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Coral Forest"
         }
       ],
@@ -1035,26 +1035,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Pleasent Amdusias",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Crystal Moon Forest"
         },
         {
           "name": "QB of Despair",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Crystal Moon Forest"
         },
         {
           "name": "Lovely Hamama",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Crystal Moon Forest"
         },
         {
           "name": "White Hedgehog",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Crystal Moon Forest"
         }
       ],
@@ -1076,20 +1076,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Unknown Female",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "D-Labo"
         },
         {
           "name": "Unknown Male",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "D-Labo"
         },
         {
           "name": "Loki",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "D-Labo"
         }
       ],
@@ -1111,26 +1111,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Flower Snake",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Forest"
         },
         {
           "name": "Arachne",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Forest"
         },
         {
           "name": "Gargoyle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Forest"
         },
         {
           "name": "Walking Flower",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Forest"
         }
       ],
@@ -1147,56 +1147,56 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Blue Shadow Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Moon Castle"
         },
         {
           "name": "Red Shadow Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Moon Castle"
         },
         {
           "name": "Purple Shadow Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Moon Castle"
         },
         {
           "name": "Black Shadow Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Moon Castle"
         },
         {
           "name": "White Shadow Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Moon Castle"
         },
         {
           "name": "Mechapring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Moon Castle"
         },
         {
           "name": "Canine God",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Moon Castle"
         },
         {
           "name": "Ghost Warrior",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Moon Castle"
         },
         {
           "name": "King Shadow Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Moon Castle"
         }
       ],
@@ -1238,32 +1238,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Deborah Snow Weasel",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Deborah Snowfield"
         },
         {
           "name": "Raving Snow Weasel",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Deborah Snowfield"
         },
         {
           "name": "Regular Snowman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Deborah Snowfield"
         },
         {
           "name": "Nameless Wendigo",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Deborah Snowfield"
         },
         {
           "name": "Narke Of Eternity",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Deborah Snowfield"
         }
       ],
@@ -1274,38 +1274,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Prispring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Desert Area"
         },
         {
           "name": "Axe Beak",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Desert Area"
         },
         {
           "name": "Liquid Cube",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Desert Area"
         },
         {
           "name": "Blood Cube",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Desert Area"
         },
         {
           "name": "Shotaro",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Desert Area"
         },
         {
           "name": "Berserker Sandman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Desert Area"
         }
       ],
@@ -1337,26 +1337,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Dark Valkyrie",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Devil's Mountain"
         },
         {
           "name": "Ice Lizard",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Devil's Mountain"
         },
         {
           "name": "Ice Walker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Devil's Mountain"
         },
         {
           "name": "Dark Giant",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Devil's Mountain"
         }
       ],
@@ -1367,26 +1367,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Fin, Symbol of Peace",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Doll Street"
         },
         {
           "name": "Unique Patchwork Bunny Scalp",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Doll Street"
         },
         {
           "name": "Heart Pirate Mate",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Doll Street"
         },
         {
           "name": "Fairy Bear Honey",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Doll Street"
         }
       ],
@@ -1408,56 +1408,56 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Imperial Puppy",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "East El Anoir Plains"
         },
         {
           "name": "Corrupted Imperial Puppy",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "East El Anoir Plains"
         },
         {
           "name": "Imperial Rifleman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "East El Anoir Plains"
         },
         {
           "name": "Corrupted Imperial Rifleman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "East El Anoir Plains"
         },
         {
           "name": "Imperial Sergeant",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "East El Anoir Plains"
         },
         {
           "name": "Corrupted Imperial Sergeant",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "East El Anoir Plains"
         },
         {
           "name": "Imperial Knight",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "East El Anoir Plains"
         },
         {
           "name": "Corrupted Imperial Knight",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "East El Anoir Plains"
         },
         {
           "name": "Imperial Knight Commander",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "East El Anoir Plains"
         }
       ],
@@ -1474,38 +1474,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Egg Rider",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Egg Castle"
         },
         {
           "name": "Super Egg Rider",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Egg Castle"
         },
         {
           "name": "EggEgg Artillery",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Egg Castle"
         },
         {
           "name": "Egg special force",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Egg Castle"
         },
         {
           "name": "Super Egg Special Force",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Egg Castle"
         },
         {
           "name": "Giant Guliver",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Egg Castle"
         }
       ],
@@ -1516,26 +1516,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Gremory of The Future",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Eidos The Sanctuary"
         },
         {
           "name": "SaElemental Intensity Valkyrie Ranger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Eidos The Sanctuary"
         },
         {
           "name": "Void Phantom Warrior",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Eidos The Sanctuary"
         },
         {
           "name": "SaElemental Intensity Steed",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Eidos The Sanctuary"
         }
       ],
@@ -1546,74 +1546,74 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Wingring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Mountain Ram",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Fiery Obia",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Diaring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Angry Ram",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Hallein Girl",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Heartring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Baby Griffon",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Hallein Griffon",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Boss Ram",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Wolfish Sheep",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "El Anoir Mountains"
         },
         {
           "name": "Baby Sphinx",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "El Anoir Mountains"
         }
       ],
@@ -1655,26 +1655,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Anz of Correction",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Elysia"
         },
         {
           "name": "Honest Lesser Kulla",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Elysia"
         },
         {
           "name": "The Urta",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Elysia"
         },
         {
           "name": "Manun Guardian of Death",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Elysia"
         }
       ],
@@ -1685,20 +1685,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "YoNang",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Empyrean"
         },
         {
           "name": "Imp",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Empyrean"
         },
         {
           "name": "Moran",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Empyrean"
         }
       ],
@@ -1720,26 +1720,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Qurot",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Factory"
         },
         {
           "name": "Pedestrian",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Factory"
         },
         {
           "name": "Pants",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Factory"
         },
         {
           "name": "Mermech",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Factory"
         }
       ],
@@ -1766,14 +1766,14 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Silk Worm",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Field Area"
         },
         {
           "name": "Psyche",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Field Area"
         }
       ],
@@ -1790,32 +1790,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Armored Mustang",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Floating City"
         },
         {
           "name": "Remodeled Kai",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Floating City"
         },
         {
           "name": "Lightning Dancer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Floating City"
         },
         {
           "name": "Maiden Gotha",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Floating City"
         },
         {
           "name": "Agent Shubalt",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Floating City"
         }
       ],
@@ -1826,20 +1826,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Wizzle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Flower Valley"
         },
         {
           "name": "Giselle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Flower Valley"
         },
         {
           "name": "Nutcracker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Flower Valley"
         }
       ],
@@ -1850,20 +1850,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Victor",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Foe Mansion"
         },
         {
           "name": "Vampanelar",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Foe Mansion"
         },
         {
           "name": "Specter",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Foe Mansion"
         }
       ],
@@ -1880,26 +1880,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Priring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Forest Area"
         },
         {
           "name": "Beetle G",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Forest Area"
         },
         {
           "name": "Wild Dog",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Forest Area"
         },
         {
           "name": "Wolf",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Forest Area"
         }
       ],
@@ -1910,26 +1910,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Baby Unicorn",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Forgotten Fields"
         },
         {
           "name": "Baby Pegasus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Forgotten Fields"
         },
         {
           "name": "Ruby Carbuncle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Forgotten Fields"
         },
         {
           "name": "Toy Knight",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Forgotten Fields"
         }
       ],
@@ -1940,20 +1940,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Rookie Owl Wizard",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Glaston Admin Area"
         },
         {
           "name": "Sharp Optica",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Glaston Admin Area"
         },
         {
           "name": "Elemental Book Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Glaston Admin Area"
         }
       ],
@@ -1964,20 +1964,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Garter",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Hangar"
         },
         {
           "name": "Belt",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Hangar"
         },
         {
           "name": "Fenrir",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Hangar"
         }
       ],
@@ -1999,26 +1999,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Sneaky Kalesa",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Invernell Ruins"
         },
         {
           "name": "Angel Winged Nero",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Invernell Ruins"
         },
         {
           "name": "Baby Aiona",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Invernell Ruins"
         },
         {
           "name": "Happy Griffon",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Invernell Ruins"
         }
       ],
@@ -2029,50 +2029,50 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hieva Mariposa",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Jade Forest"
         },
         {
           "name": "Laguna Mariposa",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Jade Forest"
         },
         {
           "name": "Biento Mariposa",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Jade Forest"
         },
         {
           "name": "Snail Bubble",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Jade Forest"
         },
         {
           "name": "Jelly Bubble",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Jade Forest"
         },
         {
           "name": "Guardian Rose",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Jade Forest"
         },
         {
           "name": "Guardian Dandelion",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Jade Forest"
         },
         {
           "name": "Guardian Hydrangea",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Jade Forest"
         }
       ],
@@ -2099,32 +2099,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Desert Fox Assassin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Jude Capital"
         },
         {
           "name": "Scorching Genie",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Jude Capital"
         },
         {
           "name": "Death Shaman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Jude Capital"
         },
         {
           "name": "Insane Sand Spirit",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Jude Capital"
         },
         {
           "name": "Enraged Agni Warrior",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Jude Capital"
         }
       ],
@@ -2135,32 +2135,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Kukuri",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Jungle Area"
         },
         {
           "name": "Woodhead",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Jungle Area"
         },
         {
           "name": "Trent",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Jungle Area"
         },
         {
           "name": "Ubuntoo Kaa",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Jungle Area"
         },
         {
           "name": "Mountain Kong",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Jungle Area"
         }
       ],
@@ -2177,20 +2177,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Ubuntoo Sui",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Jungle Area Ktuka Ruins"
         },
         {
           "name": "Ubuntoo Chii",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Jungle Area Ktuka Ruins"
         },
         {
           "name": "Ubuntoo Huu",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Jungle Area Ktuka Ruins"
         }
       ],
@@ -2212,26 +2212,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hungry Liocat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Knossos Field"
         },
         {
           "name": "Life Homun",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Knossos Field"
         },
         {
           "name": "Nakun Rogue",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Knossos Field"
         },
         {
           "name": "Aquila Fighter",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Knossos Field"
         }
       ],
@@ -2242,32 +2242,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hummingbird",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Ktuka Ruins"
         },
         {
           "name": "Trench",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Ktuka Ruins"
         },
         {
           "name": "Mantrap",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Ktuka Ruins"
         },
         {
           "name": "Jabberwock",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Ktuka Ruins"
         },
         {
           "name": "LaviKong",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Ktuka Ruins"
         }
       ],
@@ -2284,20 +2284,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Bukuri",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Ktuka Underworld"
         },
         {
           "name": "Hotkuri",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Ktuka Underworld"
         },
         {
           "name": "Fikkuri",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Ktuka Underworld"
         }
       ],
@@ -2308,26 +2308,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Working Sophie",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "LaChouette Slums"
         },
         {
           "name": "Ball Epiustin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "LaChouette Slums"
         },
         {
           "name": "Archoness",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "LaChouette Slums"
         },
         {
           "name": "Ratscy",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "LaChouette Slums"
         }
       ],
@@ -2338,26 +2338,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Bronze Madillo",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Laran Road"
         },
         {
           "name": "Leader Hiyade",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Laran Road"
         },
         {
           "name": "Drooling Hefring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Laran Road"
         },
         {
           "name": "Parupa",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Laran Road"
         }
       ],
@@ -2368,38 +2368,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Liliput Airforce",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Liliput"
         },
         {
           "name": "Liliput Navy",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Liliput"
         },
         {
           "name": "Neo Liliput Navy",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Liliput"
         },
         {
           "name": "Circus Division",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Liliput"
         },
         {
           "name": "Neo Circus Division",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Liliput"
         },
         {
           "name": "Liliput Artillery",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Liliput"
         }
       ],
@@ -2410,20 +2410,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Crucru",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Lindos, Sacred Place"
         },
         {
           "name": "Annoying Decarabi",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Lindos, Sacred Place"
         },
         {
           "name": "Positive Tyren",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Lindos, Sacred Place"
         }
       ],
@@ -2434,38 +2434,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Ironshell Scout",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Marin Island"
         },
         {
           "name": "Ironshell Fighter",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Marin Island"
         },
         {
           "name": "Ironshell Raider",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Marin Island"
         },
         {
           "name": "Red Rabbit Charger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Marin Island"
         },
         {
           "name": "Red Rabbit Elite",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Marin Island"
         },
         {
           "name": "Red Rabbit Striker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Marin Island"
         }
       ],
@@ -2476,14 +2476,14 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Tower Undertaker (Lv.170)",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Monster Tower"
         },
         {
           "name": "Tower King Asura (Lv.180)",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Monster Tower"
         }
       ],
@@ -2494,26 +2494,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Gardener Hill Ogre",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Monster Tree Hill"
         },
         {
           "name": "Boar Warrior",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Monster Tree Hill"
         },
         {
           "name": "Chocolate Shukri",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Monster Tree Hill"
         },
         {
           "name": "Talkative Pupping",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Monster Tree Hill"
         }
       ],
@@ -2524,26 +2524,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Tuxedo Schrodinger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Moros"
         },
         {
           "name": "Mose Kingdom Knight",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Moros"
         },
         {
           "name": "Mose Kingdom Wizard",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Moros"
         },
         {
           "name": "Red Golden Bear",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Moros"
         }
       ],
@@ -2554,62 +2554,62 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Ninja Sunny",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         },
         {
           "name": "Mossy Sunny",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         },
         {
           "name": "Blue Conch Shell Octopus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         },
         {
           "name": "Green Conch Shell Octopus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         },
         {
           "name": "Brown FootprElemental Intensity Cat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         },
         {
           "name": "Grey FootprElemental Intensity Cat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         },
         {
           "name": "Ruined Octopus of Greedom",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         },
         {
           "name": "Mossy Octopus of Greedom",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         },
         {
           "name": "Mossy Gangster Cat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         },
         {
           "name": "Black Gangster Cat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"
         }
       ],
@@ -2620,38 +2620,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Kobold",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Mountain Area"
         },
         {
           "name": "Brown Bear",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Mountain Area"
         },
         {
           "name": "Black Bear",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Mountain Area"
         },
         {
           "name": "Moul-Moul",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Mountain Area"
         },
         {
           "name": "Gumiho",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Mountain Area"
         },
         {
           "name": "Tiger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Mountain Area"
         }
       ],
@@ -2688,8 +2688,8 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Bear Wolf",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Mountain Cave"
         }
       ],
@@ -2700,38 +2700,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Dusk Dragon",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Mushroom Forest"
         },
         {
           "name": "Dawn Dragon",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Mushroom Forest"
         },
         {
           "name": "Topaz Cameron",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Mushroom Forest"
         },
         {
           "name": "Spotted Bubble",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Mushroom Forest"
         },
         {
           "name": "Dark Elf Warrior",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Mushroom Forest"
         },
         {
           "name": "Dark Elf Archer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Mushroom Forest"
         }
       ],
@@ -2742,44 +2742,44 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Oni Head",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Nightmare Village"
         },
         {
           "name": "Evil Jar",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Nightmare Village"
         },
         {
           "name": "Shadow Goblin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Nightmare Village"
         },
         {
           "name": "Hongran",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Nightmare Village"
         },
         {
           "name": "Otaki",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Nightmare Village"
         },
         {
           "name": "Chief Undertaker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Nightmare Village"
         },
         {
           "name": "Giseng Girl",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Nightmare Village"
         }
       ],
@@ -2790,50 +2790,50 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Weak Goblin Kid",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "North El Anoir Plains"
         },
         {
           "name": "Weak Goblin Woman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "North El Anoir Plains"
         },
         {
           "name": "Weak Goblin Soldier",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "North El Anoir Plains"
         },
         {
           "name": "Goblin Kid",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "North El Anoir Plains"
         },
         {
           "name": "Goblin Woman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "North El Anoir Plains"
         },
         {
           "name": "Goblin Soldier",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "North El Anoir Plains"
         },
         {
           "name": "Acala Goblin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "North El Anoir Plains"
         },
         {
           "name": "Iron Goblin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "North El Anoir Plains"
         }
       ],
@@ -2850,20 +2850,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Crab",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Orca Beach"
         },
         {
           "name": "Violet Crab",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Orca Beach"
         },
         {
           "name": "Sea Star",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Orca Beach"
         }
       ],
@@ -2880,26 +2880,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Joyful Moreni",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Orcarium"
         },
         {
           "name": "Calm Alparin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Orcarium"
         },
         {
           "name": "Magic Golem No. 0",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Orcarium"
         },
         {
           "name": "Archive Dantalion",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Orcarium"
         }
       ],
@@ -2910,20 +2910,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Flying Wood Mimic",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Oscar Road"
         },
         {
           "name": "Messy Cooking Boss",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Oscar Road"
         },
         {
           "name": "Munchkin Trumpeter",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Oscar Road"
         }
       ],
@@ -2934,32 +2934,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Blue Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Owl Castle"
         },
         {
           "name": "Purple Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Owl Castle"
         },
         {
           "name": "Dark Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Owl Castle"
         },
         {
           "name": "Red Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Owl Castle"
         },
         {
           "name": "White Ninja",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Owl Castle"
         }
       ],
@@ -2991,14 +2991,14 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Zombie Crew",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Phantom Ship"
         },
         {
           "name": "Skull Crew",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Phantom Ship"
         }
       ],
@@ -3009,26 +3009,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Clueless Q-riring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Phobos"
         },
         {
           "name": "Papa Bear",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Phobos"
         },
         {
           "name": "Research Stalker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Phobos"
         },
         {
           "name": "Graceful Succubus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Phobos"
         }
       ],
@@ -3039,26 +3039,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Green Atmos",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Pneumia"
         },
         {
           "name": "Polite Aeuria",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Pneumia"
         },
         {
           "name": "Doctor Theoria",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Pneumia"
         },
         {
           "name": "Action Praxis",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Pneumia"
         }
       ],
@@ -3069,44 +3069,44 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Priting",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Pyramid"
         },
         {
           "name": "Zombie",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Pyramid"
         },
         {
           "name": "Mummy Zombie",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Pyramid"
         },
         {
           "name": "Skeleton",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Pyramid"
         },
         {
           "name": "Mummy Priring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 41 ~ 60",
+          "level": "Lv. 41 ~ 60",
           "sourceField": "Pyramid"
         },
         {
           "name": "Bandersnatch",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Pyramid"
         },
         {
           "name": "Lamia",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Pyramid"
         }
       ],
@@ -3117,62 +3117,62 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Haunted Spirit",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         },
         {
           "name": "Haunted Visage",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         },
         {
           "name": "Sorcery Piece",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         },
         {
           "name": "Quartz Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         },
         {
           "name": "Emerald Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         },
         {
           "name": "Ruby Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         },
         {
           "name": "Mud Bubble",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         },
         {
           "name": "Weightluno",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         },
         {
           "name": "Weightlina",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         },
         {
           "name": "Weightless",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Quartz Cave"
         }
       ],
@@ -3199,14 +3199,14 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Black Beetle G",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Red Crop Field"
         },
         {
           "name": "Jack-O-Lantern",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Red Crop Field"
         }
       ],
@@ -3217,32 +3217,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Yong Gyoung Militant",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Royal Dragon Palace"
         },
         {
           "name": "Yong Gyoung Spearman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Royal Dragon Palace"
         },
         {
           "name": "Yong Gyoung Officer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Royal Dragon Palace"
         },
         {
           "name": "Elite Spearman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Royal Dragon Palace"
         },
         {
           "name": "Performing Maiden",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Royal Dragon Palace"
         }
       ],
@@ -3265,20 +3265,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Rabbit Dronimal",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Salar Coast"
         },
         {
           "name": "Cera-Alba No.1",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Salar Coast"
         },
         {
           "name": "Valiant Devil Knight",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Salar Coast"
         }
       ],
@@ -3289,44 +3289,44 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "PurpleHusu",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Saurus Field"
         },
         {
           "name": "Saber Tiger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Saurus Field"
         },
         {
           "name": "King Saber Tiger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Saurus Field"
         },
         {
           "name": "Bronto",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Saurus Field"
         },
         {
           "name": "Stego",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Saurus Field"
         },
         {
           "name": "Strong Stego",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Saurus Field"
         },
         {
           "name": "Ptera",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Saurus Field"
         }
       ],
@@ -3369,8 +3369,8 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Cordless",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Scrap Valey Entrance"
         }
       ],
@@ -3381,20 +3381,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Cordless",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Scrap Valley Entrance"
         },
         {
           "name": "Diode",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Scrap Valley Entrance"
         },
         {
           "name": "MK5",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Scrap Valley Entrance"
         }
       ],
@@ -3405,20 +3405,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Linch",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Scrap Valley Exit"
         },
         {
           "name": "Big Belly",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Scrap Valley Exit"
         },
         {
           "name": "Orion",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Scrap Valley Exit"
         }
       ],
@@ -3466,20 +3466,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Worsam",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Solar Farm"
         },
         {
           "name": "Quodar",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Solar Farm"
         },
         {
           "name": "Jormungandr",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Solar Farm"
         }
       ],
@@ -3490,14 +3490,14 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Ice Lady",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Soprano Snowfield"
         },
         {
           "name": "Selki",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Soprano Snowfield"
         }
       ],
@@ -3508,56 +3508,56 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Little Lamb",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "South El Anoir Plains"
         },
         {
           "name": "Black Lamb",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "South El Anoir Plains"
         },
         {
           "name": "Obia",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "South El Anoir Plains"
         },
         {
           "name": "Tiny Soldier",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "South El Anoir Plains"
         },
         {
           "name": "Tiny Knight",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "South El Anoir Plains"
         },
         {
           "name": "Bean Archer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "South El Anoir Plains"
         },
         {
           "name": "Egg Warrior",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "South El Anoir Plains"
         },
         {
           "name": "Egg Sorcerer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "South El Anoir Plains"
         },
         {
           "name": "Egg Gunner",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "South El Anoir Plains"
         }
       ],
@@ -3574,32 +3574,50 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Night Goblin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Spooky Village"
         },
         {
           "name": "Miss Gaga",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Spooky Village"
         },
         {
           "name": "Undertaker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 61 ~ 80",
+          "level": "Lv. 61 ~ 80",
           "sourceField": "Spooky Village"
         },
         {
           "name": "Wisp",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Spooky Village"
         },
         {
           "name": "Animated Jar",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
+          "sourceField": "Spooky Village"
+        },
+        {
+          "name": "Night Goblin",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
+          "sourceField": "Spooky Village"
+        },
+        {
+          "name": "Miss Gaga",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
+          "sourceField": "Spooky Village"
+        },
+        {
+          "name": "Undertaker",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Spooky Village"
         }
       ],
@@ -3610,20 +3628,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Star Dwarf Scholar",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Star Dwarf Warehouse"
         },
         {
           "name": "Star Dwarf Janitor",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Star Dwarf Warehouse"
         },
         {
           "name": "Star Dwarf Collector",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Star Dwarf Warehouse"
         }
       ],
@@ -3634,38 +3652,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Starkeeper",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Stardust Plains"
         },
         {
           "name": "Moon Elf Forest Guardian",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Stardust Plains"
         },
         {
           "name": "Moon Elf Yard Guardian",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Stardust Plains"
         },
         {
           "name": "Star Dwarf Mine Worker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Stardust Plains"
         },
         {
           "name": "Star Dwarf Worker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Stardust Plains"
         },
         {
           "name": "Star Dwarf Wizard",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Stardust Plains"
         }
       ],
@@ -3676,56 +3694,56 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Assault Battle Bee",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Storm Watcher Ruins"
         },
         {
           "name": "Queen Escort Bee",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Storm Watcher Ruins"
         },
         {
           "name": "Reserve Battle Bee",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Storm Watcher Ruins"
         },
         {
           "name": "Urethane",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Storm Watcher Ruins"
         },
         {
           "name": "Urethane Warrior",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Storm Watcher Ruins"
         },
         {
           "name": "Urethane Rabbit",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Storm Watcher Ruins"
         },
         {
           "name": "Cold Joy Glirus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Storm Watcher Ruins"
         },
         {
           "name": "Sad Glirus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Storm Watcher Ruins"
         },
         {
           "name": "Angry Glirus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Storm Watcher Ruins"
         }
       ],
@@ -3759,26 +3777,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hungry Gnoll",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Sunsent Plains"
         },
         {
           "name": "Tough Gnoll",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Sunsent Plains"
         },
         {
           "name": "Cyber Carbuncle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Sunsent Plains"
         },
         {
           "name": "Kingless Knight",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Sunsent Plains"
         }
       ],
@@ -3815,20 +3833,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Asura Tiger Master",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Taid: Empyrean"
         },
         {
           "name": "Asura Choen Pam",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Taid: Empyrean"
         },
         {
           "name": "King Asura",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Taid: Empyrean"
         }
       ],
@@ -3839,20 +3857,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Fairy Coa",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Taid: Flower Valley"
         },
         {
           "name": "Fairy Oberon and Titania",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Taid: Flower Valley"
         },
         {
           "name": "Fairy Mountain Kong",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Taid: Flower Valley"
         }
       ],
@@ -3863,26 +3881,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Imp Scout",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Temple Courtyard"
         },
         {
           "name": "Imp Tracker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Temple Courtyard"
         },
         {
           "name": "Green Swamp Hunter",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Temple Courtyard"
         },
         {
           "name": "Green Swamp Raider",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Temple Courtyard"
         }
       ],
@@ -3893,32 +3911,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Succubus Sorcerer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Temple Interior"
         },
         {
           "name": "Succubus Magian",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Temple Interior"
         },
         {
           "name": "Butterfly Rider Scout",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Temple Interior"
         },
         {
           "name": "Elite Satyr Spearman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Temple Interior"
         },
         {
           "name": "Elite Satyr Fighter",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Temple Interior"
         }
       ],
@@ -3945,32 +3963,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Boglee",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Temple of Pluton"
         },
         {
           "name": "Bogle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Temple of Pluton"
         },
         {
           "name": "Gelatin Cube",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Temple of Pluton"
         },
         {
           "name": "Goblin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Temple of Pluton"
         },
         {
           "name": "King Goblin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Temple of Pluton"
         }
       ],
@@ -3987,32 +4005,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Mantis",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "The Tallest Tree"
         },
         {
           "name": "Spear Honey Bee",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "The Tallest Tree"
         },
         {
           "name": "Bow Honey Bee",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "The Tallest Tree"
         },
         {
           "name": "Warrior Bee",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "The Tallest Tree"
         },
         {
           "name": "Queen Bee",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "The Tallest Tree"
         }
       ],
@@ -4023,44 +4041,50 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Red Max",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
+          "sourceField": "Tiger Temple"
+        },
+        {
+          "name": "Red Max",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Tiger Temple"
         },
         {
           "name": "Blue Max",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Tiger Temple"
         },
         {
           "name": "Elmira",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Tiger Temple"
         },
         {
           "name": "Elvira",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Tiger Temple"
         },
         {
           "name": "Tiger Master",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Tiger Temple"
         },
         {
           "name": "Tiger Destroyer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Tiger Temple"
         },
         {
           "name": "Hosun Lei-Lei",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Tiger Temple"
         }
       ],
@@ -4071,26 +4095,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Granny Root",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Toad Hill"
         },
         {
           "name": "Mongdali",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Toad Hill"
         },
         {
           "name": "Wild Street Cat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Toad Hill"
         },
         {
           "name": "Starfish",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Toad Hill"
         }
       ],
@@ -4101,8 +4125,8 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Karkinos",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Toad Seashore"
         }
       ],
@@ -4113,32 +4137,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Enraged Naga",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Treasure Beach"
         },
         {
           "name": "Green Dragon Turtle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Treasure Beach"
         },
         {
           "name": "Pink Dragon Turtle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Treasure Beach"
         },
         {
           "name": "Merman Soldier",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Treasure Beach"
         },
         {
           "name": "Merman Spearman",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "Treasure Beach"
         }
       ],
@@ -4149,32 +4173,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Yong Gyoung Soldier",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Twilight Cornfield"
         },
         {
           "name": "Yong Gyoung Archer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Twilight Cornfield"
         },
         {
           "name": "Elite Soldier",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Twilight Cornfield"
         },
         {
           "name": "Elite Archer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Twilight Cornfield"
         },
         {
           "name": "Beast Master",
-          "group": "",
-          "level": "",
+          "group": "Lv. 201 ~ 220",
+          "level": "Lv. 201 ~ 220",
           "sourceField": "Twilight Cornfield"
         }
       ],
@@ -4185,38 +4209,38 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Graveyard Shaz",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Undercity Construction"
         },
         {
           "name": "Gargoyle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Undercity Construction"
         },
         {
           "name": "Priring Masked Thief",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Undercity Construction"
         },
         {
           "name": "Tartaros Golem",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Undercity Construction"
         },
         {
           "name": "Purple Puppet",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Undercity Construction"
         },
         {
           "name": "Mischievous Shynic Phantom",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Undercity Construction"
         }
       ],
@@ -4227,20 +4251,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Zombie Privaring",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Underworld Canal"
         },
         {
           "name": "Underworld Bat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Underworld Canal"
         },
         {
           "name": "Demon Goblin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Underworld Canal"
         }
       ],
@@ -4257,20 +4281,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Poison Beetle G",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Underworld Cave"
         },
         {
           "name": "Borocle",
-          "group": "",
-          "level": "",
+          "group": "Lv. 1 ~ 20",
+          "level": "Lv. 1 ~ 20",
           "sourceField": "Underworld Cave"
         },
         {
           "name": "Bat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 21 ~ 40",
+          "level": "Lv. 21 ~ 40",
           "sourceField": "Underworld Cave"
         }
       ],
@@ -4318,14 +4342,14 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Fragment of the Devil King",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Vanaheimr - Wailing Coast"
         },
         {
           "name": "Broken Soul",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Vanaheimr - Wailing Coast"
         }
       ],
@@ -4336,26 +4360,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Sylphin of the East",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Vayuna Canyon"
         },
         {
           "name": "Sylphin of the West",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Vayuna Canyon"
         },
         {
           "name": "Red Berserker",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Vayuna Canyon"
         },
         {
           "name": "Shocked Agoste",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Vayuna Canyon"
         }
       ],
@@ -4366,32 +4390,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hermitage",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Velfa Library"
         },
         {
           "name": "Rideword",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Velfa Library"
         },
         {
           "name": "Bookworm",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Velfa Library"
         },
         {
           "name": "Story Fairy",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Velfa Library"
         },
         {
           "name": "Flying Armor",
-          "group": "",
-          "level": "",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Velfa Library"
         }
       ],
@@ -4402,26 +4426,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Shining Phanto Sinmara",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Vigrid"
         },
         {
           "name": "Indignant Gullinkambi",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Vigrid"
         },
         {
           "name": "Hungry Heidrun",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Vigrid"
         },
         {
           "name": "Veteran Ganglati",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Vigrid"
         }
       ],
@@ -4443,26 +4467,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Secret Forest Summoner",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Waterlily Forest"
         },
         {
           "name": "Screaming Face of Death",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Waterlily Forest"
         },
         {
           "name": "Flame Hell Cowl",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Waterlily Forest"
         },
         {
           "name": "Dragon Lance Noblesse",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "Waterlily Forest"
         }
       ],
@@ -4473,56 +4497,56 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Hamster Slime",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Webfoot Octopus Temple"
         },
         {
           "name": "Conch Shell Octopus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Webfoot Octopus Temple"
         },
         {
           "name": "Masked Octopus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Webfoot Octopus Temple"
         },
         {
           "name": "FootprElemental Intensity Cat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Webfoot Octopus Temple"
         },
         {
           "name": "Sunny",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Webfoot Octopus Temple"
         },
         {
           "name": "Gangster Cat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Webfoot Octopus Temple"
         },
         {
           "name": "Pirate Cat",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "Webfoot Octopus Temple"
         },
         {
           "name": "Octopus of Freedom",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Webfoot Octopus Temple"
         },
         {
           "name": "Soldier Octopus",
-          "group": "",
-          "level": "",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
           "sourceField": "Webfoot Octopus Temple"
         }
       ],
@@ -4581,50 +4605,50 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Kobold Squire",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "West El Anoir Plains"
         },
         {
           "name": "Wild Kobold Squire",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "West El Anoir Plains"
         },
         {
           "name": "Wild Kobold Guard",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "West El Anoir Plains"
         },
         {
           "name": "Kobold Guard",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "West El Anoir Plains"
         },
         {
           "name": "Kobold Training Leader",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "West El Anoir Plains"
         },
         {
           "name": "Wild Kobold Training Leader",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "West El Anoir Plains"
         },
         {
           "name": "Wild Kobold Musketeer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "West El Anoir Plains"
         },
         {
           "name": "Kobold Gunner",
-          "group": "",
-          "level": "",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
           "sourceField": "West El Anoir Plains"
         }
       ],
@@ -4635,20 +4659,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Ruby Strange Bird",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Whispering Hill"
         },
         {
           "name": "White Rock Troll",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Whispering Hill"
         },
         {
           "name": "Debesys Rock Spider",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Whispering Hill"
         }
       ],
@@ -4659,20 +4683,20 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Creeper",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "White Chapel"
         },
         {
           "name": "Operster",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "White Chapel"
         },
         {
           "name": "Erazer",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "White Chapel"
         }
       ],
@@ -4689,26 +4713,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Fallen Star",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "White Chapel Alley"
         },
         {
           "name": "Shadow Tief",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "White Chapel Alley"
         },
         {
           "name": "Victoria",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "White Chapel Alley"
         },
         {
           "name": "Little Blade Girl",
-          "group": "",
-          "level": "",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "White Chapel Alley"
         }
       ],
@@ -4719,32 +4743,32 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Grugger Charger",
-          "group": "",
-          "level": "",
+          "group": "Lv. 221 ~ 240",
+          "level": "Lv. 221 ~ 240",
           "sourceField": "White Cole Canyon"
         },
         {
           "name": "Karka Assassin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "White Cole Canyon"
         },
         {
           "name": "Snowy Mountain Liora",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "White Cole Canyon"
         },
         {
           "name": "Wild Owlbear",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "White Cole Canyon"
         },
         {
           "name": "Destructive Ettin",
-          "group": "",
-          "level": "",
+          "group": "Lv. 241 ~ 260",
+          "level": "Lv. 241 ~ 260",
           "sourceField": "White Cole Canyon"
         }
       ],
@@ -4755,14 +4779,14 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Ancient Arachne",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Xenadia Earth Garden Central Area"
         },
         {
           "name": "Treasure Room Guardian",
-          "group": "",
-          "level": "",
+          "group": "Lv. 81 ~ 100",
+          "level": "Lv. 81 ~ 100",
           "sourceField": "Xenadia Earth Garden Central Area"
         }
       ],
@@ -4773,8 +4797,8 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Banshee",
-          "group": "",
-          "level": "",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
           "sourceField": "Xenadia: Earth Garden Ruins"
         }
       ],
@@ -4785,26 +4809,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Freshman Maestro",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Zerenis Hill"
         },
         {
           "name": "Sophomore Maestro",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Zerenis Hill"
         },
         {
           "name": "Arrogant Spirit of Intelligence",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Zerenis Hill"
         },
         {
           "name": "Freshman Magic Broomstick",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Zerenis Hill"
         }
       ],
@@ -4815,26 +4839,26 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Runaway Aergia",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Zisk Plains"
         },
         {
           "name": "Hunter Hakai",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Zisk Plains"
         },
         {
           "name": "Zisk Plains Algaea",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Zisk Plains"
         },
         {
           "name": "Carrier Ponos",
-          "group": "",
-          "level": "",
+          "group": "Lv. 261 ~ 280",
+          "level": "Lv. 261 ~ 280",
           "sourceField": "Zisk Plains"
         }
       ],

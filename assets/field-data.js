@@ -3381,8 +3381,8 @@ window.LT_FIELD_DATA = {
       "illustrations": [
         {
           "name": "Cordless",
-          "group": "Lv. 101 ~ 120",
-          "level": "Lv. 101 ~ 120",
+          "group": "Lv. 161 ~ 180",
+          "level": "Lv. 161 ~ 180",
           "sourceField": "Scrap Valley Entrance"
         },
         {

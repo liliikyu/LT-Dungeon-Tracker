@@ -56,6 +56,7 @@
       "amarune desert":"Eastland",
       "aqua garden":"Jiendia",
       "base snowfield":"Jiendia",
+      "base soprano snowfield":"Jiendia",
       "behemoth's stomach":"Jiendia",
       "collapsed tower":"Freios",
       "cookie garden":"Jiendia",
@@ -199,7 +200,9 @@
     const raw=normField(name);
     const explicit={
       "jungle area ktuka ruins":"Jungle Area",
-      "royal dragon place":"Royal Dragon Palace"
+      "royal dragon place":"Royal Dragon Palace",
+      "base snowfield":"Base/Soprano Snowfield",
+      "soprano snowfield":"Base/Soprano Snowfield"
     };
     if(explicit[raw]) return explicit[raw];
     // Wiki variants such as "Royal Dragon Palace 3" and

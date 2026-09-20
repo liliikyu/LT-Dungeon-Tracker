@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=13.9.4.31">
+  <title>LaTale Extra Tools · Item Upgrade Tracker</title>
+  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.84-extra-tools">
+</head>
+<body class="extra-tools-page">
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="item-upgrade.html" aria-label="LaTale Extra Tools">
+        <span class="brand-mark"><img src="assets/favicon-purple.png?v=13.9.4.31" alt="" aria-hidden="true"></span>
+        <span><strong>LaTale Extra Tools</strong><small>Item Upgrade Tracker</small></span>
+      </a>
+      <nav class="extra-tools-nav" aria-label="Extra tool navigation">
+        <a class="extra-back-link" href="fields.html">← Illustration Book</a>
+      </nav>
+      <div class="topbar-actions">
+        <span class="result-count">Draft</span>
+        <button id="theme-toggle" class="icon-button" type="button" aria-label="Theme: System. Click to switch theme." title="Theme: System">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell upgrade-draft-page">
+    <section class="upgrade-hero">
+      <div>
+        <h1>Item Upgrade Tracker</h1>
+        <p>First draft focused on <strong>Weapons</strong> and <strong>Accessories</strong>. The final tracker will sync from the <code>item_upgrade</code> tab in LT Boss Matts Tracker.</p>
+      </div>
+      <span class="upgrade-draft-badge">Draft · Weapons + Accessories</span>
+    </section>
+
+    <section class="upgrade-toolbar" aria-label="Item upgrade filters">
+      <input id="upgrade-search" type="search" placeholder="Search item or material…" autocomplete="off">
+      <select id="upgrade-category" aria-label="Category">
+        <option value="all">Weapons + Accessories</option>
+        <option value="weapon">Weapons</option>
+        <option value="accessory">Accessories</option>
+      </select>
+      <select id="upgrade-progression" aria-label="Progression type">
+        <option value="all">All progression</option>
+        <option value="tier">Tier upgrades</option>
+        <option value="enhancement">Enhancement</option>
+      </select>
+    </section>
+
+    <section id="upgrade-grid" class="upgrade-grid" aria-live="polite"></section>
+
+    <div class="upgrade-note">
+      <strong>Draft behavior:</strong> cards are laid out around the Google Sheet fields <code>item_name</code>, <code>progression_type</code>, <code>stage_sequence</code>, <code>stage_name</code>, <code>material_cost_per_piece</code>, <code>material_name</code>, <code>ascension_stone_per_piece</code>, and <code>ascension_stone_name</code>. Next step is wiring the page to generated data from the <code>item_upgrade</code> tab rather than keeping sample rows in the page script.
+    </div>
+  </main>
+
+  <script src="assets/global-header.js?v=13.9.4.84-extra-tools"></script>
+  <script src="assets/item-upgrade.js?v=13.9.4.84-draft"></script>
+</body>
+</html>

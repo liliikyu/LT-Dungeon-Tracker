@@ -355,7 +355,7 @@
       }).join("");
       return `<article class="title-set-card">
         <header class="title-set-card-head">
-          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${total} title${total===1?"":"s"}${scenarioCount?` · ${scenarioCount} scenario${scenarioCount===1?"":"s"}`:""}${questCount?` · ${questCount} questing`:""}${otherCount?` · ${otherCount} other`:""}</small></span>
+          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${titles.length} title${titles.length===1?"":"s"}${scenarioCount?` · ${scenarioCount} scenario${scenarioCount===1?"":"s"}`:""}${questCount?` · ${questCount} questing`:""}${otherCount?` · ${otherCount} other`:""}</small></span>
           <span class="title-set-card-progress">${done} / ${total}</span>
         </header>
         <div class="title-set-card-list">${scenarioRows}${rows}</div>

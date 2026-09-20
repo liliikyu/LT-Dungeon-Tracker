@@ -125,12 +125,15 @@ def positive_int(value: str | None, default: int = 1) -> int:
 
 
 def level_section(text: str) -> str:
-    """Extract a wiki Monster Illustration level band."""
+    """Extract the most recent wiki Monster Illustration level band."""
     h = clean_text(text)
-    match = re.search(r"((?:S?Lv\.?\s*)?\d+\s*[~\-–—]\s*\d+)\s*(?:Monsters?)?", h, flags=re.I)
-    if not match:
+    matches = list(re.finditer(r"((?:S?Lv\.?\s*)?\d+\s*[~\-–—]\s*\d+)\s*(?:Monsters?)?", h, flags=re.I))
+    if not matches:
         return ""
-    label = clean_text(match.group(1))
+    # The parser keeps a short rolling text window. When a new section starts,
+    # that window can contain both the previous and current level headings.
+    # Always use the last band mentioned so the next table gets the current one.
+    label = clean_text(matches[-1].group(1))
     label = re.sub(r"^Lv\s+", "Lv. ", label, flags=re.I)
     label = re.sub(r"^SLv\s+", "SLv. ", label, flags=re.I)
     return label

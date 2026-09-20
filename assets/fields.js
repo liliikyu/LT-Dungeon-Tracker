@@ -170,7 +170,7 @@
     const match=raw.match(/\d+(?:\.\d+)?/);
     return match?Number(match[0]):Number.POSITIVE_INFINITY;
   };
-  const illustrationLabel=(entry)=>{const n=illustrationName(entry),lvl=illustrationLevel(entry),grp=illustrationGroup(entry),tag=lvl||grp,mutant=/^Mutant\\s+/i.test(n)?" (Mutant Monster)":"";return tag?`${n} (${tag})${mutant}`:`${n}${mutant}`;};
+  const illustrationLabel=(entry)=>{const n=illustrationName(entry),lvl=illustrationLevel(entry),grp=illustrationGroup(entry),tag=lvl||grp,mutant=/^Mutant\s+/i.test(n)?" (Mutant Monster)":"";return tag?`${n} (${tag})${mutant}`:`${n}${mutant}`;};
   const sourceFieldOf=(entry,fallback)=>typeof entry==="object"&&String(entry?.sourceField||entry?._sourceField||"").trim()?String(entry.sourceField||entry._sourceField).trim():fallback;
   const codexName=(entry)=>typeof entry==="string"?entry:String(entry?.name??"");
   const codexCategory=(entry)=>{const raw=typeof entry==="object"?String(entry?.category??"Other"):"Other";const n=raw.toLowerCase();if(n.includes("equip"))return "Equipment";if(n.includes("event"))return "Event";if(n==="etc"||n.includes("etc"))return "ETC";return "Other";};

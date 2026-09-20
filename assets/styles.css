@@ -2463,3 +2463,20 @@ body.conquest-modal-open{overflow:hidden}
 @media (max-width:1120px) and (min-width:761px){
   .title-tracker-page .brand small{display:none;}
 }
+
+
+/* v13.9.4.76 — align header actions on Fields and Dungeons */
+.field-tracker-page .topbar-actions,
+.dungeon-tracker-page .topbar-actions{
+  flex:0 0 auto;
+  align-self:flex-end;
+  height:34px;
+  align-items:center;
+  padding-bottom:1px;
+}
+.field-tracker-page .result-count,
+.dungeon-tracker-page .result-count{
+  display:flex;
+  align-items:center;
+  height:30px;
+}

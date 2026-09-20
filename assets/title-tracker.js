@@ -6,6 +6,10 @@
   const THEME_KEY = "lt-theme";
   const TITLE_PROGRESS_KEY = "lt-title-progress-v1";
   const TITLE_VIEW_KEY = "lt-title-view-v1";
+  const TITLE_SET_TITLE_EXCLUSIONS = {
+    "title_set_10": new Set(["Festival Helper Titlebook"])
+  };
+
   const TITLE_SET_SCENARIOS = {
     "title_set_05":[
       {title:"Webfoot Octopus Pasta",source:"Field mob drop",type:"other"},
@@ -26,7 +30,7 @@
       {title:"Another Document",source:"Main Scenario Ch.3 Ep.5",type:"main"},
       {title:"The Power-Hungry One",source:"Sub Scenario Ch.3 Ep.15",type:"sub"},
       {title:"Trace of Glorious Magic",source:"Complete Zerenis Headquarters dungeon quests ×2 (Repeatable)",type:"quest"},
-      {title:"Academy Helper",source:"Zerenis Headquarters material / Asma exchange",type:"other"}
+      {title:"Academy Helper",source:"Exchange materials from Zerenis Headquarters dungeon or Ely with Asma in Belos or Elias",type:"title"}
     ],
     "title_set_11":[
       {title:"Darkness of Tartaros",source:"Main Scenario Ch.3 Ep.2",type:"main"},
@@ -321,11 +325,14 @@
       return a.localeCompare(b,undefined,{sensitivity:"base"});
     });
     setGrid.innerHTML=entries.map(([setName,group])=>{
-      const titles=group.titles;
+      const excluded=TITLE_SET_TITLE_EXCLUSIONS[group.id]||new Set();
+      const titles=group.titles.filter((title)=>!excluded.has(String(title.title||"")));
       titles.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||""),undefined,{sensitivity:"base"}));
       const scenarios=group.id ? (TITLE_SET_SCENARIOS[group.id]||[]) : [];
-      const scenarioRows=scenarios.map((item,index)=>{
-        const scenarioId=`scenario:${group.id}:${index}`;
+      const supplementalTitles=scenarios.filter((item)=>item.type==="title");
+      const requirements=scenarios.filter((item)=>item.type!=="title");
+      const scenarioRows=requirements.map((item,index)=>{
+        const scenarioId=`scenario:${group.id}:${normalize(item.title)}`;
         const state=rowState(scenarioId);
         const badge=item.type==="sub"?"Sub Scenario":item.type==="main"?"Main Scenario":"";
         return `<label class="title-set-title-row title-set-scenario-row ${state.complete ? "complete" : ""}">
@@ -336,10 +343,14 @@
           </span>
         </label>`;
       }).join("");
-      const scenarioCount=scenarios.filter((item)=>item.type==="main"||item.type==="sub").length;
-      const otherCount=scenarios.filter((item)=>item.type==="quest"||item.type==="other").length;
-      const done=titles.filter((title)=>rowState(title.id).complete).length + scenarios.filter((item,index)=>rowState(`scenario:${group.id}:${index}`).complete).length;
-      const total=titles.length+scenarios.length;
+      const scenarioCount=requirements.filter((item)=>item.type==="main"||item.type==="sub").length;
+      const otherCount=requirements.filter((item)=>item.type==="quest"||item.type==="other").length;
+      const regularDone=titles.filter((title)=>rowState(title.id).complete).length;
+      const requirementDone=requirements.filter((item)=>rowState(`scenario:${group.id}:${normalize(item.title)}`).complete).length;
+      const supplementalDone=supplementalTitles.filter((item)=>rowState(`scenario:${group.id}:${normalize(item.title)}`).complete).length;
+      const done=regularDone+requirementDone+supplementalDone;
+      const titleCount=titles.length+supplementalTitles.length;
+      const total=titleCount+scenarioCount+otherCount;
       const pct=total?(done/total)*100:0;
       const rows=titles.map((title)=>{
         const state=rowState(title.id);
@@ -352,12 +363,23 @@
           </span>
         </label>`;
       }).join("");
+      const supplementalTitleRows=supplementalTitles.map((item)=>{
+        const supplementalId=`scenario:${group.id}:${normalize(item.title)}`;
+        const state=rowState(supplementalId);
+        return `<label class="title-set-title-row ${state.complete ? "complete" : ""}">
+          <input class="title-set-title-check" type="checkbox" ${state.complete ? "checked" : ""} data-title-id="${esc(supplementalId)}" aria-label="Mark ${esc(item.title)} complete">
+          <span class="title-set-title-copy">
+            <span class="title-set-title-name"><span>${esc(item.title)}</span></span>
+            <span class="title-set-title-meta">${esc(item.source)}</span>
+          </span>
+        </label>`;
+      }).join("");
       return `<article class="title-set-card">
         <header class="title-set-card-head">
-          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${titles.length} titles · ${scenarioCount} scenario · ${otherCount} others</small></span>
+          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${titleCount} titles · ${scenarioCount} scenario · ${otherCount} others</small></span>
           <span class="title-set-card-progress">${done} / ${total}</span>
         </header>
-        <div class="title-set-card-list">${scenarioRows}${rows}</div>
+        <div class="title-set-card-list">${scenarioRows}${rows}${supplementalTitleRows}</div>
         <div class="title-set-card-track" aria-hidden="true"><i style="width:${pct}%"></i></div>
       </article>`;
     }).join("");

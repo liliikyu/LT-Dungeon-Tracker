@@ -11,6 +11,7 @@ OUTPUT=ROOT/"assets"/"field-achievements.js"
 API="https://latale.wiki.gg/api.php"
 
 FIELD_MAP={
+  "Andersen\'s Fairy Tale":"Aquarium",
   "Courageous Training":"Spooky Village",
   "Hiding Place":"Behemoth's Stomach",
   "Very Spicy Pepper":"Lilliput Highway",

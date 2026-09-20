@@ -284,19 +284,35 @@ def canonical_dungeon(location: str) -> str | None:
     return ALIASES.get(name, name)
 
 
+def section_score(section: str) -> tuple[int, int]:
+    """Prefer explicit special categories, otherwise the later/higher level band."""
+    s = clean_text(section)
+    if s == "Mutant Monster":
+        return (4, 0)
+    if s == "Boss Monster":
+        return (3, 0)
+    m = re.search(r"(\d+)", s)
+    if re.match(r"^(?:S?Lv\.)", s, flags=re.I) and m:
+        return (2, int(m.group(1)))
+    return (0, 0)
+
+
+def better_section(current: str, candidate: str) -> str:
+    return candidate if section_score(candidate) > section_score(current) else current
+
+
 def parse_dungeons(html: str) -> dict[str, list[dict]]:
     parser = TableParser()
     parser.feed(html)
     dungeons: dict[str, list[dict]] = {}
     section_by_monster: dict[tuple[str, str], str] = {}
-    section_by_name: dict[str, str] = {}
+    sections_by_name: dict[str, set[str]] = {}
 
     for table_section, raw_table in parser.tables:
         table = expand_spans(raw_table)
         if not table:
             continue
 
-        # Locate a header row instead of assuming it is always row 0.
         header_index = None
         name_index = location_index = None
         for idx, row in enumerate(table[:8]):
@@ -319,35 +335,45 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
             dungeon = canonical_dungeon(location)
             if not dungeon:
                 continue
+
             section = DUNGEON_MONSTER_LEVEL_FIXES.get((dungeon, name), table_section)
             if re.match(r"^Mutant\s+", name, flags=re.I):
                 section = "Mutant Monster"
-            level = section if re.match(r"^(?:S?Lv\.)", section or "", flags=re.I) else ""
+
+            pair = (dungeon, name)
             if section:
-                section_by_monster[(dungeon, name)] = section
-                section_by_name[name] = section
+                section_by_monster[pair] = better_section(section_by_monster.get(pair, ""), section)
+                sections_by_name.setdefault(name, set()).add(section)
+
+            chosen = section_by_monster.get(pair, section)
+            level = chosen if re.match(r"^(?:S?Lv\.)", chosen or "", flags=re.I) else ""
             bucket = dungeons.setdefault(dungeon, [])
-            if not any(entry.get("name") == name for entry in bucket):
-                bucket.append({"name": name, "group": section, "level": level})
+            existing = next((entry for entry in bucket if entry.get("name") == name), None)
+            if existing is None:
+                bucket.append({"name": name, "group": chosen, "level": level})
+            else:
+                existing["group"] = chosen
+                existing["level"] = level
 
     if not dungeons:
         raise RuntimeError("No dungeon Monster Illustrations could be parsed; keeping existing snapshot")
 
-    # Replace known problematic groups after generic parsing. This deliberately
-    # prevents stale/adjacent rowspan data from being retained.
+    def resolved_section(dungeon: str, monster: str) -> str:
+        exact = section_by_monster.get((dungeon, monster), "")
+        if exact:
+            return exact
+        candidates = {s for s in sections_by_name.get(monster, set()) if s}
+        if len(candidates) == 1:
+            return next(iter(candidates))
+        return ""
+
     for dungeon, monsters in KNOWN_DUNGEON_ILLUSTRATIONS.items():
-        dungeons[dungeon] = [
-            {
-                "name": monster,
-                "group": section_by_monster.get((dungeon, monster), section_by_name.get(monster, "")),
-                "level": (
-                    section_by_monster.get((dungeon, monster), section_by_name.get(monster, ""))
-                    if re.match(r"^(?:S?Lv\.)", section_by_monster.get((dungeon, monster), section_by_name.get(monster, "")), flags=re.I)
-                    else ""
-                ),
-            }
-            for monster in monsters
-        ]
+        fixed = []
+        for monster in monsters:
+            section = resolved_section(dungeon, monster)
+            level = section if re.match(r"^(?:S?Lv\.)", section or "", flags=re.I) else ""
+            fixed.append({"name": monster, "group": section, "level": level})
+        dungeons[dungeon] = fixed
 
     return dungeons
 

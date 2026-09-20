@@ -2188,3 +2188,40 @@ body.conquest-modal-open{overflow:hidden}
   opacity:.9;
   align-self:center;
 }
+
+
+/* v13.9.4.70 — Title header overlap/alignment fix */
+.title-tracker-page .topbar-inner{
+  gap:10px;
+}
+.title-tracker-page .site-nav{
+  flex:0 0 auto;
+  min-width:0;
+}
+.title-tracker-page .site-nav-link{
+  white-space:nowrap;
+  flex:0 0 auto;
+}
+.title-tracker-page .topbar-actions{
+  flex:0 0 auto;
+  align-self:flex-end;
+  height:34px;
+  align-items:center;
+  padding-bottom:1px;
+}
+.title-tracker-page .result-count{
+  display:flex;
+  align-items:center;
+  height:30px;
+}
+@media (max-width:1180px) and (min-width:761px){
+  .title-tracker-page .topbar-inner{gap:7px;}
+  .title-tracker-page .site-nav{margin-right:4px;}
+  .title-tracker-page .site-nav-link{padding-inline:9px;font-size:12px;}
+  .title-tracker-page .tracker-tab-link{padding-inline:11px;}
+  .title-tracker-page .site-nav-divider,
+  .title-tracker-page .tracker-primary-divider{margin-inline:3px;}
+  .title-tracker-page .global-conquest-control{gap:5px;padding-inline:2px;font-size:12px;}
+  .title-tracker-page .topbar-actions{gap:6px;}
+  .title-tracker-page .result-count{margin-right:2px;font-size:12px;}
+}

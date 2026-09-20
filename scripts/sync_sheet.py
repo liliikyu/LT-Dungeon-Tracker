@@ -91,21 +91,11 @@ def level_info(raw):
     match = re.match(r"^UL(?:V)?\.?([0-9]+)", text)
     if match:
         value = int(match.group(1))
-        if value <= 1000:
-            category = "ULv. 1–1000"
-        elif 1300 <= value <= 3500:
-            category = "ULv. 1300–3500"
-        elif 3700 <= value <= 8000:
-            category = "ULv. 3700–8000"
-        elif 8300 <= value <= 9999:
-            category = "ULv. 8300–9999"
-        else:
-            category = "Other"
-        return "ULv", value, category
+        return "ULv", value, "ULv. 1–9999" if 1 <= value <= 9999 else "Other"
     match = re.search(r"([0-9]+)", text)
     if match:
         value = int(match.group(1))
-        return "Lv", value, "Lv. 1–199" if value <= 199 else "Lv. 200–235"
+        return "Lv", value, "Lv. 1–235" if 1 <= value <= 235 else "Other"
     return "Unknown", None, "Other"
 
 
@@ -413,12 +403,8 @@ def build_data(
         "schemaVersion": "v8",
         "levelFilters": [
             {"id": "all", "label": "All"},
-            {"id": "lv-1-199", "label": "Lv. 1–199"},
-            {"id": "lv-200-235", "label": "Lv. 200–235"},
-            {"id": "ulv-1-1000", "label": "ULv. 1–1000"},
-            {"id": "ulv-1300-3500", "label": "ULv. 1300–3500"},
-            {"id": "ulv-3700-8000", "label": "ULv. 3700–8000"},
-            {"id": "ulv-8300-9999", "label": "ULv. 8300–9999"},
+            {"id": "lv-1-235", "label": "Lv. 1–235"},
+            {"id": "ulv-1-9999", "label": "ULv. 1–9999"},
             {"id": "slv-1-plus", "label": "SLv. 1+"},
         ],
         "dungeons": dungeons,

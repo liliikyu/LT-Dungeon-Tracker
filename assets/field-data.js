@@ -1122,7 +1122,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Dark Forest"
         },
         {
-          "name": "Gargoyle",
+          "name": "Gargoyle (Dark Forest)",
           "group": "Lv. 41 ~ 60",
           "level": "Lv. 41 ~ 60",
           "sourceField": "Dark Forest"
@@ -4238,7 +4238,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Undercity Construction"
         },
         {
-          "name": "Gargoyle",
+          "name": "Gargoyle (Undercity Construction)",
           "group": "Lv. 241 ~ 260",
           "level": "Lv. 241 ~ 260",
           "sourceField": "Undercity Construction"

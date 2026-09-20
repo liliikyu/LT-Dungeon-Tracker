@@ -2432,3 +2432,34 @@ body.conquest-modal-open{overflow:hidden}
   color:var(--badge5);
   background:color-mix(in srgb,var(--panel-3) 88%,var(--badge5) 12%);
 }
+
+
+/* v13.9.4.75 — prevent Title-page brand from being squeezed */
+.title-tracker-page .brand{
+  flex:0 0 auto;
+}
+.title-tracker-page .brand > span:last-child{
+  min-width:max-content;
+}
+.title-tracker-page .brand strong,
+.title-tracker-page .brand small{
+  white-space:nowrap;
+}
+@media (max-width:1320px) and (min-width:761px){
+  .title-tracker-page .topbar-inner{gap:6px;}
+  .title-tracker-page .brand{gap:7px;}
+  .title-tracker-page .brand-mark{width:28px;height:28px;}
+  .title-tracker-page .brand strong{font-size:14px;}
+  .title-tracker-page .brand small{font-size:10.5px;}
+  .title-tracker-page .site-nav{margin-right:3px;}
+  .title-tracker-page .site-nav-link{padding-inline:7px;font-size:11.5px;}
+  .title-tracker-page .tracker-tab-link{padding-inline:9px;}
+  .title-tracker-page .global-conquest-control{gap:4px;padding-inline:1px;font-size:11.5px;}
+  .title-tracker-page .site-nav-divider,
+  .title-tracker-page .tracker-primary-divider{margin-inline:2px;}
+  .title-tracker-page .topbar-actions{gap:5px;}
+  .title-tracker-page .result-count{margin-right:1px;font-size:11.5px;}
+}
+@media (max-width:1120px) and (min-width:761px){
+  .title-tracker-page .brand small{display:none;}
+}

@@ -337,8 +337,7 @@
         </label>`;
       }).join("");
       const scenarioCount=scenarios.filter((item)=>item.type==="main"||item.type==="sub").length;
-      const questCount=scenarios.filter((item)=>item.type==="quest").length;
-      const otherCount=scenarios.filter((item)=>item.type==="other").length;
+      const otherCount=scenarios.filter((item)=>item.type==="quest"||item.type==="other").length;
       const done=titles.filter((title)=>rowState(title.id).complete).length + scenarios.filter((item,index)=>rowState(`scenario:${group.id}:${index}`).complete).length;
       const total=titles.length+scenarios.length;
       const pct=total?(done/total)*100:0;
@@ -355,7 +354,7 @@
       }).join("");
       return `<article class="title-set-card">
         <header class="title-set-card-head">
-          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${titles.length} title${titles.length===1?"":"s"}${scenarioCount?` · ${scenarioCount} scenario${scenarioCount===1?"":"s"}`:""}${questCount?` · ${questCount} questing`:""}${otherCount?` · ${otherCount} other`:""}</small></span>
+          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${titles.length} title${titles.length===1?"":"s"}${scenarioCount?` · ${scenarioCount} scenario${scenarioCount===1?"":"s"}`:""}${otherCount?` · ${otherCount} other`:""}</small></span>
           <span class="title-set-card-progress">${done} / ${total}</span>
         </header>
         <div class="title-set-card-list">${scenarioRows}${rows}</div>

@@ -7,19 +7,30 @@
   const TITLE_PROGRESS_KEY = "lt-title-progress-v1";
   const TITLE_VIEW_KEY = "lt-title-view-v1";
   const TITLE_SET_SCENARIOS = {
+    "title_set_05":[
+      {title:"Webfoot Octopus Pasta",source:"Field mob drop",type:"other"},
+      {title:"Star Tree Carver",source:"Adventure exchange",type:"other"}
+    ],
+    "title_set_06":[
+      {title:"Chunsik Bong",source:"Achievement from Chunsik Memorial conquest",type:"other"}
+    ],
     "title_set_08":[
+      {title:"Desert Adventurer",source:"Eastland Reputation Exchange",type:"other"},
       {title:"Archaeologist",source:"Sub Scenario Ch.3 Ep.4",type:"sub"}
     ],
     "title_set_09":[
-      {title:"Goddess' Pet",source:"Sub Scenario Ch.3 Ep.8",type:"sub"}
+      {title:"Goddess' Pet",source:"Sub Scenario Ch.3 Ep.8",type:"sub"},
+      {title:"Monster Tree Climber",source:"Eastern Freios Reputation Exchange",type:"other"}
     ],
     "title_set_10":[
       {title:"Another Document",source:"Main Scenario Ch.3 Ep.5",type:"main"},
       {title:"The Power-Hungry One",source:"Sub Scenario Ch.3 Ep.15",type:"sub"},
-      {title:"Trace of Glorious Magic",source:"Complete Zerenis Headquarters dungeon quests ×2 (Repeatable)",type:"quest"}
+      {title:"Trace of Glorious Magic",source:"Complete Zerenis Headquarters dungeon quests ×2 (Repeatable)",type:"quest"},
+      {title:"Academy Helper",source:"Zerenis Headquarters material / Asma exchange",type:"other"}
     ],
     "title_set_11":[
-      {title:"Darkness of Tartaros",source:"Main Scenario Ch.3 Ep.2",type:"main"}
+      {title:"Darkness of Tartaros",source:"Main Scenario Ch.3 Ep.2",type:"main"},
+      {title:"Undercity Construction Adventurer",source:"Eastland Reputation Exchange",type:"other"}
     ],
     "title_set_12":[
       {title:"Promise with Gaia",source:"Main Scenario Ch.3 Ep.4",type:"main"},
@@ -70,7 +81,8 @@
     ],
     "title_set_22":[
       {title:"Shadow of Orcarium",source:"Main Scenario Ch.1 Ep.2",type:"main"},
-      {title:"The Light",source:"Complete Stump of Spirits dungeon quests ×2 (Repeatable)",type:"quest"}
+      {title:"The Light",source:"Complete Stump of Spirits dungeon quests ×2 (Repeatable)",type:"quest"},
+      {title:"Increasing Beauty",source:"Challenge achievement: upgrade Ricaria Brooch to +30",type:"other"}
     ],
     "title_set_23":[
       {title:"Reverberation of Memory",source:"Main Scenario Ch.4 Ep.3",type:"main"},
@@ -315,17 +327,18 @@
       const scenarioRows=scenarios.map((item,index)=>{
         const scenarioId=`scenario:${group.id}:${index}`;
         const state=rowState(scenarioId);
-        const badge=item.type==="sub"?"Sub Scenario":item.type==="quest"?"Questing":"Main Scenario";
+        const badge=item.type==="sub"?"Sub Scenario":item.type==="quest"?"Dungeon Quest":item.type==="main"?"Main Scenario":"";
         return `<label class="title-set-title-row title-set-scenario-row ${state.complete ? "complete" : ""}">
           <input class="title-set-title-check" type="checkbox" ${state.complete ? "checked" : ""} data-title-id="${esc(scenarioId)}" aria-label="Mark ${esc(item.title)} complete">
           <span class="title-set-title-copy">
-            <span class="title-set-title-name"><span>${esc(item.type==="quest" ? item.title+" (Questing)" : item.title)}</span></span>
-            <span class="title-set-title-meta"><span class="title-source-badge ${item.type==="sub"?"sub":item.type==="quest"?"quest":"main"}">${badge}</span>${esc(item.source.replace(/^Main Scenario\s*|^Sub Scenario\s*/,""))}</span>
+            <span class="title-set-title-name"><span>${esc(item.type==="quest" ? item.title+" (Questing)" : item.title)}</span>${badge?`<span class="title-source-badge ${item.type==="sub"?"sub":item.type==="quest"?"quest":"main"}">${badge}</span>`:""}</span>
+            <span class="title-set-title-meta">${esc(item.source.replace(/^Main Scenario\s*|^Sub Scenario\s*/,""))}</span>
           </span>
         </label>`;
       }).join("");
       const scenarioCount=scenarios.filter((item)=>item.type==="main"||item.type==="sub").length;
       const questCount=scenarios.filter((item)=>item.type==="quest").length;
+      const otherCount=scenarios.filter((item)=>item.type==="other").length;
       const done=titles.filter((title)=>rowState(title.id).complete).length + scenarios.filter((item,index)=>rowState(`scenario:${group.id}:${index}`).complete).length;
       const total=titles.length+scenarios.length;
       const pct=total?(done/total)*100:0;
@@ -342,7 +355,7 @@
       }).join("");
       return `<article class="title-set-card">
         <header class="title-set-card-head">
-          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${total} title${total===1?"":"s"}${scenarioCount?` · ${scenarioCount} scenario${scenarioCount===1?"":"s"}`:""}${questCount?` · ${questCount} questing`:""}</small></span>
+          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${total} title${total===1?"":"s"}${scenarioCount?` · ${scenarioCount} scenario${scenarioCount===1?"":"s"}`:""}${questCount?` · ${questCount} questing`:""}${otherCount?` · ${otherCount} other`:""}</small></span>
           <span class="title-set-card-progress">${done} / ${total}</span>
         </header>
         <div class="title-set-card-list">${scenarioRows}${rows}</div>

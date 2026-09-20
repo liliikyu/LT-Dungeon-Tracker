@@ -19,6 +19,7 @@ def clean(v): return re.sub(r'\s+',' ',re.sub(r'\[[^\]]+\]','',v or '')).strip()
 MONSTER_NAME_FIXES={
   'FootprElemental Intensity Cat':'Footprint Cat',
   'Niez':'Nez',
+  'Shadow Tief':'Shadow Thief',
 }
 MONSTER_LEVEL_FIXES={
   ('Tiger Temple','Red Max'):'Lv. 161 ~ 180',

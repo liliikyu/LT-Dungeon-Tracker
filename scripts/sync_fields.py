@@ -19,24 +19,36 @@ def pint(v,d=1):
   try:return max(1,int(v or d))
   except:return d
 class P(HTMLParser):
-  def __init__(self):super().__init__();self.tables=[];self.depth=0;self.rows=None;self.row=None;self.parts=None;self.attrs={}
+  def __init__(self):
+    super().__init__();self.tables=[];self.depth=0;self.rows=None;self.row=None;self.parts=None;self.attrs={};self.heading_parts=None;self.current_heading=''
   def handle_starttag(self,t,a):
     t=t.lower();a=dict(a)
-    if t=='table':self.depth+=1;self.rows=[] if self.depth==1 else self.rows
+    if t in ('h2','h3','h4') and self.depth==0:
+      self.heading_parts=[]
+    elif t=='table':
+      self.depth+=1
+      if self.depth==1:self.rows=[]
     elif self.depth==1 and t=='tr':self.row=[]
     elif self.depth==1 and t in ('td','th') and self.row is not None:self.parts=[];self.attrs=a
     elif self.parts is not None and t in ('br','p','div','li'):self.parts.append(' ')
   def handle_data(self,d):
     if self.parts is not None:self.parts.append(d)
+    elif self.heading_parts is not None:self.heading_parts.append(d)
   def handle_endtag(self,t):
     t=t.lower()
-    if self.depth==1 and t in ('td','th') and self.parts is not None:self.row.append({'text':clean(''.join(self.parts)),'rowspan':pint(self.attrs.get('rowspan')),'colspan':pint(self.attrs.get('colspan'))});self.parts=None;self.attrs={}
+    if self.depth==1 and t in ('td','th') and self.parts is not None:
+      self.row.append({'text':clean(''.join(self.parts)),'rowspan':pint(self.attrs.get('rowspan')),'colspan':pint(self.attrs.get('colspan'))});self.parts=None;self.attrs={}
     elif self.depth==1 and t=='tr' and self.row is not None:
       if self.row:self.rows.append(self.row)
       self.row=None
     elif t=='table' and self.depth:
-      if self.depth==1 and self.rows is not None:self.tables.append(self.rows);self.rows=None
+      if self.depth==1 and self.rows is not None:
+        self.tables.append((self.current_heading,self.rows));self.rows=None
       self.depth-=1
+    elif t in ('h2','h3','h4') and self.heading_parts is not None:
+      heading=clean(''.join(self.heading_parts))
+      if heading:self.current_heading=heading
+      self.heading_parts=None
 def expand(raw):
   active={};out=[]
   for rr in raw:
@@ -78,10 +90,20 @@ def normalize_category(v):
   if 'event' in s:return 'Event'
   if s=='etc' or 'etc' in s:return 'ETC'
   return 'Other'
+def level_section(heading):
+  """Return the wiki monster level section without the trailing 'Monsters'."""
+  h=clean(heading)
+  m=re.search(r'((?:S?Lv\.?\s*)?\d+\s*[~\-–—]\s*\d+)\s+Monsters?$',h,re.I)
+  if m:return clean(m.group(1))
+  # wiki currently also has headings such as "Lv. 1 ~ 20 Monsters"
+  m=re.search(r'((?:S?Lv\.?\s*)\d+\s*~\s*\d+)',h,re.I)
+  return clean(m.group(1)) if m else ''
+
 def parse(html, with_category=False, with_group=False):
   p=P();p.feed(html);result={}
-  for raw in p.tables:
+  for heading,raw in p.tables:
     table=expand(raw)
+    section=level_section(heading) if with_group else ''
     for hi,row in enumerate(table[:10]):
       headers=[clean(x).lower() for x in row]
       loc=next((i for i,h in enumerate(headers) if h in ('location','locations','area','source')),None)
@@ -98,10 +120,15 @@ def parse(html, with_category=False, with_group=False):
             category=normalize_category(r[cat] if cat is not None and cat<len(r) else '')
             result.setdefault(f,[]).append({'name':n,'category':category})
           elif with_group:
-            grp=clean(r[group] if group is not None and group<len(r) else '')
-            lvl=clean(r[level] if level is not None and level<len(r) else '')
-            # Preserve the wiki's displayed level value for future UI use while
-            # keeping completion keys based only on the monster name.
+            # Monster Illustrations are grouped by wiki level-section headings
+            # (for example "Lv. 1 ~ 20 Monsters"), not by a table column.
+            # Prefer an explicit table group/level if one ever appears, otherwise
+            # use that section heading. The section is shown in brackets beside
+            # the monster name and its lower bound drives field-card sorting.
+            explicit_group=clean(r[group] if group is not None and group<len(r) else '')
+            explicit_level=clean(r[level] if level is not None and level<len(r) else '')
+            grp=explicit_group or section or explicit_level
+            lvl=explicit_level or section
             result.setdefault(f,[]).append({'name':n,'group':grp,'level':lvl})
           else: result.setdefault(f,[]).append(n)
       break
@@ -129,8 +156,11 @@ def main():
   if not monsters:raise RuntimeError('No field Monster Illustrations parsed; existing snapshot preserved')
   if not codex:raise RuntimeError('No field Item Codex entries parsed; existing snapshot preserved')
   fields={}
-  for f,names in monsters.items():fields.setdefault(f,{'illustrations':[],'codex':[]})['illustrations']=names
-  for f,names in codex.items():fields.setdefault(f,{'illustrations':[],'codex':[]})['codex']=names
+  for wiki_order,(f,names) in enumerate(monsters.items()):
+    row=fields.setdefault(f,{'illustrations':[],'codex':[],'wiki_order':wiki_order})
+    row['illustrations']=names
+    row['wiki_order']=min(row.get('wiki_order',wiki_order),wiki_order)
+  for f,names in codex.items():fields.setdefault(f,{'illustrations':[],'codex':[],'wiki_order':10**9})['codex']=names
   data={'source':{k:v[1] for k,v in PAGES.items()},'updated':date.today().isoformat(),'fields':dict(sorted(fields.items()))}
   OUTPUT.write_text('window.LT_FIELD_DATA = '+json.dumps(data,ensure_ascii=False,indent=2)+';\n',encoding='utf-8')
   print(f"Synced {len(fields)} fields, {sum(len(v['illustrations']) for v in fields.values())} illustrations, {sum(len(v['codex']) for v in fields.values())} codex entries")

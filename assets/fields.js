@@ -198,13 +198,14 @@
     name,
     illustrations:(value.illustrations||[]).map(x=>typeof x==="string"?x:{name:illustrationName(x),group:illustrationGroup(x),level:illustrationLevel(x)}).filter(x=>illustrationName(x)),
     codex:(value.codex||[]).map(x=>typeof x==="string"?x:{name:codexName(x),category:codexCategory(x)}).filter(x=>codexName(x)),
-    achievements:fieldAchievementsFor(name)
+    achievements:fieldAchievementsFor(name),
+    wikiOrder:Number.isFinite(Number(value.wiki_order))?Number(value.wiki_order):Number.POSITIVE_INFINITY
   })).map(field=>({
     ...field,
     // Sort each continent's field cards by the lowest monster level found on
     // that wiki field. Fields without level data fall to the end.
     sortLevel:field.illustrations.reduce((min,entry)=>Math.min(min,illustrationLevelNumber(entry)),Number.POSITIVE_INFINITY)
-  })).sort((a,b)=>a.sortLevel-b.sortLevel||a.name.localeCompare(b.name));
+  })).sort((a,b)=>a.sortLevel-b.sortLevel||a.wikiOrder-b.wikiOrder||a.name.localeCompare(b.name));
   const expanded=new Set();
   const collapsedRegions=new Set();
   const regionCheckboxes=[...document.querySelectorAll('#field-region-filters input[type="checkbox"]')];

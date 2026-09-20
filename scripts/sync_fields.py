@@ -26,6 +26,19 @@ MONSTER_LEVEL_FIXES={
   ('Scrap Valley Entrance','Cordless'):'Lv. 161 ~ 180',
   ('Scrap Valey Entrance','Cordless'):'Lv. 161 ~ 180',
 }
+
+MONSTER_TOWER_ILLUSTRATIONS=[
+  ('Tower Mountain Kong (Lv. 110)','Lv. 101 ~ 120'),
+  ('Tower Calamity Jane (Lv. 120)','Lv. 101 ~ 120'),
+  ('Tower Lavi Kong (Lv. 130)','Lv. 121 ~ 140'),
+  ('Tower PPPPriring (Lv. 140)','Lv. 121 ~ 140'),
+  ('Tower Mermech (Lv. 150)','Lv. 141 ~ 160'),
+  ('Tower Rabana (Lv. 160)','Lv. 141 ~ 160'),
+  ('Tower Undertaker (Lv. 170)','Lv. 161 ~ 180'),
+  ('Tower King Asura (Lv. 180)','Lv. 161 ~ 180'),
+  ('Tower Cerberus (Lv. 190)','Lv. 181 ~ 200'),
+  ('Tower Siam (Lv. 200)','Lv. 181 ~ 200'),
+]
 def monster_name(v):
   n=clean(v)
   return MONSTER_NAME_FIXES.get(n,n)
@@ -235,6 +248,21 @@ def main():
   monsters=parse(fetch(PAGES['monsters'][0]),with_group=True);codex=parse(fetch(PAGES['codex'][0]),with_category=True)
   if not monsters:raise RuntimeError('No field Monster Illustrations parsed; existing snapshot preserved')
   if not codex:raise RuntimeError('No field Item Codex entries parsed; existing snapshot preserved')
+
+  # The wiki currently omits/misplaces several Monster Tower illustration rows.
+  # Keep the known Tower sequence together in the Monster Tower field.
+  tower_names={name for name,_ in MONSTER_TOWER_ILLUSTRATIONS}
+  tower_names_compact={re.sub(r'\s+','',name) for name in tower_names}
+  for field,entries in list(monsters.items()):
+    monsters[field]=[
+      entry for entry in entries
+      if re.sub(r'\s+','',entry.get('name','')) not in tower_names_compact
+    ]
+  monsters['Monster Tower']=[
+    {'name':name,'group':level,'level':level,'sourceField':'Monster Tower'}
+    for name,level in MONSTER_TOWER_ILLUSTRATIONS
+  ]
+
   fields={}
   for wiki_order,(f,names) in enumerate(monsters.items()):
     row=fields.setdefault(f,{'illustrations':[],'codex':[],'wiki_order':wiki_order})

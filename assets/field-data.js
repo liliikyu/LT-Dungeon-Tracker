@@ -4694,7 +4694,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "White Chapel Alley"
         },
         {
-          "name": "Shadow Tief",
+          "name": "Shadow Thief",
           "group": "Lv. 161 ~ 180",
           "level": "Lv. 161 ~ 180",
           "sourceField": "White Chapel Alley"

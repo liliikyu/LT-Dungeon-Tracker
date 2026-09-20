@@ -2004,3 +2004,80 @@ body.conquest-mode-active .flag.codex{opacity:.55;}
   .dungeon-conquest-head{align-items:flex-start;flex-direction:column;}
   .progress-text-fab{right:10px !important;bottom:10px !important;}
 }
+
+/* Global navigation + Dungeon Conquest beta control */
+.site-nav-divider{
+  color:var(--line);
+  opacity:.8;
+  margin:0 4px;
+  font-weight:400;
+  user-select:none;
+}
+.global-conquest-control{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:30px;
+  padding:4px 2px 4px 5px;
+  color:var(--muted);
+  font-size:10.5px;
+  font-weight:800;
+  white-space:nowrap;
+  cursor:pointer;
+  user-select:none;
+}
+.global-conquest-label{line-height:1.1;}
+.global-conquest-switch{
+  position:relative;
+  display:inline-block;
+  width:30px;
+  height:16px;
+  flex:0 0 auto;
+}
+.global-conquest-switch input{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+}
+.global-conquest-slider{
+  position:absolute;
+  inset:0;
+  border:1px solid color-mix(in srgb,var(--muted) 58%,transparent);
+  border-radius:999px;
+  background:color-mix(in srgb,var(--panel-3) 88%,black 12%);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.28);
+  transition:background .16s ease,border-color .16s ease;
+}
+.global-conquest-slider::after{
+  content:"";
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#f1f1f1;
+  box-shadow:0 1px 3px rgba(0,0,0,.45);
+  transition:transform .16s ease;
+}
+.global-conquest-switch input:checked + .global-conquest-slider{
+  border-color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 72%,var(--panel-3) 28%);
+}
+.global-conquest-switch input:checked + .global-conquest-slider::after{transform:translateX(14px);}
+.global-conquest-switch input:focus-visible + .global-conquest-slider{outline:2px solid var(--accent);outline-offset:2px;}
+.global-conquest-control:hover .global-conquest-slider{border-color:var(--accent);}
+body.conquest-mode-active .global-conquest-label{color:var(--accent);}
+
+/* In Conquest mode, Item Codex is removed from Fields. */
+body.conquest-mode-active .field-card .flag.codex,
+body.conquest-mode-active .field-progress-panel .codex-progress-section,
+body.conquest-mode-active .field-progress-panel #clear-field-codex{
+  display:none !important;
+}
+@media (max-width:980px){
+  .site-nav-divider{display:none;}
+  .global-conquest-control{flex:1;justify-content:center;}
+}

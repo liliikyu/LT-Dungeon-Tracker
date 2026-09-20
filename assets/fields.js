@@ -4,7 +4,7 @@
   const $ = (id) => document.getElementById(id);
   const esc = (v) => String(v ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const THEME_KEY="lt-theme", WELCOME_SESSION_KEY="lt-welcome-seen-v1";
-  const MONSTER_KEY="lt-field-monster-illustration-completion-v1", CODEX_KEY="lt-field-codex-completion-v1", ACH_KEY="lt-field-achievement-completion-v1";
+  const MONSTER_KEY="lt-field-monster-illustration-completion-v1", CODEX_KEY="lt-field-codex-completion-v1", ACH_KEY="lt-field-achievement-completion-v1", CONQUEST_MODE_KEY="lt-dungeon-conquest-mode-v1";
   const REGION_FIELDS = {
     "Jiendia": [
       "Forest Area","Ancient Forest","Temple of Pluton","Field Area","Underground Cave","Mountain Area","Arcadia",
@@ -150,6 +150,7 @@
   }
   const load=(key)=>{try{const x=JSON.parse(localStorage.getItem(key)||"{}");return x&&typeof x==="object"?x:{}}catch{return {}}};
   const monsters=load(MONSTER_KEY), codex=load(CODEX_KEY), achievements=load(ACH_KEY);
+  let conquestMode=false; try{conquestMode=localStorage.getItem(CONQUEST_MODE_KEY)==="1"}catch{}
   const save=()=>{localStorage.setItem(MONSTER_KEY,JSON.stringify(monsters));localStorage.setItem(CODEX_KEY,JSON.stringify(codex));localStorage.setItem(ACH_KEY,JSON.stringify(achievements));};
   const key=(field,name)=>`${field}::${name}`;
   function preferredTheme(){return matchMedia?.("(prefers-color-scheme: light)")?.matches?"light":"dark"}
@@ -162,6 +163,12 @@
   help?.addEventListener("click",openWelcome);close?.addEventListener("click",closeWelcome);overlay?.addEventListener("click",e=>{if(e.target===overlay)closeWelcome()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!overlay?.classList.contains("hidden"))closeWelcome()});try{if(sessionStorage.getItem(WELCOME_SESSION_KEY)!=="1")openWelcome()}catch{openWelcome()}
   const illustrationName=(entry)=>typeof entry==="string"?entry:String(entry?.name??"");
   const illustrationGroup=(entry)=>typeof entry==="object"?String(entry?.group??"").trim():"";
+  const illustrationLevel=(entry)=>typeof entry==="object"?String(entry?.level??"").trim():"";
+  const illustrationLevelNumber=(entry)=>{
+    const raw=illustrationLevel(entry);
+    const match=raw.match(/\d+(?:\.\d+)?/);
+    return match?Number(match[0]):Number.POSITIVE_INFINITY;
+  };
   const illustrationLabel=(entry)=>{const n=illustrationName(entry),g=illustrationGroup(entry);return g?`${n} (${g})`:n;};
   const codexName=(entry)=>typeof entry==="string"?entry:String(entry?.name??"");
   const codexCategory=(entry)=>{const raw=typeof entry==="object"?String(entry?.category??"Other"):"Other";const n=raw.toLowerCase();if(n.includes("equip"))return "Equipment";if(n.includes("event"))return "Event";if(n==="etc"||n.includes("etc"))return "ETC";return "Other";};
@@ -189,10 +196,15 @@
 
   const entries=Object.entries(DATA.fields||{}).map(([name,value])=>({
     name,
-    illustrations:(value.illustrations||[]).map(x=>typeof x==="string"?x:{name:illustrationName(x),group:illustrationGroup(x)}).filter(x=>illustrationName(x)),
+    illustrations:(value.illustrations||[]).map(x=>typeof x==="string"?x:{name:illustrationName(x),group:illustrationGroup(x),level:illustrationLevel(x)}).filter(x=>illustrationName(x)),
     codex:(value.codex||[]).map(x=>typeof x==="string"?x:{name:codexName(x),category:codexCategory(x)}).filter(x=>codexName(x)),
     achievements:fieldAchievementsFor(name)
-  })).sort((a,b)=>a.name.localeCompare(b.name));
+  })).map(field=>({
+    ...field,
+    // Sort each continent's field cards by the lowest monster level found on
+    // that wiki field. Fields without level data fall to the end.
+    sortLevel:field.illustrations.reduce((min,entry)=>Math.min(min,illustrationLevelNumber(entry)),Number.POSITIVE_INFINITY)
+  })).sort((a,b)=>a.sortLevel-b.sortLevel||a.name.localeCompare(b.name));
   const expanded=new Set();
   const collapsedRegions=new Set();
   const regionCheckboxes=[...document.querySelectorAll('#field-region-filters input[type="checkbox"]')];
@@ -206,7 +218,7 @@
     if(allRegionBox) allRegionBox.checked=true;
     regionBoxes.forEach(box=>{box.checked=false;});
   }
-  function stats(field){const mt=field.illustrations.length,ct=field.codex.length,at=field.achievements.length,md=field.illustrations.filter(n=>monsters[key(field.name,illustrationName(n))]).length,cd=field.codex.filter(n=>codex[key(field.name,codexName(n))]).length,ad=field.achievements.filter(a=>achievements[achKey(field.name,a)]).length;return{mt,ct,at,md,cd,ad,total:mt+ct+at,done:md+cd+ad}}
+  function stats(field){const mt=field.illustrations.length,ct=conquestMode?0:field.codex.length,at=field.achievements.length,md=field.illustrations.filter(n=>monsters[key(field.name,illustrationName(n))]).length,cd=conquestMode?0:field.codex.filter(n=>codex[key(field.name,codexName(n))]).length,ad=field.achievements.filter(a=>achievements[achKey(field.name,a)]).length;return{mt,ct,at,md,cd,ad,total:mt+ct+at,done:md+cd+ad}}
   function renderMonsterSection(field){
     const done=field.illustrations.filter(entry=>monsters[key(field.name,illustrationName(entry))]).length;
     if(!field.illustrations.length)return "";
@@ -214,6 +226,7 @@
     return `<section class="monster-illustration-section"><div class="monster-illustration-head"><strong>Monster Illustration</strong><span class="monster-head-actions"><label class="monster-select-all" title="Select or clear all Monster Illustrations for ${esc(field.name)}"><input class="monster-select-all-check" type="checkbox" data-field="${esc(field.name)}" ${done===field.illustrations.length?"checked":""} aria-label="Select all Monster Illustrations for ${esc(field.name)}"><span>All</span></label><span class="monster-progress">Done ${done}/${field.illustrations.length}</span></span></div><div class="monster-illustration-list">${rows}</div></section>`;
   }
   function renderCodexColumns(field){
+    if(conquestMode)return "";
     const groups={Equipment:[],Event:[],ETC:[],Other:[]};
     field.codex.forEach(entry=>groups[codexCategory(entry)].push(entry));
     const renderGroup=(label)=>{
@@ -256,7 +269,7 @@
       const region=regionFor(f.name);
       if(!regions.has("all")&&!regions.has(region)) return false;
       if(completionStatus!=="all"){const s=stats(f),complete=s.total===0||s.done===s.total;if(completionStatus==="complete"&&!complete)return false;if(completionStatus==="incomplete"&&complete)return false;}
-      return !q||[f.name,...f.illustrations.flatMap(x=>[illustrationName(x),illustrationGroup(x)]),...f.codex.map(codexName),...f.achievements.flatMap(a=>[a.name,a.objective,a.notes])].join(" ").toLowerCase().includes(q);
+      return !q||[f.name,...f.illustrations.flatMap(x=>[illustrationName(x),illustrationGroup(x)]),...(conquestMode?[]:f.codex.map(codexName)),...f.achievements.flatMap(a=>[a.name,a.objective,a.notes])].join(" ").toLowerCase().includes(q);
     });
     $("result-count").textContent=`${visible.length} field${visible.length===1?"":"s"}`;
     const grouped=new Map(REGION_ORDER.map(r=>[r,[]]));
@@ -271,7 +284,7 @@
         const groups={Equipment:0,Event:0,ETC:0,Other:0};f.codex.forEach(entry=>groups[codexCategory(entry)]++);
         const overall=`<div class="dungeon-overall-progress"><span><strong>Overall Progress</strong></span><span class="overall-progress-track" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="overall-progress-count"><strong>Done</strong> ${s.done}/${s.total}</span></div>`;
         const details=`<div class="field-card-body">${renderMonsterSection(f)}${renderAchievementSection(f)}${renderCodexColumns(f)}</div>`;
-        return `<article class="field-card ${is?"expanded":""}" data-field-card="${esc(f.name)}"><button class="field-card-head" type="button" data-toggle-field="${esc(f.name)}" aria-expanded="${is}"><span class="field-card-title-wrap"><span class="field-card-title">${esc(f.name)}</span><span class="field-card-submeta">${s.mt} illustration${s.mt===1?"":"s"} · ${s.ct} codex · ${s.at} achievement${s.at===1?"":"s"}</span></span><span class="collapse-chevron" aria-hidden="true">▼</span></button>${overall}${details}</article>`;
+        return `<article class="field-card ${is?"expanded":""}" data-field-card="${esc(f.name)}"><button class="field-card-head" type="button" data-toggle-field="${esc(f.name)}" aria-expanded="${is}"><span class="field-card-title-wrap"><span class="field-card-title">${esc(f.name)}</span><span class="field-card-submeta">${s.mt} illustration${s.mt===1?"":"s"}${conquestMode?"":` · ${s.ct} codex`} · ${s.at} achievement${s.at===1?"":"s"}</span></span><span class="collapse-chevron" aria-hidden="true">▼</span></button>${overall}${details}</article>`;
       }).join("");
       return `<section class="field-region ${isCollapsed?"collapsed":""}" data-region="${esc(region)}"><button class="field-region-head" type="button" data-toggle-region="${esc(region)}" aria-expanded="${!isCollapsed}"><span><strong>${esc(region)}</strong><small>${fields.length} field${fields.length===1?"":"s"}</small></span><span class="field-region-progress">${regionDone}/${regionTotal} done <b>${isCollapsed?"▸":"▾"}</b></span></button><div class="field-region-grid">${cards}</div></section>`;
     }).join("");
@@ -297,7 +310,7 @@
   $("expand-all-fields").addEventListener("click",()=>{const all=expanded.size===entries.length;expanded.clear();if(!all)entries.forEach(f=>expanded.add(f.name));render()});
   function updateProgress(){
     const allM=entries.flatMap(f=>f.illustrations.map(n=>key(f.name,n)));
-    const codexEntries=entries.flatMap(f=>f.codex.map(entry=>({field:f.name,name:codexName(entry),category:codexCategory(entry)})));
+    const codexEntries=conquestMode?[]:entries.flatMap(f=>f.codex.map(entry=>({field:f.name,name:codexName(entry),category:codexCategory(entry)})));
     const allC=codexEntries.map(x=>key(x.field,x.name));
     const md=allM.filter(k=>monsters[k]).length,cd=allC.filter(k=>codex[k]).length;
     $("field-monster-total").textContent=`${md}/${allM.length} complete · ${allM.length-md} left`;
@@ -312,4 +325,13 @@
   $("clear-field-monsters")?.addEventListener("click",()=>{if(!confirm("Clear all saved Field Monster Illustration progress in this browser?"))return;localStorage.removeItem(MONSTER_KEY);Object.keys(monsters).forEach(k=>delete monsters[k]);render()});
   $("clear-field-codex")?.addEventListener("click",()=>{if(!confirm("Clear all saved Field Item Codex progress in this browser?"))return;localStorage.removeItem(CODEX_KEY);Object.keys(codex).forEach(k=>delete codex[k]);render()});
   render();
+
+  window.addEventListener("latale:conquest-mode-change",e=>{
+    conquestMode=!!e.detail?.enabled;
+    document.body.classList.toggle("conquest-mode-active",conquestMode);
+    render();
+    updateProgressSummary();
+  });
+  window.addEventListener("storage",e=>{if(e.key===CONQUEST_MODE_KEY){try{conquestMode=localStorage.getItem(CONQUEST_MODE_KEY)==="1"}catch{conquestMode=false}document.body.classList.toggle("conquest-mode-active",conquestMode);render();updateProgressSummary();}});
+  document.body.classList.toggle("conquest-mode-active",conquestMode);
 })();

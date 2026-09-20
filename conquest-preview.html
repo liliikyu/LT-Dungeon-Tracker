@@ -13,7 +13,19 @@
   <header class="topbar"><div class="shell topbar-inner">
     <a class="brand" href="dungeons.html" aria-label="LaTale Dungeon Tracker home"><span class="brand-mark"><img src="assets/favicon-purple.png?v=13.9.4.31" alt="" aria-hidden="true"></span><span><strong>Latale Unofficial Illustration Book</strong><small>Monster Illustrations, Item Codex, Achievements, and Titles</small></span></a>
     <nav class="site-nav" aria-label="Site sections">
-      <a class="site-nav-link" href="fields.html">Fields</a><a class="site-nav-link" href="dungeons.html">Dungeons</a><a class="site-nav-link" href="titles.html">Titles</a><a class="site-nav-link active" href="conquest-preview.html">Dungeon Conquest Preview</a><a class="site-nav-link" href="https://latale.wiki.gg/wiki/Illustration_Book" target="_blank" rel="noopener noreferrer">Wiki</a>
+      <a class="site-nav-link" href="fields.html">Fields</a>
+      <a class="site-nav-link" href="dungeons.html">Dungeons</a>
+      <a class="site-nav-link" href="titles.html">Titles</a>
+      <a class="site-nav-link" href="https://latale.wiki.gg/wiki/Illustration_Book" target="_blank" rel="noopener noreferrer">Wiki</a>
+      <span class="site-nav-divider" aria-hidden="true">┃</span>
+      <a class="site-nav-link active" href="conquest-preview.html">Dungeon Conquest Preview</a>
+      <label class="global-conquest-control" title="Enable Dungeon Conquest beta mode and remove Item Codex tracking from Fields and Dungeons">
+        <span class="global-conquest-label">Dungeon Conquest (BETA)</span>
+        <span class="global-conquest-switch">
+          <input id="conquest-mode-toggle" type="checkbox" aria-label="Toggle Dungeon Conquest beta mode">
+          <span class="global-conquest-slider" aria-hidden="true"></span>
+        </span>
+      </label>
     </nav>
     <div class="topbar-actions"><button id="help-toggle" class="icon-button help-button" type="button" aria-label="Open tracker guide" title="Guide / Help">?</button><button id="theme-toggle" class="icon-button" type="button" aria-label="Theme: System. Click to switch theme." title="Theme: System">◐</button></div>
   </div></header>
@@ -61,6 +73,7 @@
     </section>
   </div>
   <footer class="shell footer">Dungeon Conquest preview translated from the Korean SHINING update notice · Build v13.9.4.69</footer>
+  <script src="assets/global-header.js?v=13.9.4.69"></script>
   <script src="assets/conquest-preview.js?v=13.9.4.31"></script>
 </body>
 </html>

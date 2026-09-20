@@ -20,8 +20,16 @@
         <a class="site-nav-link" href="fields.html">Fields</a>
         <a class="site-nav-link" href="dungeons.html">Dungeons</a>
         <a class="site-nav-link active" href="titles.html">Titles</a>
-        <a class="site-nav-link" href="conquest-preview.html">Dungeon Conquest Preview</a>
         <a class="site-nav-link" href="https://latale.wiki.gg/wiki/Illustration_Book" target="_blank" rel="noopener noreferrer">Wiki</a>
+        <span class="site-nav-divider" aria-hidden="true">┃</span>
+        <a class="site-nav-link" href="conquest-preview.html">Dungeon Conquest Preview</a>
+        <label class="global-conquest-control" title="Enable Dungeon Conquest beta mode and remove Item Codex tracking from Fields and Dungeons">
+          <span class="global-conquest-label">Dungeon Conquest (BETA)</span>
+          <span class="global-conquest-switch">
+            <input id="conquest-mode-toggle" type="checkbox" aria-label="Toggle Dungeon Conquest beta mode">
+            <span class="global-conquest-slider" aria-hidden="true"></span>
+          </span>
+        </label>
       </nav>
       <div class="topbar-actions">
         <span id="result-count" class="result-count">0 titles</span>
@@ -104,6 +112,7 @@
 
   <footer class="shell footer">Data synced from LT Boss Matts Tracker · Last synced: <time id="last-sync" datetime="">Not available</time> · Build v13.9.4.69 · Title progress is saved in this browser.</footer>
   <script src="assets/data.js?v=13.9.4.69"></script>
+  <script src="assets/global-header.js?v=13.9.4.69"></script>
   <script src="assets/title-tracker.js?v=13.9.4.69"></script>
 </body>
 </html>

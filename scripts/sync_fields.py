@@ -88,6 +88,7 @@ def parse(html, with_category=False, with_group=False):
       name=next((i for i,h in enumerate(headers) if h in ('name','item','item name','monster','monster name')),None)
       cat=next((i for i,h in enumerate(headers) if h in ('category','type','item type','item category')),None)
       group=next((i for i,h in enumerate(headers) if h in ('group','monster group','illustration group')),None)
+      level=next((i for i,h in enumerate(headers) if h in ('level','lv','lvl','monster level')),None)
       if loc is None or name is None:continue
       for r in table[hi+1:]:
         if max(loc,name)>=len(r):continue
@@ -98,7 +99,10 @@ def parse(html, with_category=False, with_group=False):
             result.setdefault(f,[]).append({'name':n,'category':category})
           elif with_group:
             grp=clean(r[group] if group is not None and group<len(r) else '')
-            result.setdefault(f,[]).append({'name':n,'group':grp})
+            lvl=clean(r[level] if level is not None and level<len(r) else '')
+            # Preserve the wiki's displayed level value for future UI use while
+            # keeping completion keys based only on the monster name.
+            result.setdefault(f,[]).append({'name':n,'group':grp,'level':lvl})
           else: result.setdefault(f,[]).append(n)
       break
   if with_category:
@@ -115,7 +119,7 @@ def parse(html, with_category=False, with_group=False):
     for k,vals in result.items():
       seen=set();uniq=[]
       for v in vals:
-        key=(v['name'],v['group'])
+        key=(v['name'],v['group'],v.get('level',''))
         if key not in seen:seen.add(key);uniq.append(v)
       out[k]=uniq
     return out

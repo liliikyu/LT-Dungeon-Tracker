@@ -496,7 +496,7 @@
       const haystack = normalize([
         dungeon.name,
         displayLevel(dungeon.level),
-        ...(dungeon.items || []).map((item) => item.name),
+        ...(dungeon.items || []).filter((item) => !(conquestMode && item.codex && !item.titleMaterial && !item.badge5Material && !item.awakeningQuesting && !item.legendQuesting)).map((item) => item.name),
         ...monsterIllustrationsFor(dungeon.name),
         ...dungeonUniqueLoot,
         ...(dungeon.titleNames || [])
@@ -514,13 +514,14 @@
       };
 
       const grouped = { equipment: [], event: [], etc: [], other: [] };
-      for (const item of dungeon.items || []) grouped[itemType(item)].push(item);
+      const visibleItems = (dungeon.items || []).filter((item) => !(conquestMode && item.codex && !item.titleMaterial && !item.badge5Material && !item.awakeningQuesting && !item.legendQuesting));
+      for (const item of visibleItems) grouped[itemType(item)].push(item);
       for (const group of Object.values(grouped)) {
         group.sort((a, b) => itemPriority(a) - itemPriority(b) || cleanItemName(a.name).localeCompare(cleanItemName(b.name)));
       }
 
       const renderFlags = (item) => [
-        item.codex ? '<span class="flag codex" title="Can be registered in Codex">Codex</span>' : "",
+        item.codex && !conquestMode ? '<span class="flag codex" title="Can be registered in Codex">Codex</span>' : "",
         item.titleMaterial ? '<span class="flag title" title="Used for a title">Title</span>' : "",
         item.badge5Material ? '<span class="flag badge5" title="Material used for Badge 5">Badge 5</span>' : "",
         item.awakeningQuesting ? '<span class="flag questing-tag awakening-questing" title="Awakening Questing">AQ</span>' : "",
@@ -534,10 +535,10 @@
           const trackable = isTrackable(item);
           const completionKey = itemCompletionKey(dungeon.name, item.name);
           const completed = trackable && completionState[completionKey] === true;
-          const checkboxHtml = trackable
-            ? `<input class="item-check" type="checkbox" ${completed ? "checked" : ""} ${conquestMode ? "disabled" : ""} aria-label="Mark ${esc(cleanItemName(item.name))} as completed"${conquestMode ? ' title="Codex tracking is disabled while Dungeon Conquest (BETA) is enabled"' : ""}>`
+          const checkboxHtml = trackable && !conquestMode
+            ? `<input class="item-check" type="checkbox" ${completed ? "checked" : ""} aria-label="Mark ${esc(cleanItemName(item.name))} as completed">`
             : `<span class="item-check-spacer" aria-hidden="true"></span>`;
-          return `<li class="item-row${completed ? " completed" : ""}${trackable ? " trackable" : ""}${trackable && conquestMode ? " codex-disabled" : ""}" ${trackable ? `data-completion-key="${esc(completionKey)}"` : ""}>
+          return `<li class="item-row${completed ? " completed" : ""}${trackable && !conquestMode ? " trackable" : ""}" ${trackable ? `data-completion-key="${esc(completionKey)}"` : ""}>
             <span class="item-main">
               ${checkboxHtml}
               <span class="item-name">${esc(cleanItemName(item.name))}</span>
@@ -939,16 +940,14 @@
     if (willOpen) updateProgressSummary();
   });
 
-  if (conquestModeToggle) {
-    conquestModeToggle.checked = conquestMode;
-    conquestModeToggle.addEventListener("change", () => {
-      conquestMode = conquestModeToggle.checked;
-      saveConquestMode();
-      document.body.classList.toggle("conquest-mode-active", conquestMode);
-      render();
-    });
-  }
+  if (conquestModeToggle) conquestModeToggle.checked = conquestMode;
   document.body.classList.toggle("conquest-mode-active", conquestMode);
+  window.addEventListener("latale:conquest-mode-change", (event) => {
+    conquestMode = !!event.detail?.enabled;
+    if (conquestModeToggle) conquestModeToggle.checked = conquestMode;
+    document.body.classList.toggle("conquest-mode-active", conquestMode);
+    render();
+  });
 
   if (clearMonsterProgress) clearMonsterProgress.addEventListener("click", () => {
     if (!confirm("Clear all saved Monster Illustration progress for the Dungeons tab?")) return;

@@ -136,6 +136,19 @@ def level_section(text: str) -> str:
     return label
 
 
+def monster_section(text: str) -> str:
+    """Extract the Illustration Book category applying to the following table."""
+    h = clean_text(text)
+    level = level_section(h)
+    if level:
+        return level
+    if re.search(r"\b(?:5Lv\s*)?Boss\s+Monsters?\b", h, flags=re.I):
+        return "Boss Monster"
+    if re.search(r"\bMutant\s+Monsters?\b", h, flags=re.I):
+        return "Mutant Monster"
+    return ""
+
+
 class TableParser(HTMLParser):
     """Capture top-level wiki tables while preserving rowspan/colspan metadata."""
 
@@ -143,8 +156,9 @@ class TableParser(HTMLParser):
         super().__init__()
         self.tables: list[tuple[str, list[list[dict]]]] = []
         self._table_depth = 0
-        self._current_level = ""
-        self._table_level = ""
+        self._current_section = ""
+        self._table_section = ""
+        self._recent_text: list[str] = []
         self._rows: list[list[dict]] | None = None
         self._row: list[dict] | None = None
         self._cell_parts: list[str] | None = None
@@ -157,7 +171,7 @@ class TableParser(HTMLParser):
             self._table_depth += 1
             if self._table_depth == 1:
                 self._rows = []
-                self._table_level = self._current_level
+                self._table_section = self._current_section
         elif self._table_depth == 1 and tag == "tr":
             self._row = []
         elif self._table_depth == 1 and tag in {"td", "th"} and self._row is not None:
@@ -167,9 +181,12 @@ class TableParser(HTMLParser):
             self._cell_parts.append(" ")
 
     def handle_data(self, data):
-        detected = level_section(data)
-        if detected:
-            self._current_level = detected
+        if data:
+            self._recent_text.append(data)
+            self._recent_text = self._recent_text[-12:]
+            detected = monster_section(" ".join(self._recent_text))
+            if detected:
+                self._current_section = detected
         if self._cell_parts is not None:
             self._cell_parts.append(data)
 
@@ -189,7 +206,7 @@ class TableParser(HTMLParser):
             self._row = None
         elif tag == "table" and self._table_depth:
             if self._table_depth == 1 and self._rows is not None:
-                self.tables.append((self._table_level or self._current_level, self._rows))
+                self.tables.append((self._table_section or self._current_section, self._rows))
                 self._rows = None
             self._table_depth -= 1
 
@@ -269,9 +286,9 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
     parser = TableParser()
     parser.feed(html)
     dungeons: dict[str, list[dict]] = {}
-    level_by_monster: dict[str, str] = {}
+    section_by_monster: dict[tuple[str, str], str] = {}
 
-    for table_level, raw_table in parser.tables:
+    for table_section, raw_table in parser.tables:
         table = expand_spans(raw_table)
         if not table:
             continue
@@ -299,12 +316,13 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
             dungeon = canonical_dungeon(location)
             if not dungeon:
                 continue
-            level = DUNGEON_MONSTER_LEVEL_FIXES.get((dungeon, name), table_level)
-            if level:
-                level_by_monster[name] = level
+            section = DUNGEON_MONSTER_LEVEL_FIXES.get((dungeon, name), table_section)
+            level = section if re.match(r"^(?:S?Lv\.)", section or "", flags=re.I) else ""
+            if section:
+                section_by_monster[(dungeon, name)] = section
             bucket = dungeons.setdefault(dungeon, [])
             if not any(entry.get("name") == name for entry in bucket):
-                bucket.append({"name": name, "group": level, "level": level})
+                bucket.append({"name": name, "group": section, "level": level})
 
     if not dungeons:
         raise RuntimeError("No dungeon Monster Illustrations could be parsed; keeping existing snapshot")
@@ -315,8 +333,12 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
         dungeons[dungeon] = [
             {
                 "name": monster,
-                "group": level_by_monster.get(monster, ""),
-                "level": level_by_monster.get(monster, ""),
+                "group": section_by_monster.get((dungeon, monster), ""),
+                "level": (
+                    section_by_monster.get((dungeon, monster), "")
+                    if re.match(r"^(?:S?Lv\.)", section_by_monster.get((dungeon, monster), ""), flags=re.I)
+                    else ""
+                ),
             }
             for monster in monsters
         ]

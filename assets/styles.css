@@ -1074,6 +1074,19 @@ html[data-theme="light"] .dungeon-overall-progress{background:color-mix(in srgb,
   color:#aab7ca;font-size:10px;letter-spacing:.025em;text-transform:uppercase;
 }
 .title-summary-names{min-width:0;overflow-wrap:anywhere;color:var(--muted);}
+.dungeon-title-status{
+  margin-left:auto;display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;
+  border:1px solid var(--line);border-radius:999px;background:var(--panel-2);
+  color:var(--muted);font-size:10px;font-weight:800;white-space:nowrap;
+}
+.dungeon-title-status.complete{
+  border-color:color-mix(in srgb,#35b56f 62%,var(--line));
+  background:color-mix(in srgb,var(--panel-2) 84%,#35b56f 16%);
+  color:#35b56f;
+}
+.dungeon-title-status.incomplete{
+  border-color:color-mix(in srgb,var(--muted) 45%,var(--line));
+}
 html[data-theme="light"] .title-summary-row{background:color-mix(in srgb,var(--panel-3) 92%,transparent);}
 
 

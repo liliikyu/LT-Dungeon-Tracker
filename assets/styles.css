@@ -2123,3 +2123,16 @@ body.conquest-modal-open{overflow:hidden}
   .conquest-modal{width:calc(100vw - 10px);max-height:calc(100vh - 10px);border-radius:12px}
   .conquest-modal-site{max-height:calc(100vh - 70px)}
 }
+
+/* v13.9.4.69: smoother tab-like switching between Fields / Dungeons / Titles */
+@view-transition { navigation: auto; }
+.topbar{view-transition-name:tracker-topbar;}
+::view-transition-old(root),::view-transition-new(root){animation-duration:140ms;}
+::view-transition-old(root){animation-name:tracker-page-out;}
+::view-transition-new(root){animation-name:tracker-page-in;}
+::view-transition-old(tracker-topbar),::view-transition-new(tracker-topbar){animation:none;}
+@keyframes tracker-page-out{to{opacity:.72;transform:translateY(-2px)}}
+@keyframes tracker-page-in{from{opacity:.72;transform:translateY(2px)}}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-old(root),::view-transition-new(root){animation:none;}
+}

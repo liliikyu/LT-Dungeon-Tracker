@@ -105,8 +105,23 @@
 
   const monsterCompletionState = loadMonsterCompletion();
 
+  function monsterEntryName(monster) {
+    return typeof monster === "string" ? monster : String(monster?.name || "");
+  }
+
+  function monsterEntryLevel(monster) {
+    if (!monster || typeof monster === "string") return "";
+    return String(monster.level || monster.group || "").trim();
+  }
+
+  function monsterEntryLabel(monster) {
+    const name = monsterEntryName(monster);
+    const level = monsterEntryLevel(monster);
+    return level ? `${name} (${level})` : name;
+  }
+
   function monsterCompletionKey(dungeonName, monsterName) {
-    return `${normalize(dungeonName)}::${normalize(monsterName)}`;
+    return `${normalize(dungeonName)}::${normalize(monsterEntryName(monsterName))}`;
   }
 
   function saveMonsterCompletion() {
@@ -497,7 +512,7 @@
         dungeon.name,
         displayLevel(dungeon.level),
         ...(dungeon.items || []).filter((item) => !(conquestMode && item.codex && !item.titleMaterial && !item.badge5Material && !item.awakeningQuesting && !item.legendQuesting)).map((item) => item.name),
-        ...monsterIllustrationsFor(dungeon.name),
+        ...monsterIllustrationsFor(dungeon.name).map(monsterEntryLabel),
         ...dungeonUniqueLoot,
         ...(dungeon.titleNames || [])
       ].join(" "));
@@ -555,11 +570,13 @@
       const illustrations = monsterIllustrationsFor(dungeon.name);
       const monsterDone = illustrations.filter((monster) => monsterCompletionState[monsterCompletionKey(dungeon.name, monster)] === true).length;
       const monsterRows = illustrations.map((monster) => {
+        const name = monsterEntryName(monster);
+        const label = monsterEntryLabel(monster);
         const key = monsterCompletionKey(dungeon.name, monster);
         const checked = monsterCompletionState[key] === true;
         return `<label class="monster-illustration-row${checked ? " completed" : ""}" data-monster-key="${esc(key)}">
-          <input class="monster-check" type="checkbox" ${checked ? "checked" : ""} aria-label="Mark ${esc(monster)} illustration as completed">
-          <span>${esc(monster)}</span>
+          <input class="monster-check" type="checkbox" ${checked ? "checked" : ""} aria-label="Mark ${esc(name)} illustration as completed">
+          <span>${esc(label)}</span>
         </label>`;
       }).join("");
       const monsterSectionHtml = illustrations.length ? `<section class="monster-illustration-section">

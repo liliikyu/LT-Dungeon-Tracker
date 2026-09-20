@@ -2395,3 +2395,32 @@ body.conquest-modal-open{overflow:hidden}
   .title-view-switch{margin-left:auto;}
   .title-set-grid{grid-template-columns:1fr;}
 }
+
+
+/* v13.9.4.73 — scenario requirements in title set cards */
+.title-set-scenario-row{
+  background:color-mix(in srgb,var(--panel-2) 92%,var(--accent) 4%);
+}
+.title-source-badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:16px;
+  margin-right:5px;
+  padding:1px 5px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  font-size:9px;
+  font-weight:800;
+  line-height:1;
+  vertical-align:middle;
+}
+.title-source-badge.main{
+  border-color:color-mix(in srgb,var(--accent) 52%,var(--line));
+  color:var(--accent);
+  background:color-mix(in srgb,var(--panel-3) 88%,var(--accent) 12%);
+}
+.title-source-badge.sub{
+  border-color:color-mix(in srgb,var(--title) 48%,var(--line));
+  color:var(--title);
+  background:color-mix(in srgb,var(--panel-3) 88%,var(--title) 12%);
+}

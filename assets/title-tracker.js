@@ -207,9 +207,17 @@
         groups.get(setName).push(title);
       });
     });
-    const entries=[...groups.entries()].sort(([a],[b])=>{
+    const setOrder=(titles)=>{
+      const ids=titles.flatMap((title)=>Array.isArray(title.titleSetIds)?title.titleSetIds:[])
+        .map((id)=>Number(String(id).match(/(\d+)$/)?.[1]))
+        .filter(Number.isFinite);
+      return ids.length?Math.min(...ids):Number.POSITIVE_INFINITY;
+    };
+    const entries=[...groups.entries()].sort(([a,aTitles],[b,bTitles])=>{
       if(a==="No Title Set") return 1;
       if(b==="No Title Set") return -1;
+      const orderDiff=setOrder(aTitles)-setOrder(bTitles);
+      if(Number.isFinite(orderDiff) && orderDiff!==0) return orderDiff;
       return a.localeCompare(b,undefined,{sensitivity:"base"});
     });
     setGrid.innerHTML=entries.map(([setName,titles])=>{

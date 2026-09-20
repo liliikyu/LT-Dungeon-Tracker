@@ -3601,24 +3601,6 @@ window.LT_FIELD_DATA = {
           "group": "Lv. 101 ~ 120",
           "level": "Lv. 101 ~ 120",
           "sourceField": "Spooky Village"
-        },
-        {
-          "name": "Night Goblin",
-          "group": "Lv. 101 ~ 120",
-          "level": "Lv. 101 ~ 120",
-          "sourceField": "Spooky Village"
-        },
-        {
-          "name": "Miss Gaga",
-          "group": "Lv. 101 ~ 120",
-          "level": "Lv. 101 ~ 120",
-          "sourceField": "Spooky Village"
-        },
-        {
-          "name": "Undertaker",
-          "group": "Lv. 101 ~ 120",
-          "level": "Lv. 101 ~ 120",
-          "sourceField": "Spooky Village"
         }
       ],
       "codex": [],
@@ -4039,12 +4021,6 @@ window.LT_FIELD_DATA = {
     },
     "Tiger Temple": {
       "illustrations": [
-        {
-          "name": "Red Max",
-          "group": "Lv. 101 ~ 120",
-          "level": "Lv. 101 ~ 120",
-          "sourceField": "Tiger Temple"
-        },
         {
           "name": "Red Max",
           "group": "Lv. 161 ~ 180",

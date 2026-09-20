@@ -48,6 +48,15 @@ window.LT_FIELD_ACHIEVEMENTS = {
         "points": 30
       }
     ],
+    "Aquarium": [
+      {
+        "name": "Andersen's Fairy Tale",
+        "category": "Exploration",
+        "objective": "Enter Mermaid Room",
+        "notes": "Mermaid Room (164,1424) · Quest - Lv.220~230 - Coral City, then Mermaid Room portal",
+        "points": 15
+      }
+    ],
     "Aurora Forest": [
       {
         "name": "Mysterious Aura",

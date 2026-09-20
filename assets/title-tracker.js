@@ -5,6 +5,7 @@
   const normalize = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
   const THEME_KEY = "lt-theme";
   const TITLE_PROGRESS_KEY = "lt-title-progress-v1";
+  const TITLE_VIEW_KEY = "lt-title-view-v1";
 
   function loadProgress(){
     try { const value = JSON.parse(localStorage.getItem(TITLE_PROGRESS_KEY) || "{}"); return value && typeof value === "object" ? value : {}; }
@@ -116,8 +117,12 @@
     return `<img class="title-coupon-icon" src="assets/title-coupon.png?v=13.5.2" alt="Coupon II" title="Available from Instance Dungeon Guaranteed Titlebook Coupon II" style="display:inline-block;width:22px;height:22px;object-fit:contain;vertical-align:middle;margin-left:4px;flex:0 0 22px;">`;
   }
 
+  function titleSetParts(value){
+    return String(value || "").split(/\r?\n|\s*\|\s*/).map(v=>v.trim()).filter(Boolean);
+  }
+
   function titleSetHtml(value){
-    const parts=String(value || "").split(/\r?\n|\s*\|\s*/).map(v=>v.trim()).filter(Boolean);
+    const parts=titleSetParts(value);
     if(!parts.length) return '<span class="empty-cell">—</span>';
     return `<span class="title-set-inline">${parts.map(esc).join(' <span class="title-set-separator">|</span> ')}</span>`;
   }
@@ -137,9 +142,16 @@
     return new Set(categoryRangeBoxes.filter((box)=>box.checked).map((box)=>box.value));
   }
 
-  function render(){
+  const listView=$("title-list-view");
+  const setView=$("title-set-view");
+  const setGrid=$("title-set-grid");
+  const listViewButton=$("title-view-list");
+  const setViewButton=$("title-view-sets");
+  let titleViewMode=(()=>{ try{return localStorage.getItem(TITLE_VIEW_KEY)==="sets"?"sets":"list";}catch{return "list";} })();
+
+  function visibleTitles(){
     const query=normalize($("title-search").value); const status=$("title-status").value; const categories=selectedTitleCategories();
-    const visible=(D.titles||[]).filter((title)=>{
+    return (D.titles||[]).filter((title)=>{
       const state=rowState(title.id);
       if(status === "complete" && !state.complete) return false;
       if(status === "incomplete" && state.complete) return false;
@@ -147,6 +159,9 @@
       if(!query) return true;
       return normalize([title.title,title.dungeon,title.dungeonLevel,title.titleSet,title.exchangePathDescription,title.elyRequired,...(title.materials||[])].join(" ")).includes(query);
     });
+  }
+
+  function renderList(visible){
     $("title-table-body").innerHTML=visible.map((title)=>{
       const state=rowState(title.id); const req=numericRequired(title); const specialReq=specialRequirement(title); const elyReq=elyRequirement(title);
       const rawMats=[...(title.materials||[])].filter((mat)=>!/^\s*[\d,]+\s+ely\s*$/i.test(String(mat||"")));
@@ -173,16 +188,81 @@
       const specialRow = specialReq ? `<div class="material-progress-row requirement-only-row"><div class="material-info"><span class="material-name">${esc(specialReq)}</span></div></div>` : "";
       const elyRow = elyReq ? `<div class="material-progress-row requirement-only-row ely-requirement"><div class="material-info"><span class="material-name">${esc(elyReq)}</span></div></div>` : "";
       const materialRows = (trackedRows || specialRow || elyRow) ? `${trackedRows}${specialRow}${elyRow}` : '<div class="no-title-materials">No material tracking required.</div>';
-      const extraRequirement = "";
       return `<tr class="${state.complete ? "title-complete-row" : ""}" data-title-row="${esc(title.id)}">
         <td class="complete-cell"><input class="title-complete-check" type="checkbox" ${state.complete ? "checked" : ""} data-title-id="${esc(title.id)}" aria-label="Mark ${esc(title.title)} complete"></td>
         <td class="title-name-cell"><span class="title-name-line"><strong>${esc(title.title)}</strong>${couponIconHtml(title)}</span><span class="title-dungeon-name">${esc(title.dungeon || "—")}${title.dungeonLevel ? ` (${esc(displayDungeonLevel(title.dungeonLevel))})` : ""}</span>${title.exchangePathDescription ? `<span class="title-dungeon-name title-exchange-path">↪ ${esc(title.exchangePathDescription)}</span>` : ""}</td>
-        <td class="materials-stack-cell">${materialRows}${extraRequirement}</td>
+        <td class="materials-stack-cell">${materialRows}</td>
         <td class="title-set-cell">${titleSetHtml(title.titleSet)}</td>
       </tr>`;
     }).join("");
+    $("title-empty-state").classList.toggle("hidden",visible.length>0);
+  }
+
+  function renderSets(visible){
+    const groups=new Map();
+    visible.forEach((title)=>{
+      const sets=titleSetParts(title.titleSet);
+      (sets.length?sets:["No Title Set"]).forEach((setName)=>{
+        if(!groups.has(setName)) groups.set(setName,[]);
+        groups.get(setName).push(title);
+      });
+    });
+    const entries=[...groups.entries()].sort(([a],[b])=>{
+      if(a==="No Title Set") return 1;
+      if(b==="No Title Set") return -1;
+      return a.localeCompare(b,undefined,{sensitivity:"base"});
+    });
+    setGrid.innerHTML=entries.map(([setName,titles])=>{
+      titles.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||""),undefined,{sensitivity:"base"}));
+      const done=titles.filter((title)=>rowState(title.id).complete).length;
+      const total=titles.length;
+      const pct=total?(done/total)*100:0;
+      const rows=titles.map((title)=>{
+        const state=rowState(title.id);
+        const dungeon=[title.dungeon,title.dungeonLevel?displayDungeonLevel(title.dungeonLevel):""].filter(Boolean).join(" · ");
+        return `<label class="title-set-title-row ${state.complete ? "complete" : ""}">
+          <input class="title-set-title-check" type="checkbox" ${state.complete ? "checked" : ""} data-title-id="${esc(title.id)}" aria-label="Mark ${esc(title.title)} complete">
+          <span class="title-set-title-copy">
+            <span class="title-set-title-name"><span>${esc(title.title)}</span>${couponIconHtml(title)}</span>
+            <span class="title-set-title-meta">${esc(dungeon || "—")}</span>
+          </span>
+        </label>`;
+      }).join("");
+      return `<article class="title-set-card">
+        <header class="title-set-card-head">
+          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${total} title${total===1?"":"s"}</small></span>
+          <span class="title-set-card-progress">${done} / ${total}</span>
+        </header>
+        <div class="title-set-card-list">${rows}</div>
+        <div class="title-set-card-track" aria-hidden="true"><i style="width:${pct}%"></i></div>
+      </article>`;
+    }).join("");
+    $("title-set-empty-state").classList.toggle("hidden",visible.length>0);
+  }
+
+  function syncViewControls(){
+    const sets=titleViewMode==="sets";
+    listView.classList.toggle("hidden",sets);
+    setView.classList.toggle("hidden",!sets);
+    listViewButton.classList.toggle("active",!sets);
+    setViewButton.classList.toggle("active",sets);
+    listViewButton.setAttribute("aria-pressed",String(!sets));
+    setViewButton.setAttribute("aria-pressed",String(sets));
+  }
+
+  function setTitleView(mode){
+    titleViewMode=mode==="sets"?"sets":"list";
+    try{localStorage.setItem(TITLE_VIEW_KEY,titleViewMode);}catch{}
+    render();
+  }
+
+  function render(){
+    const visible=visibleTitles();
+    syncViewControls();
+    if(titleViewMode==="sets") renderSets(visible);
+    else renderList(visible);
     $("result-count").textContent=`${visible.length} title${visible.length===1?"":"s"}`;
-    $("title-empty-state").classList.toggle("hidden",visible.length>0); updateStats();
+    updateStats();
   }
 
   $("title-table-body").addEventListener("input",(event)=>{
@@ -197,6 +277,12 @@
     check.closest("tr")?.classList.toggle("title-complete-row",check.checked); updateStats();
     render();
   });
+  setGrid.addEventListener("change",(event)=>{
+    const check=event.target.closest(".title-set-title-check"); if(!check)return;
+    const state=rowState(check.dataset.titleId); state.complete=check.checked; saveProgress(); render();
+  });
+  listViewButton.addEventListener("click",()=>setTitleView("list"));
+  setViewButton.addEventListener("click",()=>setTitleView("sets"));
   $("title-search").addEventListener("input",render); $("title-status").addEventListener("change",render);
   categoryBoxes.forEach((box)=>box.addEventListener("change",()=>{
     if(box.value==="all"){

@@ -10,28 +10,28 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Mabem",
-        "group": "Lv. 1 ~ 20",
-        "level": "Lv. 1 ~ 20"
+        "group": "Lv. 21 ~ 40",
+        "level": "Lv. 21 ~ 40"
       },
       {
         "name": "Mabem Soul",
-        "group": "Lv. 1 ~ 20",
-        "level": "Lv. 1 ~ 20"
+        "group": "Lv. 21 ~ 40",
+        "level": "Lv. 21 ~ 40"
       },
       {
         "name": "Sir Percival",
-        "group": "Lv. 1 ~ 20",
-        "level": "Lv. 1 ~ 20"
+        "group": "Lv. 21 ~ 40",
+        "level": "Lv. 21 ~ 40"
       },
       {
         "name": "Fierie",
-        "group": "Lv. 1 ~ 20",
-        "level": "Lv. 1 ~ 20"
+        "group": "Lv. 21 ~ 40",
+        "level": "Lv. 21 ~ 40"
       },
       {
         "name": "Chimera",
-        "group": "Lv. 1 ~ 20",
-        "level": "Lv. 1 ~ 20"
+        "group": "Lv. 21 ~ 40",
+        "level": "Lv. 21 ~ 40"
       }
     ],
     "Shangri-la": [

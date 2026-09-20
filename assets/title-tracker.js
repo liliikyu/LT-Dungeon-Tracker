@@ -15,7 +15,8 @@
     ],
     "title_set_10":[
       {title:"Another Document",source:"Main Scenario Ch.3 Ep.5",type:"main"},
-      {title:"The Power-Hungry One",source:"Sub Scenario Ch.3 Ep.15",type:"sub"}
+      {title:"The Power-Hungry One",source:"Sub Scenario Ch.3 Ep.15",type:"sub"},
+      {title:"Trace of Glorious Magic",source:"Complete Zerenis Headquarters dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_11":[
       {title:"Darkness of Tartaros",source:"Main Scenario Ch.3 Ep.2",type:"main"}
@@ -27,42 +28,53 @@
     ],
     "title_set_13":[
       {title:"Savior of the Ruins",source:"Main Scenario Ch.3 Ep.6",type:"main"},
-      {title:"Shynic's Memory",source:"Sub Scenario Ch.3 Ep.20",type:"sub"}
+      {title:"Shynic's Memory",source:"Sub Scenario Ch.3 Ep.20",type:"sub"},
+      {title:"Happy Ending",source:"Complete Dream Oneiro dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_14":[
-      {title:"Faith of the Sword Master",source:"Main Scenario Ch.3 Ep.7",type:"main"}
+      {title:"Faith of the Sword Master",source:"Main Scenario Ch.3 Ep.7",type:"main"},
+      {title:"Beyond the Oblivion",source:"Complete Oblivion Lake dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_15":[
       {title:"Atkina's Commitment",source:"Main Scenario Ch.3 Ep.8",type:"main"},
-      {title:"Champion's Gathering",source:"Sub Scenario Ch.3 Ep.33",type:"sub"}
+      {title:"Champion's Gathering",source:"Sub Scenario Ch.3 Ep.33",type:"sub"},
+      {title:"Lack of Souls",source:"Complete Rosengarten dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_16":[
       {title:"Blessed By the Earth",source:"Main Scenario Ch.3 Ep.9",type:"main"},
-      {title:"Iris Adventurer",source:"Sub Scenario Ch.3 Ep.37",type:"sub"}
+      {title:"Iris Adventurer",source:"Sub Scenario Ch.3 Ep.37",type:"sub"},
+      {title:"Overcoming the Despair",source:"Complete Promised Sanctuary dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_17":[
-      {title:"Sea of Fog",source:"Main Scenario Ch.3 Ep.10",type:"main"}
+      {title:"Sea of Fog",source:"Main Scenario Ch.3 Ep.10",type:"main"},
+      {title:"Echo of Lies",source:"Complete Spring of the Echo dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_18":[
       {title:"Alley of Chaos",source:"Main Scenario Ch.3 Ep.11",type:"main"},
-      {title:"Before the Storm",source:"Sub Scenario Ch.3 Ep.47",type:"sub"}
+      {title:"Before the Storm",source:"Sub Scenario Ch.3 Ep.47",type:"sub"},
+      {title:"Rage Control",source:"Complete Acro Coffin dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_19":[
-      {title:"Savior of Eastland",source:"Main Scenario Ch.3 Ep.12",type:"main"}
+      {title:"Savior of Eastland",source:"Main Scenario Ch.3 Ep.12",type:"main"},
+      {title:"The Judge",source:"Complete Purgatory Azrael dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_20":[
       {title:"Walking the Time",source:"Main Scenario Ch.3 Ep.13",type:"main"},
-      {title:"New Tag Game",source:"Sub Scenario Ch.3 Ep.58",type:"sub"}
+      {title:"New Tag Game",source:"Sub Scenario Ch.3 Ep.58",type:"sub"},
+      {title:"Fragile Cat Paws",source:"Complete Kairos' Time dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_21":[
       {title:"The First Rehearsal",source:"Main Scenario Ch.1 Ep.1",type:"main"},
-      {title:"Delivery Adventurer",source:"Sub Scenario Ch.4 Ep.3",type:"sub"}
+      {title:"Delivery Adventurer",source:"Sub Scenario Ch.4 Ep.3",type:"sub"},
+      {title:"Main Character",source:"Complete Theater Eugamon dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_22":[
-      {title:"Shadow of Orcarium",source:"Main Scenario Ch.1 Ep.2",type:"main"}
+      {title:"Shadow of Orcarium",source:"Main Scenario Ch.1 Ep.2",type:"main"},
+      {title:"The Light",source:"Complete Stump of Spirits dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_23":[
-      {title:"Reverberation of Memory",source:"Main Scenario Ch.4 Ep.3",type:"main"}
+      {title:"Reverberation of Memory",source:"Main Scenario Ch.4 Ep.3",type:"main"},
+      {title:"Witch Hunter",source:"Complete Twilight Cathedral dungeon quests ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_26":[
       {title:"Vortex of Fate",source:"Main Scenario Ch.4 Ep.8",type:"main"},
@@ -303,15 +315,17 @@
       const scenarioRows=scenarios.map((item,index)=>{
         const scenarioId=`scenario:${group.id}:${index}`;
         const state=rowState(scenarioId);
-        const badge=item.type==="sub"?"Sub Scenario":item.type==="quest"?"Dungeon Quest":"Main Scenario";
+        const badge=item.type==="sub"?"Sub Scenario":item.type==="quest"?"Questing":"Main Scenario";
         return `<label class="title-set-title-row title-set-scenario-row ${state.complete ? "complete" : ""}">
           <input class="title-set-title-check" type="checkbox" ${state.complete ? "checked" : ""} data-title-id="${esc(scenarioId)}" aria-label="Mark ${esc(item.title)} complete">
           <span class="title-set-title-copy">
-            <span class="title-set-title-name"><span>${esc(item.title)}</span></span>
+            <span class="title-set-title-name"><span>${esc(item.type==="quest" ? item.title+" (Questing)" : item.title)}</span></span>
             <span class="title-set-title-meta"><span class="title-source-badge ${item.type==="sub"?"sub":item.type==="quest"?"quest":"main"}">${badge}</span>${esc(item.source.replace(/^Main Scenario\s*|^Sub Scenario\s*/,""))}</span>
           </span>
         </label>`;
       }).join("");
+      const scenarioCount=scenarios.filter((item)=>item.type==="main"||item.type==="sub").length;
+      const questCount=scenarios.filter((item)=>item.type==="quest").length;
       const done=titles.filter((title)=>rowState(title.id).complete).length + scenarios.filter((item,index)=>rowState(`scenario:${group.id}:${index}`).complete).length;
       const total=titles.length+scenarios.length;
       const pct=total?(done/total)*100:0;
@@ -328,7 +342,7 @@
       }).join("");
       return `<article class="title-set-card">
         <header class="title-set-card-head">
-          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${total} title${total===1?"":"s"}${scenarios.length?` · ${scenarios.length} scenario${scenarios.length===1?"":"s"}`:""}</small></span>
+          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${total} title${total===1?"":"s"}${scenarioCount?` · ${scenarioCount} scenario${scenarioCount===1?"":"s"}`:""}${questCount?` · ${questCount} questing`:""}</small></span>
           <span class="title-set-card-progress">${done} / ${total}</span>
         </header>
         <div class="title-set-card-list">${scenarioRows}${rows}</div>

@@ -2480,3 +2480,17 @@ body.conquest-modal-open{overflow:hidden}
   align-items:center;
   height:30px;
 }
+
+
+/* v13.9.4.78 — title-set badges beside title names */
+.title-set-scenario-row .title-set-title-name{
+  justify-content:space-between;
+  gap:8px;
+}
+.title-set-scenario-row .title-set-title-name > span:first-child{
+  flex:1 1 auto;
+}
+.title-set-scenario-row .title-source-badge{
+  flex:0 0 auto;
+  margin:0 0 0 auto;
+}

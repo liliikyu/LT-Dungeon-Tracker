@@ -6,6 +6,80 @@
   const THEME_KEY = "lt-theme";
   const TITLE_PROGRESS_KEY = "lt-title-progress-v1";
   const TITLE_VIEW_KEY = "lt-title-view-v1";
+  const TITLE_SET_SCENARIOS = {
+    "title_set_08":[
+      {title:"Archaeologist",source:"Sub Scenario Ch.3 Ep.4",type:"sub"}
+    ],
+    "title_set_09":[
+      {title:"Goddess' Pet",source:"Sub Scenario Ch.3 Ep.8",type:"sub"}
+    ],
+    "title_set_10":[
+      {title:"Another Document",source:"Main Scenario Ch.3 Ep.5",type:"main"},
+      {title:"The Power-Hungry One",source:"Sub Scenario Ch.3 Ep.15",type:"sub"}
+    ],
+    "title_set_11":[
+      {title:"Darkness of Tartaros",source:"Main Scenario Ch.3 Ep.2",type:"main"}
+    ],
+    "title_set_12":[
+      {title:"Promise with Gaia",source:"Main Scenario Ch.3 Ep.4",type:"main"},
+      {title:"Iris Anxiety",source:"Sub Scenario Ch.3 Ep.12",type:"sub"}
+    ],
+    "title_set_13":[
+      {title:"Savior of the Ruins",source:"Main Scenario Ch.3 Ep.6",type:"main"},
+      {title:"Shynic's Memory",source:"Sub Scenario Ch.3 Ep.20",type:"sub"}
+    ],
+    "title_set_14":[
+      {title:"Faith of the Sword Master",source:"Main Scenario Ch.3 Ep.7",type:"main"}
+    ],
+    "title_set_15":[
+      {title:"Atkina's Commitment",source:"Main Scenario Ch.3 Ep.8",type:"main"},
+      {title:"Champion's Gathering",source:"Sub Scenario Ch.3 Ep.33",type:"sub"}
+    ],
+    "title_set_16":[
+      {title:"Blessed By the Earth",source:"Main Scenario Ch.3 Ep.9",type:"main"},
+      {title:"Iris Adventurer",source:"Sub Scenario Ch.3 Ep.37",type:"sub"}
+    ],
+    "title_set_17":[
+      {title:"Sea of Fog",source:"Main Scenario Ch.3 Ep.10",type:"main"}
+    ],
+    "title_set_18":[
+      {title:"Alley of Chaos",source:"Main Scenario Ch.3 Ep.11",type:"main"},
+      {title:"Before the Storm",source:"Sub Scenario Ch.3 Ep.47",type:"sub"}
+    ],
+    "title_set_19":[
+      {title:"Savior of Eastland",source:"Main Scenario Ch.3 Ep.12",type:"main"}
+    ],
+    "title_set_20":[
+      {title:"Walking the Time",source:"Main Scenario Ch.3 Ep.13",type:"main"},
+      {title:"New Tag Game",source:"Sub Scenario Ch.3 Ep.58",type:"sub"}
+    ],
+    "title_set_21":[
+      {title:"The First Rehearsal",source:"Main Scenario Ch.1 Ep.1",type:"main"},
+      {title:"Delivery Adventurer",source:"Sub Scenario Ch.4 Ep.3",type:"sub"}
+    ],
+    "title_set_22":[
+      {title:"Shadow of Orcarium",source:"Main Scenario Ch.1 Ep.2",type:"main"}
+    ],
+    "title_set_23":[
+      {title:"Reverberation of Memory",source:"Main Scenario Ch.4 Ep.3",type:"main"}
+    ],
+    "title_set_26":[
+      {title:"Vortex of Fate",source:"Main Scenario Ch.4 Ep.8",type:"main"},
+      {title:"La Vita",source:"Main Scenario Ch.4 Ep.9",type:"main"}
+    ],
+    "title_set_27":[
+      {title:"Good Luck",source:"Main Scenario Ch.4 Ep.10",type:"main"},
+      {title:"Daydream",source:"Main Scenario Ch.4 Ep.11",type:"main"}
+    ],
+    "title_set_28":[
+      {title:"Goodbye, Hello Again",source:"Main Scenario Ch.4 Ep.12",type:"main"},
+      {title:"Ancient Wings",source:"Main Scenario Ch.4 Ep.13",type:"main"}
+    ],
+    "title_set_29":[
+      {title:"Whisper of Deceit and Lies",source:"Main Scenario Ch.4 Ep.14",type:"main"}
+    ]
+  };
+
 
   function loadProgress(){
     try { const value = JSON.parse(localStorage.getItem(TITLE_PROGRESS_KEY) || "{}"); return value && typeof value === "object" ? value : {}; }
@@ -202,28 +276,43 @@
     const groups=new Map();
     visible.forEach((title)=>{
       const sets=titleSetParts(title.titleSet);
-      (sets.length?sets:["No Title Set"]).forEach((setName)=>{
-        if(!groups.has(setName)) groups.set(setName,[]);
-        groups.get(setName).push(title);
+      const ids=Array.isArray(title.titleSetIds)?title.titleSetIds:[];
+      (sets.length?sets:["No Title Set"]).forEach((setName,index)=>{
+        if(!groups.has(setName)) groups.set(setName,{titles:[],id:ids[index]||null});
+        const group=groups.get(setName);
+        group.titles.push(title);
+        if(!group.id && ids[index]) group.id=ids[index];
       });
     });
-    const setOrder=(titles)=>{
-      const ids=titles.flatMap((title)=>Array.isArray(title.titleSetIds)?title.titleSetIds:[])
-        .map((id)=>Number(String(id).match(/(\d+)$/)?.[1]))
-        .filter(Number.isFinite);
-      return ids.length?Math.min(...ids):Number.POSITIVE_INFINITY;
+    const setOrder=(group)=>{
+      const n=Number(String(group.id||"").match(/(\d+)$/)?.[1]);
+      return Number.isFinite(n)?n:Number.POSITIVE_INFINITY;
     };
-    const entries=[...groups.entries()].sort(([a,aTitles],[b,bTitles])=>{
+    const entries=[...groups.entries()].sort(([a,aGroup],[b,bGroup])=>{
       if(a==="No Title Set") return 1;
       if(b==="No Title Set") return -1;
-      const orderDiff=setOrder(aTitles)-setOrder(bTitles);
+      const orderDiff=setOrder(aGroup)-setOrder(bGroup);
       if(Number.isFinite(orderDiff) && orderDiff!==0) return orderDiff;
       return a.localeCompare(b,undefined,{sensitivity:"base"});
     });
-    setGrid.innerHTML=entries.map(([setName,titles])=>{
+    setGrid.innerHTML=entries.map(([setName,group])=>{
+      const titles=group.titles;
       titles.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||""),undefined,{sensitivity:"base"}));
-      const done=titles.filter((title)=>rowState(title.id).complete).length;
-      const total=titles.length;
+      const scenarios=group.id ? (TITLE_SET_SCENARIOS[group.id]||[]) : [];
+      const scenarioRows=scenarios.map((item,index)=>{
+        const scenarioId=`scenario:${group.id}:${index}`;
+        const state=rowState(scenarioId);
+        const badge=item.type==="sub"?"Sub Scenario":"Main Scenario";
+        return `<label class="title-set-title-row title-set-scenario-row ${state.complete ? "complete" : ""}">
+          <input class="title-set-title-check" type="checkbox" ${state.complete ? "checked" : ""} data-title-id="${esc(scenarioId)}" aria-label="Mark ${esc(item.title)} complete">
+          <span class="title-set-title-copy">
+            <span class="title-set-title-name"><span>${esc(item.title)}</span></span>
+            <span class="title-set-title-meta"><span class="title-source-badge ${item.type==="sub"?"sub":"main"}">${badge}</span>${esc(item.source.replace(/^Main Scenario\s*|^Sub Scenario\s*/,""))}</span>
+          </span>
+        </label>`;
+      }).join("");
+      const done=titles.filter((title)=>rowState(title.id).complete).length + scenarios.filter((item,index)=>rowState(`scenario:${group.id}:${index}`).complete).length;
+      const total=titles.length+scenarios.length;
       const pct=total?(done/total)*100:0;
       const rows=titles.map((title)=>{
         const state=rowState(title.id);
@@ -238,10 +327,10 @@
       }).join("");
       return `<article class="title-set-card">
         <header class="title-set-card-head">
-          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${total} title${total===1?"":"s"}</small></span>
+          <span class="title-set-card-title"><strong>${esc(setName)}</strong><small>${total} title${total===1?"":"s"}${scenarios.length?` · ${scenarios.length} scenario${scenarios.length===1?"":"s"}`:""}</small></span>
           <span class="title-set-card-progress">${done} / ${total}</span>
         </header>
-        <div class="title-set-card-list">${rows}</div>
+        <div class="title-set-card-list">${scenarioRows}${rows}</div>
         <div class="title-set-card-track" aria-hidden="true"><i style="width:${pct}%"></i></div>
       </article>`;
     }).join("");

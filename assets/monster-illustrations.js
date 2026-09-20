@@ -5,7 +5,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Dragon Lair": [
       {
         "name": "Invoke EX",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -37,7 +37,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Shangri-la": [
       {
         "name": "Hyunmu",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -59,21 +59,21 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Dark Moon of the 16th": [
       {
         "name": "Dark Moon Princess",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Rice Zone": [
       {
         "name": "Doctor Rice",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Treasure Vault": [
       {
         "name": "Sphinx",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -90,40 +90,40 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Captain Johnny's Room": [
       {
         "name": "Captain Johnny",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
         "name": "Kraken Head 2",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Gothic Room": [
       {
         "name": "Pandora",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Cold Heart": [
       {
         "name": "Ocean King",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Heart of Ktuka": [
       {
         "name": "Coa",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Chimera Laboratory": [
       {
         "name": "Choen Palm",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -150,7 +150,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Toad Mountain": [
       {
         "name": "Rabana",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -172,7 +172,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Toad Cave": [
       {
         "name": "Kalad Burg",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -194,7 +194,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Frozen Labyrinth": [
       {
         "name": "Vintor",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -221,21 +221,21 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Toad Valley": [
       {
         "name": "Large Big Toad",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "King's Aircraft": [
       {
         "name": "King Asura",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Valhalla": [
       {
         "name": "Pheonix",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -262,42 +262,42 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Webfoot Octopus Temple": [
       {
         "name": "UFO Octopus",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Hel's Door": [
       {
         "name": "Hel",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Black Tower": [
       {
         "name": "Formless One",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Outer Realm": [
       {
         "name": "Siam Vespucci",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Constellation Cliff": [
       {
         "name": "Luseria",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Magic Book Room": [
       {
         "name": "Ifrit",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -334,7 +334,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Forgotten Garden": [
       {
         "name": "Degos",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -386,7 +386,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Star's Cradle": [
       {
         "name": "Theseus",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -418,14 +418,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Collapsed Tower Underground": [
       {
         "name": "Njord",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Ymir Institute": [
       {
         "name": "Almae",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -477,21 +477,21 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Chunsik Room": [
       {
         "name": "Chuntrio Sik",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Starry Cats Royal Rumble": [
       {
         "name": "MD",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Road of Moon": [
       {
         "name": "Tyr Phantom",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -513,7 +513,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Road of Dream": [
       {
         "name": "Agasura Phantom",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -525,7 +525,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "World's Genesis": [
       {
         "name": "Divine Phantom",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -572,14 +572,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Big Tube": [
       {
         "name": "Bollywood",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "TAID Dragon Garden": [
       {
         "name": "Dragon Garden Lord",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -621,7 +621,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Rising Dragon Temple": [
       {
         "name": "Tahm",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -688,7 +688,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Hidden Cave": [
       {
         "name": "Nepenthes",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -725,7 +725,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Ruined Palace": [
       {
         "name": "Geminus",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -807,7 +807,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Aurora Garden": [
       {
         "name": "Aurora",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -854,7 +854,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Rivera City Hall": [
       {
         "name": "Zekal",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -896,7 +896,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Manastone Laboratory": [
       {
         "name": "Elrian",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -948,7 +948,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Devil's Canyon": [
       {
         "name": "Gallus",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -975,7 +975,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Mysterious Hall": [
       {
         "name": "Minerva",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1027,7 +1027,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Sacred Hall": [
       {
         "name": "Blaspheme",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1099,7 +1099,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Dwarf Aircraft": [
       {
         "name": "Furin",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1176,7 +1176,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Solar Temple": [
       {
         "name": "Darman",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1213,7 +1213,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Agni's Altar": [
       {
         "name": "Aslan",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1275,7 +1275,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Treasure Cave": [
       {
         "name": "Doctor SD",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1332,7 +1332,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Waterfall Forest": [
       {
         "name": "Trinia",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1374,7 +1374,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Jewell Forest": [
       {
         "name": "Veska",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1431,17 +1431,17 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Chunsik Memorial": [
       {
         "name": "Bong",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
         "name": "Chun",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
         "name": "Sik",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1483,7 +1483,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Ice Cream Garden": [
       {
         "name": "Essential Calorie",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1550,7 +1550,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Book of Shadows": [
       {
         "name": "Black Dragon",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1587,7 +1587,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Floating Island": [
       {
         "name": "Bilbradha",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1634,7 +1634,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Illusion Mist Swamp": [
       {
         "name": "Devil's Illusion",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1691,12 +1691,12 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Euphony of Corals": [
       {
         "name": "Levianthan Kraca",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
         "name": "Leviathan Krill",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1743,14 +1743,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Twin Caves": [
       {
         "name": "Ocelino",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Canyon of Chaos": [
       {
         "name": "Evil Iris",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1792,7 +1792,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Frozen World": [
       {
         "name": "Evil Order",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1849,7 +1849,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Ra's Palace": [
       {
         "name": "Ra Natun",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1891,7 +1891,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Hall of Rest": [
       {
         "name": "Anubis",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1933,7 +1933,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Chamber of Hell": [
       {
         "name": "Malphas",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -1985,7 +1985,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Champion's Memorial": [
       {
         "name": "Randine",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2027,7 +2027,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Warrior's Graveyard": [
       {
         "name": "Letum",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2079,7 +2079,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Monster Tree Valley": [
       {
         "name": "Arborum",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2126,7 +2126,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Divine Tree Rapier": [
       {
         "name": "Requiem",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2188,7 +2188,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Dragon Valley": [
       {
         "name": "Kyrie",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2230,7 +2230,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Zerenis Training Center": [
       {
         "name": "Zephyros",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2267,69 +2267,69 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Doctor Vampire",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Engineer Vampire",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Precious Succubus",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Timid Succubus",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Gardener Souly",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Remu Remu",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Epu Epu",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Nemu Nemu",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Calm Q-riring",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Famous Q-riring",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Einhorn",
-        "group": "Lv. 1 ~ 1000",
-        "level": "Lv. 1 ~ 1000"
+        "group": "",
+        "level": ""
       },
       {
         "name": "Chloris",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Dream Oneiro": [
       {
         "name": "Bergelmir",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2396,7 +2396,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Fallout Shelter": [
       {
         "name": "Prince Nox",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2433,7 +2433,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Void Star": [
       {
         "name": "Shadow Snake",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2470,7 +2470,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Oblivon Lake": [
       {
         "name": "Rete of Oblivion",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2532,7 +2532,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Flame's Cradle": [
       {
         "name": "Lilith",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2569,7 +2569,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Rosengarten": [
       {
         "name": "Asmodea",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2636,7 +2636,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Hyle": [
       {
         "name": "Michealla",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2673,7 +2673,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Promised Sancutary": [
       {
         "name": "Barbatos",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2725,7 +2725,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Icicle Prison": [
       {
         "name": "Argos",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2762,7 +2762,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Spring of the Echo": [
       {
         "name": "Echo",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -2834,7 +2834,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Heart of Reminisence": [
       {
         "name": "Pasiphae",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
@@ -2886,14 +2886,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Minos",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Vanitas": [
       {
         "name": "Vellosh",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3015,14 +3015,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Vice The Sinner",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Chronos' Time": [
       {
         "name": "Chronos",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3064,7 +3064,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Kairos' Time": [
       {
         "name": "Kairos",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3116,7 +3116,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Chaotic Mirror": [
       {
         "name": "Scylla",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3158,7 +3158,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Theater Eugamon": [
       {
         "name": "Glaucos",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3235,7 +3235,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Entelechy of Life": [
       {
         "name": "Magic Golem Ricaria",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3267,7 +3267,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Stump of Spirits": [
       {
         "name": "El-Larsa",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3319,14 +3319,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Euphony of Vanishing Star": [
       {
         "name": "Merlin",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Twilight Cathedral": [
       {
         "name": "Morgana",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3413,7 +3413,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Trial of the Dark Moon": [
       {
         "name": "Anshara",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3450,7 +3450,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Trial of the Earth": [
       {
         "name": "Kishara",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3507,7 +3507,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Aegir Ruins": [
       {
         "name": "Rafaela",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3554,7 +3554,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Atlas Garden": [
       {
         "name": "Metheus",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3636,7 +3636,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Niflheim Station": [
       {
         "name": "Hel",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3683,7 +3683,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Muspelheim Tunnel": [
       {
         "name": "Surtr",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3770,14 +3770,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Lefica",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Tears of Nornir": [
       {
         "name": "Gremory Queen",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3899,14 +3899,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Yankas",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Gates of Lysithea": [
       {
         "name": "Andreas",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -3963,7 +3963,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Boundary of the Void": [
       {
         "name": "Gnosis",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -4085,7 +4085,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Demiurge",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
@@ -4132,14 +4132,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Ego Notoria",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Pseudaria": [
       {
         "name": "Raudskinna",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -4226,14 +4226,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Bunny Bunny Luseria",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Emeraldia": [
       {
         "name": "Dorothea",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -4335,7 +4335,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Helepol Fort": [
       {
         "name": "Dmitrij",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -4382,7 +4382,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Trial of Iron": [
       {
         "name": "Tyrhenia",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -4484,14 +4484,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Gabriella",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Wings of Icarus": [
       {
         "name": "Grendel",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -4578,14 +4578,14 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "TAID Choco Garden": [
       {
         "name": "Mutant Gingerbread Man",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Twisted Genesis": [
       {
         "name": "Mutant Sky Dragon",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -4632,7 +4632,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Sunset Forest": [
       {
         "name": "Mutant Flower Snake",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       },
       {
@@ -4664,21 +4664,21 @@ window.LT_MONSTER_ILLUSTRATIONS = {
     "Garden of the Priring": [
       {
         "name": "Mutant Jewelring",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Unknown Forest": [
       {
         "name": "Mutant Ent",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],
     "Unknown Beach": [
       {
         "name": "Mutant Clawrence",
-        "group": "",
+        "group": "Boss Monster",
         "level": ""
       }
     ],

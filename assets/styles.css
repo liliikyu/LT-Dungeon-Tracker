@@ -2424,3 +2424,11 @@ body.conquest-modal-open{overflow:hidden}
   color:var(--title);
   background:color-mix(in srgb,var(--panel-3) 88%,var(--title) 12%);
 }
+
+
+/* v13.9.4.74 — dungeon quest title-set requirement badge */
+.title-source-badge.quest{
+  border-color:color-mix(in srgb,var(--badge5) 52%,var(--line));
+  color:var(--badge5);
+  background:color-mix(in srgb,var(--panel-3) 88%,var(--badge5) 12%);
+}

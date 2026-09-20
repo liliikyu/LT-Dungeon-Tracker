@@ -22,7 +22,8 @@
     ],
     "title_set_12":[
       {title:"Promise with Gaia",source:"Main Scenario Ch.3 Ep.4",type:"main"},
-      {title:"Iris Anxiety",source:"Sub Scenario Ch.3 Ep.12",type:"sub"}
+      {title:"Iris Anxiety",source:"Sub Scenario Ch.3 Ep.12",type:"sub"},
+      {title:"Adrica Nightmare",source:"Complete Divine Tree Rapier dungeon quests from Medea in Kali ×2 (Repeatable)",type:"quest"}
     ],
     "title_set_13":[
       {title:"Savior of the Ruins",source:"Main Scenario Ch.3 Ep.6",type:"main"},
@@ -302,12 +303,12 @@
       const scenarioRows=scenarios.map((item,index)=>{
         const scenarioId=`scenario:${group.id}:${index}`;
         const state=rowState(scenarioId);
-        const badge=item.type==="sub"?"Sub Scenario":"Main Scenario";
+        const badge=item.type==="sub"?"Sub Scenario":item.type==="quest"?"Dungeon Quest":"Main Scenario";
         return `<label class="title-set-title-row title-set-scenario-row ${state.complete ? "complete" : ""}">
           <input class="title-set-title-check" type="checkbox" ${state.complete ? "checked" : ""} data-title-id="${esc(scenarioId)}" aria-label="Mark ${esc(item.title)} complete">
           <span class="title-set-title-copy">
             <span class="title-set-title-name"><span>${esc(item.title)}</span></span>
-            <span class="title-set-title-meta"><span class="title-source-badge ${item.type==="sub"?"sub":"main"}">${badge}</span>${esc(item.source.replace(/^Main Scenario\s*|^Sub Scenario\s*/,""))}</span>
+            <span class="title-set-title-meta"><span class="title-source-badge ${item.type==="sub"?"sub":item.type==="quest"?"quest":"main"}">${badge}</span>${esc(item.source.replace(/^Main Scenario\s*|^Sub Scenario\s*/,""))}</span>
           </span>
         </label>`;
       }).join("");

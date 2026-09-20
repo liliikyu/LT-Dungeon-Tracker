@@ -169,7 +169,7 @@
     const match=raw.match(/\d+(?:\.\d+)?/);
     return match?Number(match[0]):Number.POSITIVE_INFINITY;
   };
-  const illustrationLabel=(entry)=>{const n=illustrationName(entry),g=illustrationGroup(entry)||illustrationLevel(entry);return g?`${n} (${g})`:n;};
+  const illustrationLabel=(entry)=>{const n=illustrationName(entry),lvl=illustrationLevel(entry),grp=illustrationGroup(entry),tag=lvl||grp;return tag?`${n} (${tag})`:n;};
   const sourceFieldOf=(entry,fallback)=>typeof entry==="object"&&String(entry?.sourceField||entry?._sourceField||"").trim()?String(entry.sourceField||entry._sourceField).trim():fallback;
   const codexName=(entry)=>typeof entry==="string"?entry:String(entry?.name??"");
   const codexCategory=(entry)=>{const raw=typeof entry==="object"?String(entry?.category??"Other"):"Other";const n=raw.toLowerCase();if(n.includes("equip"))return "Equipment";if(n.includes("event"))return "Event";if(n==="etc"||n.includes("etc"))return "ETC";return "Other";};
@@ -198,13 +198,18 @@
   function canonicalFieldName(name){
     const raw=normField(name);
     const explicit={
-      "jungle area ktuka ruins":"Jungle Area"
+      "jungle area ktuka ruins":"Jungle Area",
+      "royal dragon place":"Royal Dragon Palace"
     };
     if(explicit[raw]) return explicit[raw];
     // Wiki variants such as "Royal Dragon Palace 3" and
     // "Webfoot Octopus Temple 3" belong to the main field card.
     const base=String(name||"").replace(/\s+\d+$/,'').trim();
-    if(base && base!==name) return base;
+    if(base && base!==name){
+      const baseRaw=normField(base);
+      if(explicit[baseRaw]) return explicit[baseRaw];
+      return base;
+    }
     return name;
   }
   const rawEntries=Object.entries(DATA.fields||{}).map(([name,value])=>({
@@ -233,10 +238,17 @@
       if(!target.achievements.some(x=>`${normField(x?.name)}::${normField(x?.objective)}`===k)) target.achievements.push(a);
     });
   });
-  const entries=[...mergedFields.values()].map(field=>({
-    ...field,
-    sortLevel:field.illustrations.reduce((min,entry)=>Math.min(min,illustrationLevelNumber(entry)),Number.POSITIVE_INFINITY)
-  })).sort((a,b)=>a.sortLevel-b.sortLevel||a.wikiOrder-b.wikiOrder||a.name.localeCompare(b.name));
+  const FIELD_LEVEL_FALLBACK={
+    "Webfoot Octopus Temple":101
+  };
+  const entries=[...mergedFields.values()].map(field=>{
+    const parsedLevel=field.illustrations.reduce((min,entry)=>Math.min(min,illustrationLevelNumber(entry)),Number.POSITIVE_INFINITY);
+    const fallback=FIELD_LEVEL_FALLBACK[field.name];
+    return {
+      ...field,
+      sortLevel:Number.isFinite(parsedLevel)?parsedLevel:(Number.isFinite(fallback)?fallback:Number.POSITIVE_INFINITY)
+    };
+  }).sort((a,b)=>a.sortLevel-b.sortLevel||a.wikiOrder-b.wikiOrder||a.name.localeCompare(b.name));
   const expanded=new Set();
   const collapsedRegions=new Set();
   const regionCheckboxes=[...document.querySelectorAll('#field-region-filters input[type="checkbox"]')];

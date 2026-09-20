@@ -90,21 +90,30 @@ def normalize_category(v):
   if 'event' in s:return 'Event'
   if s=='etc' or 'etc' in s:return 'ETC'
   return 'Other'
-def level_section(heading):
-  """Return the wiki monster level section without the trailing 'Monsters'."""
-  h=clean(heading)
-  m=re.search(r'((?:S?Lv\.?\s*)?\d+\s*[~\-–—]\s*\d+)\s+Monsters?$',h,re.I)
-  if m:return clean(m.group(1))
-  # wiki currently also has headings such as "Lv. 1 ~ 20 Monsters"
-  m=re.search(r'((?:S?Lv\.?\s*)\d+\s*~\s*\d+)',h,re.I)
-  return clean(m.group(1)) if m else ''
+def level_section(text):
+  """Return a wiki level section label from a heading OR table separator row.
+
+  The Monster Illustrations page has used both real section headings and
+  in-table separator rows over time, so only reading the nearest <h*> is not
+  reliable enough for the generated static data.
+  """
+  h=clean(text)
+  # Examples: "Lv. 1 ~ 20 Monsters", "Lv 21-40", "SLv. 1 ~ 10 Monsters".
+  m=re.search(r'((?:S?Lv\.?\s*)?\d+\s*[~\-–—]\s*\d+)\s*(?:Monsters?)?',h,re.I)
+  if m:
+    label=clean(m.group(1))
+    # Keep the displayed label consistent even if the wiki omits the dot.
+    label=re.sub(r'^Lv\s+','Lv. ',label,flags=re.I)
+    label=re.sub(r'^SLv\s+','SLv. ',label,flags=re.I)
+    return label
+  return ''
 
 def parse(html, with_category=False, with_group=False):
   p=P();p.feed(html);result={}
   for heading,raw in p.tables:
     table=expand(raw)
-    section=level_section(heading) if with_group else ''
-    for hi,row in enumerate(table[:10]):
+    heading_section=level_section(heading) if with_group else ''
+    for hi,row in enumerate(table[:12]):
       headers=[clean(x).lower() for x in row]
       loc=next((i for i,h in enumerate(headers) if h in ('location','locations','area','source')),None)
       name=next((i for i,h in enumerate(headers) if h in ('name','item','item name','monster','monster name')),None)
@@ -112,7 +121,21 @@ def parse(html, with_category=False, with_group=False):
       group=next((i for i,h in enumerate(headers) if h in ('group','monster group','illustration group')),None)
       level=next((i for i,h in enumerate(headers) if h in ('level','lv','lvl','monster level')),None)
       if loc is None or name is None:continue
+      current_section=heading_section
       for r in table[hi+1:]:
+        # wiki.gg has alternated between <h*> level headings and separator rows
+        # inside a larger table. Capture either form so every following monster
+        # inherits the correct section until the next separator appears.
+        if with_group:
+          row_section=level_section(' '.join(clean(x) for x in r if clean(x)))
+          if row_section:
+            current_section=row_section
+            # Separator rows do not represent a monster entry. Continue unless
+            # this row also contains an actual field source + monster name.
+            row_loc=clean(r[loc]) if loc < len(r) else ''
+            row_name=clean(r[name]) if name < len(r) else ''
+            if not field_name(row_loc) or not row_name:
+              continue
         if max(loc,name)>=len(r):continue
         n=clean(r[name]);f=field_name(r[loc])
         if n and f:
@@ -120,15 +143,10 @@ def parse(html, with_category=False, with_group=False):
             category=normalize_category(r[cat] if cat is not None and cat<len(r) else '')
             result.setdefault(f,[]).append({'name':n,'category':category,'sourceField':f})
           elif with_group:
-            # Monster Illustrations are grouped by wiki level-section headings
-            # (for example "Lv. 1 ~ 20 Monsters"), not by a table column.
-            # Prefer an explicit table group/level if one ever appears, otherwise
-            # use that section heading. The section is shown in brackets beside
-            # the monster name and its lower bound drives field-card sorting.
             explicit_group=clean(r[group] if group is not None and group<len(r) else '')
             explicit_level=clean(r[level] if level is not None and level<len(r) else '')
-            grp=explicit_group or section or explicit_level
-            lvl=explicit_level or section
+            grp=explicit_group or current_section or explicit_level
+            lvl=current_section or explicit_level
             result.setdefault(f,[]).append({'name':n,'group':grp,'level':lvl,'sourceField':f})
           else: result.setdefault(f,[]).append(n)
       break

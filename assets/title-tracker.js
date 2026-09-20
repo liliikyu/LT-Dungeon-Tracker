@@ -327,7 +327,7 @@
       const scenarioRows=scenarios.map((item,index)=>{
         const scenarioId=`scenario:${group.id}:${index}`;
         const state=rowState(scenarioId);
-        const badge=item.type==="sub"?"Sub Scenario":item.type==="quest"?"Dungeon Quest":item.type==="main"?"Main Scenario":"";
+        const badge=item.type==="sub"?"Sub Scenario":item.type==="main"?"Main Scenario":"";
         return `<label class="title-set-title-row title-set-scenario-row ${state.complete ? "complete" : ""}">
           <input class="title-set-title-check" type="checkbox" ${state.complete ? "checked" : ""} data-title-id="${esc(scenarioId)}" aria-label="Mark ${esc(item.title)} complete">
           <span class="title-set-title-copy">

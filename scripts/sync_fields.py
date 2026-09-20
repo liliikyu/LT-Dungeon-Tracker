@@ -23,6 +23,11 @@ MONSTER_NAME_FIXES={
   'Niez':'Nez',
   'Shadow Tief':'Shadow Thief',
 }
+
+MONSTER_FIELD_NAME_FIXES={
+  ('Dark Forest','Gargoyle'):'Gargoyle (Dark Forest)',
+  ('Undercity Construction','Gargoyle'):'Gargoyle (Undercity Construction)',
+}
 MONSTER_LEVEL_FIXES={
   ('Tiger Temple','Red Max'):'Lv. 161 ~ 180',
   ('Scrap Valley Entrance','Cordless'):'Lv. 161 ~ 180',
@@ -210,6 +215,8 @@ def parse(html, with_category=False, with_group=False):
               continue
         if max(loc,name)>=len(r):continue
         n=monster_name(r[name]) if with_group else clean(r[name]);f=field_name(r[loc])
+        if with_group and n and f:
+          n=MONSTER_FIELD_NAME_FIXES.get((f,n),n)
         if n and f:
           if with_category:
             category=normalize_category(r[cat] if cat is not None and cat<len(r) else '')

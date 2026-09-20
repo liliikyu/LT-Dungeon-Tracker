@@ -121,7 +121,16 @@ def parse(html, with_category=False, with_group=False):
       group=next((i for i,h in enumerate(headers) if h in ('group','monster group','illustration group')),None)
       level=next((i for i,h in enumerate(headers) if h in ('level','lv','lvl','monster level')),None)
       if loc is None or name is None:continue
+      # wiki.gg collapsible tables put the level band in a full-width row
+      # *above* the Name / Given Stats / Location header row, e.g.
+      # "Lv. 1 ~ 20 Monsters [Collapse]". Seed this table's section from
+      # those pre-header rows before parsing the monster rows below.
       current_section=heading_section
+      if with_group:
+        for pre in table[:hi]:
+          pre_section=level_section(' '.join(clean(x) for x in pre if clean(x)))
+          if pre_section:
+            current_section=pre_section
       for r in table[hi+1:]:
         # wiki.gg has alternated between <h*> level headings and separator rows
         # inside a larger table. Capture either form so every following monster

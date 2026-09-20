@@ -142,10 +142,12 @@ def monster_section(text: str) -> str:
     level = level_section(h)
     if level:
         return level
-    if re.search(r"\b(?:5Lv\s*)?Boss\s+Monsters?\b", h, flags=re.I):
-        return "Boss Monster"
+    # Check Mutant before Boss because the rolling text window can still contain
+    # the preceding "Boss Monster" heading when the Mutant section starts.
     if re.search(r"\bMutant\s+Monsters?\b", h, flags=re.I):
         return "Mutant Monster"
+    if re.search(r"\b(?:5Lv\s*)?Boss\s+Monsters?\b", h, flags=re.I):
+        return "Boss Monster"
     return ""
 
 
@@ -287,6 +289,7 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
     parser.feed(html)
     dungeons: dict[str, list[dict]] = {}
     section_by_monster: dict[tuple[str, str], str] = {}
+    section_by_name: dict[str, str] = {}
 
     for table_section, raw_table in parser.tables:
         table = expand_spans(raw_table)
@@ -320,6 +323,7 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
             level = section if re.match(r"^(?:S?Lv\.)", section or "", flags=re.I) else ""
             if section:
                 section_by_monster[(dungeon, name)] = section
+                section_by_name[name] = section
             bucket = dungeons.setdefault(dungeon, [])
             if not any(entry.get("name") == name for entry in bucket):
                 bucket.append({"name": name, "group": section, "level": level})
@@ -333,10 +337,10 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
         dungeons[dungeon] = [
             {
                 "name": monster,
-                "group": section_by_monster.get((dungeon, monster), ""),
+                "group": section_by_monster.get((dungeon, monster), section_by_name.get(monster, "")),
                 "level": (
-                    section_by_monster.get((dungeon, monster), "")
-                    if re.match(r"^(?:S?Lv\.)", section_by_monster.get((dungeon, monster), ""), flags=re.I)
+                    section_by_monster.get((dungeon, monster), section_by_name.get(monster, ""))
+                    if re.match(r"^(?:S?Lv\.)", section_by_monster.get((dungeon, monster), section_by_name.get(monster, "")), flags=re.I)
                     else ""
                 ),
             }

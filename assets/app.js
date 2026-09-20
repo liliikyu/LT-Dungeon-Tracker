@@ -636,8 +636,8 @@
       const titleText = displayedTitles.length ? displayedTitles.map(esc).join(" · ") : "";
       const titleCount = displayedTitles.length;
       const dungeonTitleRecords = titleRecordsForDungeon(dungeon.name);
-      const titleProgressState = loadTitleProgress();
-      const titleDoneCount = dungeonTitleRecords.filter((title) => titleProgressState?.[title.id]?.complete === true).length;
+      const titleBadgeProgressState = loadTitleProgress();
+      const titleDoneCount = dungeonTitleRecords.filter((title) => titleBadgeProgressState?.[title.id]?.complete === true).length;
       const titleProgressBadge = dungeonTitleRecords.length
         ? `<span class="dungeon-title-status ${titleDoneCount === dungeonTitleRecords.length ? "complete" : "incomplete"}" title="Title Tracker completion">${titleDoneCount === dungeonTitleRecords.length ? "✓ " : ""}${titleDoneCount}/${dungeonTitleRecords.length} complete</span>`
         : "";

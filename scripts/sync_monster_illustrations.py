@@ -113,13 +113,27 @@ def positive_int(value: str | None, default: int = 1) -> int:
         return default
 
 
+def level_section(text: str) -> str:
+    """Extract a wiki Monster Illustration level band."""
+    h = clean_text(text)
+    match = re.search(r"((?:S?Lv\.?\s*)?\d+\s*[~\-–—]\s*\d+)\s*(?:Monsters?)?", h, flags=re.I)
+    if not match:
+        return ""
+    label = clean_text(match.group(1))
+    label = re.sub(r"^Lv\s+", "Lv. ", label, flags=re.I)
+    label = re.sub(r"^SLv\s+", "SLv. ", label, flags=re.I)
+    return label
+
+
 class TableParser(HTMLParser):
     """Capture top-level wiki tables while preserving rowspan/colspan metadata."""
 
     def __init__(self):
         super().__init__()
-        self.tables: list[list[list[dict]]] = []
+        self.tables: list[tuple[str, list[list[dict]]]] = []
         self._table_depth = 0
+        self._current_level = ""
+        self._table_level = ""
         self._rows: list[list[dict]] | None = None
         self._row: list[dict] | None = None
         self._cell_parts: list[str] | None = None
@@ -132,6 +146,7 @@ class TableParser(HTMLParser):
             self._table_depth += 1
             if self._table_depth == 1:
                 self._rows = []
+                self._table_level = self._current_level
         elif self._table_depth == 1 and tag == "tr":
             self._row = []
         elif self._table_depth == 1 and tag in {"td", "th"} and self._row is not None:
@@ -141,6 +156,9 @@ class TableParser(HTMLParser):
             self._cell_parts.append(" ")
 
     def handle_data(self, data):
+        detected = level_section(data)
+        if detected:
+            self._current_level = detected
         if self._cell_parts is not None:
             self._cell_parts.append(data)
 
@@ -160,7 +178,7 @@ class TableParser(HTMLParser):
             self._row = None
         elif tag == "table" and self._table_depth:
             if self._table_depth == 1 and self._rows is not None:
-                self.tables.append(self._rows)
+                self.tables.append((self._table_level or self._current_level, self._rows))
                 self._rows = None
             self._table_depth -= 1
 
@@ -236,12 +254,13 @@ def canonical_dungeon(location: str) -> str | None:
     return ALIASES.get(name, name)
 
 
-def parse_dungeons(html: str) -> dict[str, list[str]]:
+def parse_dungeons(html: str) -> dict[str, list[dict]]:
     parser = TableParser()
     parser.feed(html)
-    dungeons: dict[str, list[str]] = {}
+    dungeons: dict[str, list[dict]] = {}
+    level_by_monster: dict[str, str] = {}
 
-    for raw_table in parser.tables:
+    for table_level, raw_table in parser.tables:
         table = expand_spans(raw_table)
         if not table:
             continue
@@ -269,9 +288,12 @@ def parse_dungeons(html: str) -> dict[str, list[str]]:
             dungeon = canonical_dungeon(location)
             if not dungeon:
                 continue
+            level = table_level
+            if level:
+                level_by_monster.setdefault(name, level)
             bucket = dungeons.setdefault(dungeon, [])
-            if name not in bucket:
-                bucket.append(name)
+            if not any(entry.get("name") == name for entry in bucket):
+                bucket.append({"name": name, "group": level, "level": level})
 
     if not dungeons:
         raise RuntimeError("No dungeon Monster Illustrations could be parsed; keeping existing snapshot")
@@ -279,7 +301,14 @@ def parse_dungeons(html: str) -> dict[str, list[str]]:
     # Replace known problematic groups after generic parsing. This deliberately
     # prevents stale/adjacent rowspan data from being retained.
     for dungeon, monsters in KNOWN_DUNGEON_ILLUSTRATIONS.items():
-        dungeons[dungeon] = list(monsters)
+        dungeons[dungeon] = [
+            {
+                "name": monster,
+                "group": level_by_monster.get(monster, ""),
+                "level": level_by_monster.get(monster, ""),
+            }
+            for monster in monsters
+        ]
 
     return dungeons
 
@@ -303,7 +332,7 @@ def self_test() -> None:
       <tr><td>A</td><td>+1</td><td rowspan="3">Forgotten Garden<br>(Dungeon)</td></tr>
       <tr><td>B</td><td>+2</td></tr><tr><td>C</td><td>+3</td></tr></table>'''
     parsed = parse_dungeons(sample)
-    assert parsed.get("Forgotten Garden") == ["A", "B", "C"], parsed
+    assert [entry["name"] for entry in parsed.get("Forgotten Garden", [])] == ["A", "B", "C"], parsed
 
 
 def main():

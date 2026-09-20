@@ -19,6 +19,9 @@ def clean(v): return re.sub(r'\s+',' ',re.sub(r'\[[^\]]+\]','',v or '')).strip()
 MONSTER_NAME_FIXES={
   'FootprElemental Intensity Cat':'Footprint Cat',
 }
+MONSTER_LEVEL_FIXES={
+  ('Tiger Temple','Red Max'):'Lv. 161 ~ 180',
+}
 def monster_name(v):
   n=clean(v)
   return MONSTER_NAME_FIXES.get(n,n)
@@ -195,8 +198,9 @@ def parse(html, with_category=False, with_group=False):
           elif with_group:
             explicit_group=clean(r[group] if group is not None and group<len(r) else '')
             explicit_level=clean(r[level] if level is not None and level<len(r) else '')
-            grp=explicit_group or current_section or explicit_level
-            lvl=current_section or explicit_level
+            fixed_level=MONSTER_LEVEL_FIXES.get((f,n),'')
+            grp=fixed_level or explicit_group or current_section or explicit_level
+            lvl=fixed_level or current_section or explicit_level
             result.setdefault(f,[]).append({'name':n,'group':grp,'level':lvl,'sourceField':f})
           else: result.setdefault(f,[]).append(n)
       break
@@ -217,8 +221,9 @@ def parse(html, with_category=False, with_group=False):
     for k,vals in result.items():
       seen=set();uniq=[]
       for v in vals:
-        key=(v['name'],v['group'],v.get('level',''),v.get('sourceField',''))
-        if key not in seen:seen.add(key);uniq.append(v)
+        key=(v['name'],v.get('sourceField',''))
+        if key not in seen:
+          seen.add(key);uniq.append(v)
       out[k]=uniq
     return out
   return {k:list(dict.fromkeys(v)) for k,v in result.items()}

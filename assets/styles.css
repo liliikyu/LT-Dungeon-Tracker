@@ -2180,3 +2180,11 @@ body.conquest-modal-open{overflow:hidden}
   .site-nav:has(.tracker-tab-link){align-self:auto;gap:0;overflow-x:auto;padding-top:4px;}
   .tracker-tab-link{flex:0 0 auto;min-width:96px;height:34px;padding:0 12px;}
 }
+
+/* v13.9.4.69: separator between primary tracker tabs and Wiki */
+.tracker-primary-divider{
+  margin:0 8px;
+  color:var(--line);
+  opacity:.9;
+  align-self:center;
+}

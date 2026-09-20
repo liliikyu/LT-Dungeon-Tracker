@@ -2267,58 +2267,58 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       },
       {
         "name": "Doctor Vampire",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Engineer Vampire",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Precious Succubus",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Timid Succubus",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Gardener Souly",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Remu Remu",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Epu Epu",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Nemu Nemu",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Calm Q-riring",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Famous Q-riring",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Einhorn",
-        "group": "",
-        "level": ""
+        "group": "Lv. 1 ~ 1000",
+        "level": "Lv. 1 ~ 1000"
       },
       {
         "name": "Chloris",

@@ -21,6 +21,8 @@ MONSTER_NAME_FIXES={
 }
 MONSTER_LEVEL_FIXES={
   ('Tiger Temple','Red Max'):'Lv. 161 ~ 180',
+  ('Scrap Valley Entrance','Cordless'):'Lv. 161 ~ 180',
+  ('Scrap Valey Entrance','Cordless'):'Lv. 161 ~ 180',
 }
 def monster_name(v):
   n=clean(v)

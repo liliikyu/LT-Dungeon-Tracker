@@ -15,6 +15,30 @@
   });
   window.addEventListener("storage",e=>{if(e.key===KEY)apply(read(),true)});
 
+  // Treat Fields / Dungeons / Titles as the three primary tracker tabs.
+  // They remain real URLs for refresh/back-button reliability, while same-origin
+  // cross-document view transitions and prefetching make switching feel tab-like.
+  const trackerTabFiles=new Set(["fields.html","dungeons.html","titles.html"]);
+  const trackerTabLinks=[...document.querySelectorAll(".site-nav-link")].filter((link)=>{
+    try{
+      const url=new URL(link.href,location.href);
+      return url.origin===location.origin && trackerTabFiles.has(url.pathname.split("/").pop());
+    }catch{return false;}
+  });
+  const nav=trackerTabLinks[0]?.closest(".site-nav");
+  if(nav) nav.setAttribute("role","tablist");
+  trackerTabLinks.forEach((link)=>{
+    link.setAttribute("role","tab");
+    link.setAttribute("aria-selected",link.classList.contains("active")?"true":"false");
+    const url=new URL(link.href,location.href);
+    if(url.pathname!==location.pathname){
+      const prefetch=document.createElement("link");
+      prefetch.rel="prefetch";
+      prefetch.href=url.href;
+      document.head.appendChild(prefetch);
+    }
+  });
+
   // Dungeon Conquest Preview is presented as a site-native popup rather than
   // navigating away from the tracker page.
   const previewLinks=[...document.querySelectorAll('a[href$="conquest-preview.html"]')];

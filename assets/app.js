@@ -635,7 +635,13 @@
       const displayedTitles = titleOverride || dungeon.titleNames || [];
       const titleText = displayedTitles.length ? displayedTitles.map(esc).join(" · ") : "";
       const titleCount = displayedTitles.length;
-      const titleNote = `<div class="title-summary-row"><span><strong class="title-summary-label" title="Track title completion in the Title Tracker">Title</strong> ${titleCount}</span><span class="title-summary-names">${titleText}</span></div>`;
+      const dungeonTitleRecords = titleRecordsForDungeon(dungeon.name);
+      const titleProgressState = loadTitleProgress();
+      const titleDoneCount = dungeonTitleRecords.filter((title) => titleProgressState?.[title.id]?.complete === true).length;
+      const titleProgressBadge = dungeonTitleRecords.length
+        ? `<span class="dungeon-title-status ${titleDoneCount === dungeonTitleRecords.length ? "complete" : "incomplete"}" title="Title Tracker completion">${titleDoneCount === dungeonTitleRecords.length ? "✓ " : ""}${titleDoneCount}/${dungeonTitleRecords.length} complete</span>`
+        : "";
+      const titleNote = `<div class="title-summary-row"><span><strong class="title-summary-label" title="Track title completion in the Title Tracker">Title</strong> ${titleCount}</span><span class="title-summary-names">${titleText}</span>${titleProgressBadge}</div>`;
 
       const scenario = scenarioFor(dungeon.name);
       const scenarioList = (items) => items.length

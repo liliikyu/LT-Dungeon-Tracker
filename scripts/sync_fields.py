@@ -78,7 +78,7 @@ def normalize_category(v):
   if 'event' in s:return 'Event'
   if s=='etc' or 'etc' in s:return 'ETC'
   return 'Other'
-def parse(html, with_category=False):
+def parse(html, with_category=False, with_group=False):
   p=P();p.feed(html);result={}
   for raw in p.tables:
     table=expand(raw)
@@ -87,6 +87,7 @@ def parse(html, with_category=False):
       loc=next((i for i,h in enumerate(headers) if h in ('location','locations','area','source')),None)
       name=next((i for i,h in enumerate(headers) if h in ('name','item','item name','monster','monster name')),None)
       cat=next((i for i,h in enumerate(headers) if h in ('category','type','item type','item category')),None)
+      group=next((i for i,h in enumerate(headers) if h in ('group','monster group','illustration group')),None)
       if loc is None or name is None:continue
       for r in table[hi+1:]:
         if max(loc,name)>=len(r):continue
@@ -95,6 +96,9 @@ def parse(html, with_category=False):
           if with_category:
             category=normalize_category(r[cat] if cat is not None and cat<len(r) else '')
             result.setdefault(f,[]).append({'name':n,'category':category})
+          elif with_group:
+            grp=clean(r[group] if group is not None and group<len(r) else '')
+            result.setdefault(f,[]).append({'name':n,'group':grp})
           else: result.setdefault(f,[]).append(n)
       break
   if with_category:
@@ -106,9 +110,18 @@ def parse(html, with_category=False):
         if key not in seen:seen.add(key);uniq.append(v)
       out[k]=uniq
     return out
+  if with_group:
+    out={}
+    for k,vals in result.items():
+      seen=set();uniq=[]
+      for v in vals:
+        key=(v['name'],v['group'])
+        if key not in seen:seen.add(key);uniq.append(v)
+      out[k]=uniq
+    return out
   return {k:list(dict.fromkeys(v)) for k,v in result.items()}
 def main():
-  monsters=parse(fetch(PAGES['monsters'][0]));codex=parse(fetch(PAGES['codex'][0]),with_category=True)
+  monsters=parse(fetch(PAGES['monsters'][0]),with_group=True);codex=parse(fetch(PAGES['codex'][0]),with_category=True)
   if not monsters:raise RuntimeError('No field Monster Illustrations parsed; existing snapshot preserved')
   if not codex:raise RuntimeError('No field Item Codex entries parsed; existing snapshot preserved')
   fields={}

@@ -160,6 +160,9 @@
   function openWelcome(){overlay?.classList.remove("hidden");overlay?.setAttribute("aria-hidden","false");document.body.classList.add("welcome-open");requestAnimationFrame(()=>close?.focus());try{sessionStorage.setItem(WELCOME_SESSION_KEY,"1")}catch{}}
   function closeWelcome(){overlay?.classList.add("hidden");overlay?.setAttribute("aria-hidden","true");document.body.classList.remove("welcome-open");help?.focus()}
   help?.addEventListener("click",openWelcome);close?.addEventListener("click",closeWelcome);overlay?.addEventListener("click",e=>{if(e.target===overlay)closeWelcome()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!overlay?.classList.contains("hidden"))closeWelcome()});try{if(sessionStorage.getItem(WELCOME_SESSION_KEY)!=="1")openWelcome()}catch{openWelcome()}
+  const illustrationName=(entry)=>typeof entry==="string"?entry:String(entry?.name??"");
+  const illustrationGroup=(entry)=>typeof entry==="object"?String(entry?.group??"").trim():"";
+  const illustrationLabel=(entry)=>{const n=illustrationName(entry),g=illustrationGroup(entry);return g?`${n} (${g})`:n;};
   const codexName=(entry)=>typeof entry==="string"?entry:String(entry?.name??"");
   const codexCategory=(entry)=>{const raw=typeof entry==="object"?String(entry?.category??"Other"):"Other";const n=raw.toLowerCase();if(n.includes("equip"))return "Equipment";if(n.includes("event"))return "Event";if(n==="etc"||n.includes("etc"))return "ETC";return "Other";};
   const normField=(v)=>String(v??"").toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9]+/g," ").trim();
@@ -186,7 +189,7 @@
 
   const entries=Object.entries(DATA.fields||{}).map(([name,value])=>({
     name,
-    illustrations:[...new Set(value.illustrations||[])],
+    illustrations:(value.illustrations||[]).map(x=>typeof x==="string"?x:{name:illustrationName(x),group:illustrationGroup(x)}).filter(x=>illustrationName(x)),
     codex:(value.codex||[]).map(x=>typeof x==="string"?x:{name:codexName(x),category:codexCategory(x)}).filter(x=>codexName(x)),
     achievements:fieldAchievementsFor(name)
   })).sort((a,b)=>a.name.localeCompare(b.name));
@@ -203,11 +206,11 @@
     if(allRegionBox) allRegionBox.checked=true;
     regionBoxes.forEach(box=>{box.checked=false;});
   }
-  function stats(field){const mt=field.illustrations.length,ct=field.codex.length,at=field.achievements.length,md=field.illustrations.filter(n=>monsters[key(field.name,n)]).length,cd=field.codex.filter(n=>codex[key(field.name,codexName(n))]).length,ad=field.achievements.filter(a=>achievements[achKey(field.name,a)]).length;return{mt,ct,at,md,cd,ad,total:mt+ct+at,done:md+cd+ad}}
+  function stats(field){const mt=field.illustrations.length,ct=field.codex.length,at=field.achievements.length,md=field.illustrations.filter(n=>monsters[key(field.name,illustrationName(n))]).length,cd=field.codex.filter(n=>codex[key(field.name,codexName(n))]).length,ad=field.achievements.filter(a=>achievements[achKey(field.name,a)]).length;return{mt,ct,at,md,cd,ad,total:mt+ct+at,done:md+cd+ad}}
   function renderMonsterSection(field){
-    const done=field.illustrations.filter(n=>monsters[key(field.name,n)]).length;
+    const done=field.illustrations.filter(entry=>monsters[key(field.name,illustrationName(entry))]).length;
     if(!field.illustrations.length)return "";
-    const rows=field.illustrations.map(n=>{const k=key(field.name,n),checked=!!monsters[k];return `<label class="monster-illustration-row${checked?" completed":""}"><input class="monster-check" type="checkbox" data-type="monsters" data-field="${esc(field.name)}" data-name="${esc(n)}" ${checked?"checked":""} aria-label="Mark ${esc(n)} illustration as completed"><span>${esc(n)}</span></label>`}).join("");
+    const rows=field.illustrations.map(entry=>{const n=illustrationName(entry),label=illustrationLabel(entry),k=key(field.name,n),checked=!!monsters[k];return `<label class="monster-illustration-row${checked?" completed":""}"><input class="monster-check" type="checkbox" data-type="monsters" data-field="${esc(field.name)}" data-name="${esc(n)}" ${checked?"checked":""} aria-label="Mark ${esc(n)} illustration as completed"><span>${esc(label)}</span></label>`}).join("");
     return `<section class="monster-illustration-section"><div class="monster-illustration-head"><strong>Monster Illustration</strong><span class="monster-head-actions"><label class="monster-select-all" title="Select or clear all Monster Illustrations for ${esc(field.name)}"><input class="monster-select-all-check" type="checkbox" data-field="${esc(field.name)}" ${done===field.illustrations.length?"checked":""} aria-label="Select all Monster Illustrations for ${esc(field.name)}"><span>All</span></label><span class="monster-progress">Done ${done}/${field.illustrations.length}</span></span></div><div class="monster-illustration-list">${rows}</div></section>`;
   }
   function renderCodexColumns(field){
@@ -253,7 +256,7 @@
       const region=regionFor(f.name);
       if(!regions.has("all")&&!regions.has(region)) return false;
       if(completionStatus!=="all"){const s=stats(f),complete=s.total===0||s.done===s.total;if(completionStatus==="complete"&&!complete)return false;if(completionStatus==="incomplete"&&complete)return false;}
-      return !q||[f.name,...f.illustrations,...f.codex.map(codexName),...f.achievements.flatMap(a=>[a.name,a.objective,a.notes])].join(" ").toLowerCase().includes(q);
+      return !q||[f.name,...f.illustrations.flatMap(x=>[illustrationName(x),illustrationGroup(x)]),...f.codex.map(codexName),...f.achievements.flatMap(a=>[a.name,a.objective,a.notes])].join(" ").toLowerCase().includes(q);
     });
     $("result-count").textContent=`${visible.length} field${visible.length===1?"":"s"}`;
     const grouped=new Map(REGION_ORDER.map(r=>[r,[]]));
@@ -277,7 +280,7 @@
     updateProgress();
   }
   $("field-grid").addEventListener("click",e=>{const r=e.target.closest("[data-toggle-region]");if(r){const n=r.dataset.toggleRegion;collapsedRegions.has(n)?collapsedRegions.delete(n):collapsedRegions.add(n);render();return;}const b=e.target.closest("[data-toggle-field]");if(!b)return;const n=b.dataset.toggleField;expanded.has(n)?expanded.delete(n):expanded.add(n);render()});
-  $("field-grid").addEventListener("change",e=>{const all=e.target.closest('.monster-select-all-check[data-field]');if(all){const field=entries.find(f=>f.name===all.dataset.field);if(!field)return;field.illustrations.forEach(n=>{const k=key(field.name,n);if(all.checked)monsters[k]=true;else delete monsters[k];});save();render();return;}const a=e.target.closest('.field-achievement-check');if(a){const row=a.closest("[data-field-achievement-key]"),k=row?.dataset.fieldAchievementKey;if(!k)return;if(a.checked)achievements[k]=true;else delete achievements[k];save();render();return;}const i=e.target.closest('input[type="checkbox"][data-field]');if(!i)return;const state=i.dataset.type==="monsters"?monsters:codex;state[key(i.dataset.field,i.dataset.name)]=i.checked;if(!i.checked)delete state[key(i.dataset.field,i.dataset.name)];save();render()});
+  $("field-grid").addEventListener("change",e=>{const all=e.target.closest('.monster-select-all-check[data-field]');if(all){const field=entries.find(f=>f.name===all.dataset.field);if(!field)return;field.illustrations.forEach(entry=>{const k=key(field.name,illustrationName(entry));if(all.checked)monsters[k]=true;else delete monsters[k];});save();render();return;}const a=e.target.closest('.field-achievement-check');if(a){const row=a.closest("[data-field-achievement-key]"),k=row?.dataset.fieldAchievementKey;if(!k)return;if(a.checked)achievements[k]=true;else delete achievements[k];save();render();return;}const i=e.target.closest('input[type="checkbox"][data-field]');if(!i)return;const state=i.dataset.type==="monsters"?monsters:codex;state[key(i.dataset.field,i.dataset.name)]=i.checked;if(!i.checked)delete state[key(i.dataset.field,i.dataset.name)];save();render()});
   if(allRegionBox) allRegionBox.addEventListener("change",()=>{
     if(allRegionBox.checked) regionBoxes.forEach(box=>{box.checked=false;});
     else if(!regionBoxes.some(box=>box.checked)) allRegionBox.checked=true;

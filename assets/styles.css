@@ -2741,3 +2741,13 @@ body.conquest-modal-open{overflow:hidden}
   .upgrade-hero{flex-direction:column;}
   .extra-tools-page .brand small{display:none;}
 }
+
+
+/* v13.9.4.85 — softer EX label and smaller title view toggle text */
+.extra-tools-toggle{
+  font-weight:700;
+  text-transform:none;
+}
+.title-view-option{
+  font-size:11px;
+}

@@ -111,13 +111,20 @@
 
   function monsterEntryLevel(monster) {
     if (!monster || typeof monster === "string") return "";
-    return String(monster.level || monster.group || "").trim();
+    return String(monster.level || "").trim();
+  }
+
+  function monsterEntryGroup(monster) {
+    if (!monster || typeof monster === "string") return "";
+    return String(monster.group || "").trim();
   }
 
   function monsterEntryLabel(monster) {
     const name = monsterEntryName(monster);
     const level = monsterEntryLevel(monster);
-    return level ? `${name} (${level})` : name;
+    const group = monsterEntryGroup(monster);
+    const tag = level || ((group === "Boss Monster" || group === "Mutant Monster") ? group : "");
+    return tag ? `${name} (${tag})` : name;
   }
 
   function monsterCompletionKey(dungeonName, monsterName) {
@@ -310,14 +317,9 @@
 
   function categoryFor(raw) {
     const { type, value } = parseLevel(raw);
-    if (type === "lv") return value <= 199 ? "lv-1-199" : "lv-200-235";
+    if (type === "lv" && value >= 1 && value <= 235) return "lv-1-235";
+    if (type === "ulv" && value >= 1 && value <= 9999) return "ulv-1-9999";
     if (type === "slv") return "slv-1-plus";
-    if (type === "ulv") {
-      if (value <= 1000) return "ulv-1-1000";
-      if (value >= 1300 && value <= 3500) return "ulv-1300-3500";
-      if (value >= 3700 && value <= 8000) return "ulv-3700-8000";
-      if (value >= 8300 && value <= 9999) return "ulv-8300-9999";
-    }
     return "other";
   }
 

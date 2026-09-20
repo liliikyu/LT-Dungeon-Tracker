@@ -4514,7 +4514,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Webfoot Octopus Temple"
         },
         {
-          "name": "FootprElemental Intensity Cat",
+          "name": "Footprint Cat",
           "group": "Lv. 121 ~ 140",
           "level": "Lv. 121 ~ 140",
           "sourceField": "Webfoot Octopus Temple"

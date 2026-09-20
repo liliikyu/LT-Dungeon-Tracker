@@ -2081,3 +2081,32 @@ body.conquest-mode-active .field-progress-panel #clear-field-codex{
   .site-nav-divider{display:none;}
   .global-conquest-control{flex:1;justify-content:center;}
 }
+
+/* V13.9.4.69 follow-up: site-native Dungeon Conquest preview modal */
+body.conquest-modal-open{overflow:hidden}
+.conquest-modal-overlay{
+  position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:22px;
+  background:rgba(6,12,24,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)
+}
+.conquest-modal-overlay.hidden{display:none}
+.conquest-modal{
+  width:min(1080px,calc(100vw - 24px));max-height:calc(100vh - 32px);overflow:hidden;
+  border:1px solid var(--line);border-radius:18px;background:var(--panel);box-shadow:0 30px 90px rgba(0,0,0,.46)
+}
+.conquest-modal-topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 14px;
+  border-bottom:1px solid var(--line);background:var(--panel-2)
+}
+.conquest-modal-brand{display:flex;align-items:center;gap:9px;min-width:0}
+.conquest-modal-brand img{width:34px;height:34px;object-fit:contain}
+.conquest-modal-brand span{display:grid;min-width:0}
+.conquest-modal-brand strong{font-size:14px;color:var(--text)}
+.conquest-modal-brand small{font-size:11px;color:var(--muted)}
+.conquest-modal-site{max-height:calc(100vh - 92px);overflow:auto;background:var(--bg)}
+.conquest-modal-hero{border-radius:0;margin:0;border-inline:0;border-top:0}
+.conquest-modal-content{margin:0 auto;max-width:940px;padding-bottom:28px}
+@media(max-width:700px){
+  .conquest-modal-overlay{padding:7px}
+  .conquest-modal{width:calc(100vw - 10px);max-height:calc(100vh - 10px);border-radius:12px}
+  .conquest-modal-site{max-height:calc(100vh - 70px)}
+}

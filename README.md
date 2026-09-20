@@ -117,7 +117,7 @@ The Fields tracker groups map locations into collapsible Jiendia, Freios, Wester
 
 
 ### v13.9.4.69
-- Titles now resolve Title Set membership from `title_exchange_and_set` + `title_set_id`.
+- Titles now use `title_id` as the canonical source for title name, unlock type, exchange path, Title Set membership, reputation, Ely, and coupon data; `title_set_id` resolves set names.
 - A title may belong to multiple Title Sets without duplicating its title record.
 - The Titles page now shows the exchange-path description as a small muted guide line beneath the dungeon/level.
 - `item_upgrade` remains intentionally excluded from website sync.

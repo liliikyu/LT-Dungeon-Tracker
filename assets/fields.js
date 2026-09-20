@@ -169,7 +169,8 @@
     const match=raw.match(/\d+(?:\.\d+)?/);
     return match?Number(match[0]):Number.POSITIVE_INFINITY;
   };
-  const illustrationLabel=(entry)=>{const n=illustrationName(entry),g=illustrationGroup(entry);return g?`${n} (${g})`:n;};
+  const illustrationLabel=(entry)=>{const n=illustrationName(entry),g=illustrationGroup(entry)||illustrationLevel(entry);return g?`${n} (${g})`:n;};
+  const sourceFieldOf=(entry,fallback)=>typeof entry==="object"&&String(entry?.sourceField||entry?._sourceField||"").trim()?String(entry.sourceField||entry._sourceField).trim():fallback;
   const codexName=(entry)=>typeof entry==="string"?entry:String(entry?.name??"");
   const codexCategory=(entry)=>{const raw=typeof entry==="object"?String(entry?.category??"Other"):"Other";const n=raw.toLowerCase();if(n.includes("equip"))return "Equipment";if(n.includes("event"))return "Event";if(n==="etc"||n.includes("etc"))return "ETC";return "Other";};
   const normField=(v)=>String(v??"").toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9]+/g," ").trim();
@@ -194,16 +195,46 @@
   }
   const achKey=(field,achievement)=>`${field}::${achievement?.name||""}::${achievement?.objective||""}`;
 
-  const entries=Object.entries(DATA.fields||{}).map(([name,value])=>({
+  function canonicalFieldName(name){
+    const raw=normField(name);
+    const explicit={
+      "jungle area ktuka ruins":"Jungle Area"
+    };
+    if(explicit[raw]) return explicit[raw];
+    // Wiki variants such as "Royal Dragon Palace 3" and
+    // "Webfoot Octopus Temple 3" belong to the main field card.
+    const base=String(name||"").replace(/\s+\d+$/,'').trim();
+    if(base && base!==name) return base;
+    return name;
+  }
+  const rawEntries=Object.entries(DATA.fields||{}).map(([name,value])=>({
     name,
-    illustrations:(value.illustrations||[]).map(x=>typeof x==="string"?x:{name:illustrationName(x),group:illustrationGroup(x),level:illustrationLevel(x)}).filter(x=>illustrationName(x)),
-    codex:(value.codex||[]).map(x=>typeof x==="string"?x:{name:codexName(x),category:codexCategory(x)}).filter(x=>codexName(x)),
-    achievements:fieldAchievementsFor(name),
+    illustrations:(value.illustrations||[]).map(x=>typeof x==="string"?{name:x,group:"",level:"",sourceField:name}:{name:illustrationName(x),group:illustrationGroup(x),level:illustrationLevel(x),sourceField:sourceFieldOf(x,name)}).filter(x=>illustrationName(x)),
+    codex:(value.codex||[]).map(x=>typeof x==="string"?{name:x,category:"Other",sourceField:name}:{name:codexName(x),category:codexCategory(x),sourceField:sourceFieldOf(x,name)}).filter(x=>codexName(x)),
+    achievements:fieldAchievementsFor(name).map(a=>({...a,sourceField:name})),
     wikiOrder:Number.isFinite(Number(value.wiki_order))?Number(value.wiki_order):Number.POSITIVE_INFINITY
-  })).map(field=>({
+  }));
+  const mergedFields=new Map();
+  rawEntries.forEach(field=>{
+    const name=canonicalFieldName(field.name);
+    let target=mergedFields.get(name);
+    if(!target){target={name,illustrations:[],codex:[],achievements:[],wikiOrder:field.wikiOrder};mergedFields.set(name,target);}
+    target.wikiOrder=Math.min(target.wikiOrder,field.wikiOrder);
+    field.illustrations.forEach(entry=>{
+      const k=normField(illustrationName(entry));
+      if(k&&!target.illustrations.some(x=>normField(illustrationName(x))===k)) target.illustrations.push(entry);
+    });
+    field.codex.forEach(entry=>{
+      const k=normField(codexName(entry));
+      if(k&&!target.codex.some(x=>normField(codexName(x))===k)) target.codex.push(entry);
+    });
+    field.achievements.forEach(a=>{
+      const k=`${normField(a?.name)}::${normField(a?.objective)}`;
+      if(!target.achievements.some(x=>`${normField(x?.name)}::${normField(x?.objective)}`===k)) target.achievements.push(a);
+    });
+  });
+  const entries=[...mergedFields.values()].map(field=>({
     ...field,
-    // Sort each continent's field cards by the lowest monster level found on
-    // that wiki field. Fields without level data fall to the end.
     sortLevel:field.illustrations.reduce((min,entry)=>Math.min(min,illustrationLevelNumber(entry)),Number.POSITIVE_INFINITY)
   })).sort((a,b)=>a.sortLevel-b.sortLevel||a.wikiOrder-b.wikiOrder||a.name.localeCompare(b.name));
   const expanded=new Set();
@@ -219,11 +250,11 @@
     if(allRegionBox) allRegionBox.checked=true;
     regionBoxes.forEach(box=>{box.checked=false;});
   }
-  function stats(field){const mt=field.illustrations.length,ct=conquestMode?0:field.codex.length,at=field.achievements.length,md=field.illustrations.filter(n=>monsters[key(field.name,illustrationName(n))]).length,cd=conquestMode?0:field.codex.filter(n=>codex[key(field.name,codexName(n))]).length,ad=field.achievements.filter(a=>achievements[achKey(field.name,a)]).length;return{mt,ct,at,md,cd,ad,total:mt+ct+at,done:md+cd+ad}}
+  function stats(field){const mt=field.illustrations.length,ct=conquestMode?0:field.codex.length,at=field.achievements.length,md=field.illustrations.filter(n=>monsters[key(sourceFieldOf(n,field.name),illustrationName(n))]).length,cd=conquestMode?0:field.codex.filter(n=>codex[key(sourceFieldOf(n,field.name),codexName(n))]).length,ad=field.achievements.filter(a=>achievements[achKey(sourceFieldOf(a,field.name),a)]).length;return{mt,ct,at,md,cd,ad,total:mt+ct+at,done:md+cd+ad}}
   function renderMonsterSection(field){
-    const done=field.illustrations.filter(entry=>monsters[key(field.name,illustrationName(entry))]).length;
+    const done=field.illustrations.filter(entry=>monsters[key(sourceFieldOf(entry,field.name),illustrationName(entry))]).length;
     if(!field.illustrations.length)return "";
-    const rows=field.illustrations.map(entry=>{const n=illustrationName(entry),label=illustrationLabel(entry),k=key(field.name,n),checked=!!monsters[k];return `<label class="monster-illustration-row${checked?" completed":""}"><input class="monster-check" type="checkbox" data-type="monsters" data-field="${esc(field.name)}" data-name="${esc(n)}" ${checked?"checked":""} aria-label="Mark ${esc(n)} illustration as completed"><span>${esc(label)}</span></label>`}).join("");
+    const rows=field.illustrations.map(entry=>{const n=illustrationName(entry),label=illustrationLabel(entry),sf=sourceFieldOf(entry,field.name),k=key(sf,n),checked=!!monsters[k];return `<label class="monster-illustration-row${checked?" completed":""}"><input class="monster-check" type="checkbox" data-type="monsters" data-field="${esc(field.name)}" data-storage-field="${esc(sf)}" data-name="${esc(n)}" ${checked?"checked":""} aria-label="Mark ${esc(n)} illustration as completed"><span>${esc(label)}</span></label>`}).join("");
     return `<section class="monster-illustration-section"><div class="monster-illustration-head"><strong>Monster Illustration</strong><span class="monster-head-actions"><label class="monster-select-all" title="Select or clear all Monster Illustrations for ${esc(field.name)}"><input class="monster-select-all-check" type="checkbox" data-field="${esc(field.name)}" ${done===field.illustrations.length?"checked":""} aria-label="Select all Monster Illustrations for ${esc(field.name)}"><span>All</span></label><span class="monster-progress">Done ${done}/${field.illustrations.length}</span></span></div><div class="monster-illustration-list">${rows}</div></section>`;
   }
   function renderCodexColumns(field){
@@ -232,7 +263,7 @@
     field.codex.forEach(entry=>groups[codexCategory(entry)].push(entry));
     const renderGroup=(label)=>{
       const list=groups[label];
-      const rows=list.length?list.map(entry=>{const n=codexName(entry),k=key(field.name,n),checked=!!codex[k];return `<li class="item-row${checked?" completed":""}"><span class="item-main"><input class="item-check" type="checkbox" data-type="codex" data-field="${esc(field.name)}" data-name="${esc(n)}" ${checked?"checked":""} aria-label="Mark ${esc(n)} as completed"><span class="item-name">${esc(n)}</span></span><span class="item-flags"><span class="flag codex">Codex</span></span></li>`}).join(""):'<li class="column-empty">—</li>';
+      const rows=list.length?list.map(entry=>{const n=codexName(entry),sf=sourceFieldOf(entry,field.name),k=key(sf,n),checked=!!codex[k];return `<li class="item-row${checked?" completed":""}"><span class="item-main"><input class="item-check" type="checkbox" data-type="codex" data-field="${esc(field.name)}" data-storage-field="${esc(sf)}" data-name="${esc(n)}" ${checked?"checked":""} aria-label="Mark ${esc(n)} as completed"><span class="item-name">${esc(n)}</span></span><span class="item-flags"><span class="flag codex">Codex</span></span></li>`}).join(""):'<li class="column-empty">—</li>';
       return `<section class="item-column"><div class="item-column-head">${label}</div><ul class="item-list">${rows}</ul></section>`;
     };
     return `<div class="item-columns">${renderGroup("Equipment")}${renderGroup("Event")}${renderGroup("ETC")}${renderGroup("Other")}</div>`;
@@ -240,9 +271,9 @@
   function renderAchievementSection(field){
     const list=field.achievements||[];
     if(!list.length)return "";
-    const done=list.filter(a=>achievements[achKey(field.name,a)]).length;
+    const done=list.filter(a=>achievements[achKey(sourceFieldOf(a,field.name),a)]).length;
     const rows=list.map(a=>{
-      const k=achKey(field.name,a),checked=!!achievements[k];
+      const k=achKey(sourceFieldOf(a,field.name),a),checked=!!achievements[k];
       const notes=String(a.notes||"").trim();
       return `<label class="dungeon-achievement-row${checked?" completed":""}" data-field-achievement-key="${esc(k)}">
         <input class="achievement-check field-achievement-check" type="checkbox" data-field="${esc(field.name)}" ${checked?"checked":""} aria-label="Mark ${esc(a.name)} achievement as completed">
@@ -294,7 +325,7 @@
     updateProgress();
   }
   $("field-grid").addEventListener("click",e=>{const r=e.target.closest("[data-toggle-region]");if(r){const n=r.dataset.toggleRegion;collapsedRegions.has(n)?collapsedRegions.delete(n):collapsedRegions.add(n);render();return;}const b=e.target.closest("[data-toggle-field]");if(!b)return;const n=b.dataset.toggleField;expanded.has(n)?expanded.delete(n):expanded.add(n);render()});
-  $("field-grid").addEventListener("change",e=>{const all=e.target.closest('.monster-select-all-check[data-field]');if(all){const field=entries.find(f=>f.name===all.dataset.field);if(!field)return;field.illustrations.forEach(entry=>{const k=key(field.name,illustrationName(entry));if(all.checked)monsters[k]=true;else delete monsters[k];});save();render();return;}const a=e.target.closest('.field-achievement-check');if(a){const row=a.closest("[data-field-achievement-key]"),k=row?.dataset.fieldAchievementKey;if(!k)return;if(a.checked)achievements[k]=true;else delete achievements[k];save();render();return;}const i=e.target.closest('input[type="checkbox"][data-field]');if(!i)return;const state=i.dataset.type==="monsters"?monsters:codex;state[key(i.dataset.field,i.dataset.name)]=i.checked;if(!i.checked)delete state[key(i.dataset.field,i.dataset.name)];save();render()});
+  $("field-grid").addEventListener("change",e=>{const all=e.target.closest('.monster-select-all-check[data-field]');if(all){const field=entries.find(f=>f.name===all.dataset.field);if(!field)return;field.illustrations.forEach(entry=>{const k=key(sourceFieldOf(entry,field.name),illustrationName(entry));if(all.checked)monsters[k]=true;else delete monsters[k];});save();render();return;}const a=e.target.closest('.field-achievement-check');if(a){const row=a.closest("[data-field-achievement-key]"),k=row?.dataset.fieldAchievementKey;if(!k)return;if(a.checked)achievements[k]=true;else delete achievements[k];save();render();return;}const i=e.target.closest('input[type="checkbox"][data-field]');if(!i)return;const state=i.dataset.type==="monsters"?monsters:codex;const storageField=i.dataset.storageField||i.dataset.field;state[key(storageField,i.dataset.name)]=i.checked;if(!i.checked)delete state[key(storageField,i.dataset.name)];save();render()});
   if(allRegionBox) allRegionBox.addEventListener("change",()=>{
     if(allRegionBox.checked) regionBoxes.forEach(box=>{box.checked=false;});
     else if(!regionBoxes.some(box=>box.checked)) allRegionBox.checked=true;

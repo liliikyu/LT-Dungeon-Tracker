@@ -23,7 +23,7 @@ class P(HTMLParser):
     super().__init__();self.tables=[];self.depth=0;self.rows=None;self.row=None;self.parts=None;self.attrs={};self.heading_parts=None;self.current_heading=''
   def handle_starttag(self,t,a):
     t=t.lower();a=dict(a)
-    if t in ('h2','h3','h4') and self.depth==0:
+    if t in ('h1','h2','h3','h4','h5','h6') and self.depth==0:
       self.heading_parts=[]
     elif t=='table':
       self.depth+=1
@@ -45,7 +45,7 @@ class P(HTMLParser):
       if self.depth==1 and self.rows is not None:
         self.tables.append((self.current_heading,self.rows));self.rows=None
       self.depth-=1
-    elif t in ('h2','h3','h4') and self.heading_parts is not None:
+    elif t in ('h1','h2','h3','h4','h5','h6') and self.heading_parts is not None:
       heading=clean(''.join(self.heading_parts))
       if heading:self.current_heading=heading
       self.heading_parts=None
@@ -118,7 +118,7 @@ def parse(html, with_category=False, with_group=False):
         if n and f:
           if with_category:
             category=normalize_category(r[cat] if cat is not None and cat<len(r) else '')
-            result.setdefault(f,[]).append({'name':n,'category':category})
+            result.setdefault(f,[]).append({'name':n,'category':category,'sourceField':f})
           elif with_group:
             # Monster Illustrations are grouped by wiki level-section headings
             # (for example "Lv. 1 ~ 20 Monsters"), not by a table column.
@@ -129,7 +129,7 @@ def parse(html, with_category=False, with_group=False):
             explicit_level=clean(r[level] if level is not None and level<len(r) else '')
             grp=explicit_group or section or explicit_level
             lvl=explicit_level or section
-            result.setdefault(f,[]).append({'name':n,'group':grp,'level':lvl})
+            result.setdefault(f,[]).append({'name':n,'group':grp,'level':lvl,'sourceField':f})
           else: result.setdefault(f,[]).append(n)
       break
   if with_category:
@@ -137,7 +137,7 @@ def parse(html, with_category=False, with_group=False):
     for k,vals in result.items():
       seen=set();uniq=[]
       for v in vals:
-        key=(v['name'],v['category'])
+        key=(v['name'],v['category'],v.get('sourceField',''))
         if key not in seen:seen.add(key);uniq.append(v)
       out[k]=uniq
     return out
@@ -146,7 +146,7 @@ def parse(html, with_category=False, with_group=False):
     for k,vals in result.items():
       seen=set();uniq=[]
       for v in vals:
-        key=(v['name'],v['group'],v.get('level',''))
+        key=(v['name'],v['group'],v.get('level',''),v.get('sourceField',''))
         if key not in seen:seen.add(key);uniq.append(v)
       out[k]=uniq
     return out

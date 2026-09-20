@@ -7,7 +7,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=13.9.4.31">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?v=13.9.4.31">
   <title>Latale Unofficial Illustration Book</title>
-  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.68">
+  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.69-fix3">
 </head>
 <body>
   <header class="topbar">
@@ -165,11 +165,11 @@
       <button id="clear-monster-progress" class="small-button danger-button" type="button">Clear Illustrations</button>
     </div>
   </aside>
-  <button id="progress-toggle" class="codex-fab progress-text-fab" type="button" aria-expanded="false" aria-controls="progress-panel" aria-label="Open Dungeon Illustration Progress" title="Dungeon Illustration Progress">Progress</button>
+  <button id="progress-toggle" class="codex-fab codex-image-toggle" type="button" aria-expanded="false" aria-controls="progress-panel" aria-label="Open Dungeon Illustration Progress" title="Dungeon Illustration Progress"><img id="progress-toggle-image" src="assets/codex-before.webp?v=13.3" data-closed-src="assets/codex-before.webp?v=13.3" data-open-src="assets/codex-after.webp?v=13.3" alt="" aria-hidden="true"><span class="codex-fallback" aria-hidden="true">Progress</span></button>
 
   <footer class="shell footer">Data synced from LT Boss Matts Tracker · Last synced: <time id="last-sync" datetime="">Not available</time> · Build v13.9.4.69 · Filters run entirely in your browser.</footer>
   <script src="assets/data.js?v=13.9.4.11"></script>
-  <script src="assets/global-header.js?v=13.9.4.69"></script>
+  <script src="assets/global-header.js?v=13.9.4.69-fix3"></script>
   <script>
     // Wiki snapshots change independently via GitHub Actions.
     // Fresh URLs prevent browser caching from hiding newly synced data.
@@ -191,7 +191,7 @@
         await loadScript(`assets/dungeon-unique-loot.js?ts=${stamp}`);
         await loadScript(`assets/dungeon-achievements.js?ts=${stamp}`);
         await loadScript(`assets/scenario-data.js?ts=${stamp}`);
-        await loadScript("assets/app.js?v=13.9.4.68");
+        await loadScript("assets/app.js?v=13.9.4.69-fix3");
       })();
     })();
   </script>

@@ -663,13 +663,16 @@
         <span><strong>Other</strong> ${grouped.other.length}</span>
       </div>`;
 
+      const codexCount = conquestMode ? 0 : (dungeon.items || []).filter((item) => item.codex && !isPlaceholderItem(item)).length;
+      const codexSubmeta = conquestMode ? "" : ` · ${codexCount} ${codexCount === 1 ? "codex" : "codex"}`;
+
       const headerHtml = isExpandable ? `<button class="dungeon-toggle" type="button" aria-expanded="${isExpanded ? "true" : "false"}" title="${isExpanded ? "Return to summary" : "Show full list"} ${esc(dungeon.name)}">
         <div class="dungeon-title-wrap">
           <div class="dungeon-name-row">
             <div class="dungeon-name">${esc(dungeon.name)}</div>
             ${meta ? `<span class="dungeon-meta-inline">${meta}</span>` : ""}
           </div>
-          <div class="dungeon-card-submeta">${illustrations.length} ${illustrations.length > 1 ? "illustrations" : "illustration"} · ${achievements.length} ${achievements.length > 1 ? "achievements" : "achievement"} · ${titleCount} ${titleCount > 1 ? "titles" : "title"}</div>
+          <div class="dungeon-card-submeta">${illustrations.length} ${illustrations.length > 1 ? "illustrations" : "illustration"} · ${achievements.length} ${achievements.length > 1 ? "achievements" : "achievement"} · ${titleCount} ${titleCount > 1 ? "titles" : "title"}${codexSubmeta}</div>
         </div>
         <span class="dungeon-head-right">
           <span class="level-badge">${esc(displayLevel(dungeon.level))}</span>
@@ -681,7 +684,7 @@
             <div class="dungeon-name">${esc(dungeon.name)}</div>
             ${meta ? `<span class="dungeon-meta-inline">${meta}</span>` : ""}
           </div>
-          <div class="dungeon-card-submeta">${illustrations.length} ${illustrations.length > 1 ? "illustrations" : "illustration"} · ${achievements.length} ${achievements.length > 1 ? "achievements" : "achievement"} · ${titleCount} ${titleCount > 1 ? "titles" : "title"}</div>
+          <div class="dungeon-card-submeta">${illustrations.length} ${illustrations.length > 1 ? "illustrations" : "illustration"} · ${achievements.length} ${achievements.length > 1 ? "achievements" : "achievement"} · ${titleCount} ${titleCount > 1 ? "titles" : "title"}${codexSubmeta}</div>
         </div>
         <span class="level-badge">${esc(displayLevel(dungeon.level))}</span>
       </div>`;
@@ -920,6 +923,7 @@
   });
 
   const progressToggle = $("progress-toggle");
+  const progressToggleImage = $("progress-toggle-image");
   const progressPanel = $("progress-panel");
   const clearMonsterProgress = $("clear-monster-progress");
   const conquestModeToggle = $("conquest-mode-toggle");
@@ -931,6 +935,7 @@
     progressToggle.style.removeProperty("display");
     progressToggle.setAttribute("aria-expanded", String(isOpen));
     progressToggle.setAttribute("aria-label", isOpen ? "Close Dungeon Illustration Progress" : "Open Dungeon Illustration Progress");
+    if (progressToggleImage) progressToggleImage.src = isOpen ? progressToggleImage.dataset.openSrc : progressToggleImage.dataset.closedSrc;
   }
 
   progressToggle?.addEventListener("click", () => {

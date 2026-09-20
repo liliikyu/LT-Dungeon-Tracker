@@ -2,9 +2,10 @@
 """Sync normalized Google Sheet tabs into assets/data.js.
 
 ``dungeon_id`` + ``dungeon_drop`` remain the source of truth for dungeon identity,
-entries, drop/codex rows, title recipes, and title unlock requirements.
-``title_set_id`` + ``title_exchange_and_set`` provide title-set membership and
-title exchange-path guidance for the Titles page.
+entries, drops/codex rows, and title-material relationships.
+``title_id`` is the canonical source of truth for title metadata, including title name,
+unlock type, exchange path, title-set membership, reputation, Ely, and coupon data.
+``title_set_id`` resolves title-set IDs to display names.
 
 ``item_upgrade`` is intentionally NOT consumed by this website sync yet.
 No third-party Python packages are required.
@@ -25,7 +26,7 @@ SHEET_ID = "15aKwZohEpEwa9fOOnrcqZvAQ-JdHrVLcRTKglM2g1EQ"
 DUNGEON_ID_SHEET_NAME = "dungeon_id"
 DUNGEON_DROP_SHEET_NAME = "dungeon_drop"
 TITLE_SET_ID_SHEET_NAME = "title_set_id"
-TITLE_EXCHANGE_SET_SHEET_NAME = "title_exchange_and_set"
+TITLE_ID_SHEET_NAME = "title_id"
 OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "data.js"
 
 UPGRADE_COLUMNS = [f"upgrade_item_{n}_id" for n in range(1, 15)]
@@ -196,7 +197,7 @@ def build_data(
     dungeon_rows: list[list[str]],
     drop_rows: list[list[str]],
     title_set_rows: list[list[str]],
-    title_exchange_rows: list[list[str]],
+    title_rows: list[list[str]],
 ) -> dict:
     dungeon_records = rows_as_dicts(
         dungeon_rows,
@@ -210,9 +211,9 @@ def build_data(
         title_set_rows,
         required=("title_set_id", "title_set_name"),
     )
-    title_exchange_records = rows_as_dicts(
-        title_exchange_rows,
-        required=("title_id", "title_exchange_path", "title_exchange_path_description"),
+    title_records = rows_as_dicts(
+        title_rows,
+        required=("title_id", "title_name", "title_unlock_type", "title_exchange_path", "title_exchange_path_description"),
     )
 
     title_set_names = {
@@ -220,8 +221,8 @@ def build_data(
         for row in title_set_records
         if clean_text(row.get("title_set_id")) and clean_text(row.get("title_set_name"))
     }
-    title_exchange_by_id: dict[str, dict] = {}
-    for row in title_exchange_records:
+    title_meta_by_id: dict[str, dict] = {}
+    for row in title_records:
         title_id = clean_text(row.get("title_id"))
         if not title_id:
             continue
@@ -232,11 +233,16 @@ def build_data(
             set_id = clean_text(value)
             if set_id and set_id not in set_ids:
                 set_ids.append(set_id)
-        title_exchange_by_id[title_id] = {
+        title_meta_by_id[title_id] = {
+            "title": clean_text(row.get("title_name")),
+            "unlockType": normalize_unlock_type(row.get("title_unlock_type")),
             "exchangePath": clean_text(row.get("title_exchange_path")),
             "exchangePathDescription": clean_text(row.get("title_exchange_path_description")),
             "titleSetIds": set_ids,
             "titleSetNames": [title_set_names.get(set_id, set_id) for set_id in set_ids],
+            "reputationRequired": clean_text(row.get("title_reputation")) or clean_text(row.get("title_reputation_required")),
+            "elyRequired": clean_number(row.get("title_ely")) if clean_number(row.get("title_ely")) is not None else clean_number(row.get("title_ely_required")),
+            "coupon": clean_text(row.get("title_coupon")),
         }
 
     # Only populated master rows become website dungeons. Pre-filled future IDs with blank names are ignored.
@@ -263,7 +269,35 @@ def build_data(
             )
         grouped_drops[dungeon_id].append(row)
 
+    # Build the title catalog from title_id first. dungeon_drop only enriches material
+    # relationships / material counts and does not override title metadata.
     titles_by_id: OrderedDict[str, dict] = OrderedDict()
+    for title_id, title_meta in title_meta_by_id.items():
+        match = re.match(r"^(dng_[0-9]+)_title(?:_|$)", title_id)
+        dungeon_id = match.group(1) if match else None
+        dungeon_meta = master.get(dungeon_id) if dungeon_id else None
+        reputation_required = title_meta.get("reputationRequired")
+        amount_required = None
+        if title_meta.get("unlockType") == "reputation" and reputation_required:
+            amount_required = f"{humanize_identifier(reputation_required)} reputation"
+        titles_by_id[title_id] = {
+            "id": title_id,
+            "title": title_meta.get("title") or title_id,
+            "dungeon": clean_text(dungeon_meta.get("dungeon_name")) if dungeon_meta else None,
+            "dungeonId": dungeon_id,
+            "dungeonLevel": clean_text(dungeon_meta.get("dungeon_level")) if dungeon_meta else None,
+            "amountRequired": amount_required,
+            "elyRequired": title_meta.get("elyRequired"),
+            "materials": [],
+            "titleSet": " | ".join(title_meta.get("titleSetNames", [])) or None,
+            "titleSetIds": title_meta.get("titleSetIds", []),
+            "exchangePath": title_meta.get("exchangePath"),
+            "exchangePathDescription": title_meta.get("exchangePathDescription"),
+            "coupon": title_meta.get("coupon"),
+            "unlockType": title_meta.get("unlockType"),
+            "reputationRequired": reputation_required,
+        }
+
     dungeons = []
 
     for dungeon_id, meta in master.items():
@@ -291,8 +325,9 @@ def build_data(
                 row_category = clean_text(row.get("codex_category")) if codex else None
                 display_category = row_category or category_from_item_type(item_type)
                 codex_display = with_type_suffix(codex_name, display_category) if codex else ""
-                unlock_type = normalize_unlock_type(row.get("title_unlock_type"))
-                title_material = unlock_type == "material" and bool(clean_text(row.get("title_id")) or clean_text(row.get("title_name")))
+                row_title_id = clean_text(row.get("title_id"))
+                row_title_meta = title_meta_by_id.get(row_title_id, {}) if row_title_id else {}
+                title_material = row_title_meta.get("unlockType") == "material" and bool(row_title_id)
                 upgrade_targets = [clean_text(row.get(col)) for col in UPGRADE_COLUMNS if clean_text(row.get(col))]
                 badge5 = any(str(target).lower().endswith("_badge_5") for target in upgrade_targets)
 
@@ -304,55 +339,18 @@ def build_data(
                     badge_materials.append(item_name)
 
             title_id = clean_text(row.get("title_id"))
-            title_name = clean_text(row.get("title_name"))
-            if title_id or title_name:
-                stable_title_id = title_id or f"{dungeon_id}_title_{len(titles_by_id) + 1}"
-                unlock_type = normalize_unlock_type(row.get("title_unlock_type"))
-                title = titles_by_id.get(stable_title_id)
-                if title is not None and title_name and title.get("title") != title_name:
-                    fallback_id = f"{stable_title_id}_{slug(title_name)}"
-                    print(
-                        f"WARNING: title_id {stable_title_id!r} is used for both {title.get('title')!r} and {title_name!r}; "
-                        f"using temporary generated id {fallback_id!r}. Fix title_id in {DUNGEON_DROP_SHEET_NAME}."
-                    )
-                    stable_title_id = fallback_id
-                    title = titles_by_id.get(stable_title_id)
+            if title_id:
+                title = titles_by_id.get(title_id)
                 if title is None:
-                    amount_required = clean_number(row.get("title_amount_mats_required"))
-                    reputation_required = clean_text(row.get("title_reputation_required"))
-                    if unlock_type == "reputation" and amount_required is None and reputation_required:
-                        amount_required = f"{humanize_identifier(reputation_required)} reputation"
-                    exchange_meta = title_exchange_by_id.get(stable_title_id, {})
-                    title = {
-                        "id": stable_title_id,
-                        "title": title_name or stable_title_id,
-                        "dungeon": dungeon_name,
-                        "dungeonId": dungeon_id,
-                        "dungeonLevel": raw_level or None,
-                        "amountRequired": amount_required,
-                        "elyRequired": clean_number(row.get("title_ely_required")),
-                        "materials": [],
-                        "titleSet": " | ".join(exchange_meta.get("titleSetNames", [])) or None,
-                        "titleSetIds": exchange_meta.get("titleSetIds", []),
-                        "exchangePath": exchange_meta.get("exchangePath"),
-                        "exchangePathDescription": exchange_meta.get("exchangePathDescription"),
-                        "coupon": clean_text(row.get("title_coupon")),
-                        "unlockType": unlock_type,
-                        "reputationRequired": reputation_required,
-                    }
-                    titles_by_id[stable_title_id] = title
-                else:
-                    # Fill optional values from another material row if the first row was blank.
-                    if not title.get("title") and title_name:
-                        title["title"] = title_name
-                    if title.get("amountRequired") is None:
-                        title["amountRequired"] = clean_number(row.get("title_amount_mats_required"))
-                    if title.get("elyRequired") is None:
-                        title["elyRequired"] = clean_number(row.get("title_ely_required"))
-                    if not title.get("coupon"):
-                        title["coupon"] = clean_text(row.get("title_coupon"))
+                    print(f"WARNING: {title_id!r} is referenced by {DUNGEON_DROP_SHEET_NAME} but missing from {TITLE_ID_SHEET_NAME}; ignoring title metadata for this row.")
+                    continue
 
-                if unlock_type == "material" and item_name:
+                # Material quantity still belongs to the drop/recipe relationship.
+                # It is the only title display value intentionally enriched from dungeon_drop.
+                if title.get("amountRequired") is None:
+                    title["amountRequired"] = clean_number(row.get("title_amount_mats_required"))
+
+                if title.get("unlockType") == "material" and item_name:
                     title_material_name = with_type_suffix(
                         item_name, clean_text(row.get("codex_category")) or category_from_item_type(item_type)
                     )
@@ -411,7 +409,7 @@ def build_data(
 
     return {
         "lastSyncedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        "generatedFrom": "Google Sheets — LT Boss Matts Tracker / dungeon_id + dungeon_drop + title_set_id + title_exchange_and_set",
+        "generatedFrom": "Google Sheets — LT Boss Matts Tracker / dungeon_id + dungeon_drop + title_set_id + title_id",
         "schemaVersion": "v8",
         "levelFilters": [
             {"id": "all", "label": "All"},
@@ -432,8 +430,8 @@ def main() -> None:
     dungeon_rows = fetch_rows(DUNGEON_ID_SHEET_NAME)
     drop_rows = fetch_rows(DUNGEON_DROP_SHEET_NAME)
     title_set_rows = fetch_rows(TITLE_SET_ID_SHEET_NAME)
-    title_exchange_rows = fetch_rows(TITLE_EXCHANGE_SET_SHEET_NAME)
-    data = build_data(dungeon_rows, drop_rows, title_set_rows, title_exchange_rows)
+    title_rows = fetch_rows(TITLE_ID_SHEET_NAME)
+    data = build_data(dungeon_rows, drop_rows, title_set_rows, title_rows)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(
         "window.LT_DATA=" + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n",
@@ -442,7 +440,7 @@ def main() -> None:
     print(
         f"Wrote {len(data['dungeons'])} dungeons and {len(data['titles'])} titles to {OUTPUT} "
         f"from {DUNGEON_ID_SHEET_NAME} + {DUNGEON_DROP_SHEET_NAME} + "
-        f"{TITLE_SET_ID_SHEET_NAME} + {TITLE_EXCHANGE_SET_SHEET_NAME}."
+        f"{TITLE_SET_ID_SHEET_NAME} + {TITLE_ID_SHEET_NAME}."
     )
 
 

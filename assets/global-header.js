@@ -49,7 +49,7 @@
     wrap.className="extra-tools-menu";
     wrap.innerHTML=`
       <button id="extra-tools-toggle" class="extra-tools-toggle" type="button" aria-haspopup="menu" aria-expanded="false">
-        <span>EX</span><span class="extra-tools-chevron" aria-hidden="true">▾</span>
+        <span>ex</span><span class="extra-tools-chevron" aria-hidden="true">▾</span>
       </button>
       <div id="extra-tools-dropdown" class="extra-tools-dropdown hidden" role="menu" aria-label="Extra tools">
         <div class="extra-tools-heading">Extra Tools</div>

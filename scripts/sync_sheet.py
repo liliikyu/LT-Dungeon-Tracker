@@ -24,6 +24,7 @@ from pathlib import Path
 
 SHEET_ID = "15aKwZohEpEwa9fOOnrcqZvAQ-JdHrVLcRTKglM2g1EQ"
 DUNGEON_ID_SHEET_NAME = "dungeon_id"
+DUNGEON_ID_GID = "1585680012"
 DUNGEON_DROP_SHEET_NAME = "dungeon_drop"
 TITLE_SET_ID_SHEET_NAME = "title_set_id"
 TITLE_ID_SHEET_NAME = "title_id"
@@ -33,10 +34,19 @@ UPGRADE_COLUMNS = [f"upgrade_item_{n}_id" for n in range(1, 15)]
 
 
 def fetch_rows(sheet_name: str) -> list[list[str]]:
-    url = (
-        f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?"
-        + urllib.parse.urlencode({"tqx": "out:csv", "sheet": sheet_name})
-    )
+    # gviz infers a single type per column. dungeon_level starts numeric and later
+    # switches to values such as UL500 / SL2, so gviz returns those text values as
+    # blanks. Use the plain CSV export for dungeon_id to preserve the mixed column.
+    if sheet_name == DUNGEON_ID_SHEET_NAME:
+        url = (
+            f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?"
+            + urllib.parse.urlencode({"format": "csv", "gid": DUNGEON_ID_GID})
+        )
+    else:
+        url = (
+            f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?"
+            + urllib.parse.urlencode({"tqx": "out:csv", "sheet": sheet_name})
+        )
     req = urllib.request.Request(url, headers={"User-Agent": "lt-normalized-dungeon-sync/2.0"})
     with urllib.request.urlopen(req, timeout=60) as response:
         text = response.read().decode("utf-8-sig")

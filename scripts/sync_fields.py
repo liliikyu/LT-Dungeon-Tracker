@@ -110,9 +110,26 @@ def level_section(text):
 
 def parse(html, with_category=False, with_group=False):
   p=P();p.feed(html);result={}
+  # wiki.gg renders each collapsible level-band label as its own tiny table in
+  # some page revisions. Carry the most recently seen level section forward
+  # across table boundaries so the following Name / Given Stats / Location
+  # table inherits it.
+  pending_section=''
   for heading,raw in p.tables:
     table=expand(raw)
     heading_section=level_section(heading) if with_group else ''
+    table_section=''
+    if with_group:
+      for probe in table:
+        candidate=level_section(' '.join(clean(x) for x in probe if clean(x)))
+        if candidate:
+          table_section=candidate
+          break
+      if heading_section:
+        pending_section=heading_section
+      elif table_section:
+        pending_section=table_section
+    matched_data_table=False
     for hi,row in enumerate(table[:12]):
       headers=[clean(x).lower() for x in row]
       loc=next((i for i,h in enumerate(headers) if h in ('location','locations','area','source')),None)
@@ -125,12 +142,14 @@ def parse(html, with_category=False, with_group=False):
       # *above* the Name / Given Stats / Location header row, e.g.
       # "Lv. 1 ~ 20 Monsters [Collapse]". Seed this table's section from
       # those pre-header rows before parsing the monster rows below.
-      current_section=heading_section
+      matched_data_table=True
+      current_section=heading_section or pending_section
       if with_group:
         for pre in table[:hi]:
           pre_section=level_section(' '.join(clean(x) for x in pre if clean(x)))
           if pre_section:
             current_section=pre_section
+            pending_section=pre_section
       for r in table[hi+1:]:
         # wiki.gg has alternated between <h*> level headings and separator rows
         # inside a larger table. Capture either form so every following monster
@@ -139,6 +158,7 @@ def parse(html, with_category=False, with_group=False):
           row_section=level_section(' '.join(clean(x) for x in r if clean(x)))
           if row_section:
             current_section=row_section
+            pending_section=row_section
             # Separator rows do not represent a monster entry. Continue unless
             # this row also contains an actual field source + monster name.
             row_loc=clean(r[loc]) if loc < len(r) else ''
@@ -159,6 +179,9 @@ def parse(html, with_category=False, with_group=False):
             result.setdefault(f,[]).append({'name':n,'group':grp,'level':lvl,'sourceField':f})
           else: result.setdefault(f,[]).append(n)
       break
+    # A one-row collapsible header table has no Name/Location columns. Its
+    # level band is intentionally retained in pending_section for the next
+    # data table.
   if with_category:
     out={}
     for k,vals in result.items():

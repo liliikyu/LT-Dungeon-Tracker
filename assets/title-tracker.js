@@ -128,13 +128,22 @@
     return [30,300,1000,3000,6000].includes(amount) ? String(amount) : "other";
   }
 
+  const categoryBoxes=[...document.querySelectorAll('#title-category-filters input[type="checkbox"]')];
+  const categoryAllBox=categoryBoxes.find((box)=>box.value==="all");
+  const categoryRangeBoxes=categoryBoxes.filter((box)=>box.value!=="all");
+
+  function selectedTitleCategories(){
+    if(!categoryAllBox || categoryAllBox.checked) return new Set(["all"]);
+    return new Set(categoryRangeBoxes.filter((box)=>box.checked).map((box)=>box.value));
+  }
+
   function render(){
-    const query=normalize($("title-search").value); const status=$("title-status").value; const category=$("title-category")?.value || "all";
+    const query=normalize($("title-search").value); const status=$("title-status").value; const categories=selectedTitleCategories();
     const visible=(D.titles||[]).filter((title)=>{
       const state=rowState(title.id);
       if(status === "complete" && !state.complete) return false;
       if(status === "incomplete" && state.complete) return false;
-      if(category !== "all" && titleCategory(title) !== category) return false;
+      if(!categories.has("all") && !categories.has(titleCategory(title))) return false;
       if(!query) return true;
       return normalize([title.title,title.dungeon,title.dungeonLevel,title.titleSet,title.exchangePathDescription,title.elyRequired,...(title.materials||[])].join(" ")).includes(query);
     });
@@ -188,7 +197,17 @@
     check.closest("tr")?.classList.toggle("title-complete-row",check.checked); updateStats();
     render();
   });
-  $("title-search").addEventListener("input",render); $("title-status").addEventListener("change",render); $("title-category")?.addEventListener("change",render);
+  $("title-search").addEventListener("input",render); $("title-status").addEventListener("change",render);
+  categoryBoxes.forEach((box)=>box.addEventListener("change",()=>{
+    if(box.value==="all"){
+      if(box.checked) categoryRangeBoxes.forEach((item)=>{item.checked=false;});
+      else if(!categoryRangeBoxes.some((item)=>item.checked)) box.checked=true;
+    } else {
+      if(box.checked && categoryAllBox) categoryAllBox.checked=false;
+      if(!categoryRangeBoxes.some((item)=>item.checked) && categoryAllBox) categoryAllBox.checked=true;
+    }
+    render();
+  }));
   $("reset-title-progress").addEventListener("click",()=>{
     if(!confirm("Clear all saved Title Tracker progress in this browser?"))return;
     localStorage.removeItem(TITLE_PROGRESS_KEY); Object.keys(progress).forEach(k=>delete progress[k]); render();

@@ -1,74 +1,70 @@
 window.LT_MONSTER_ILLUSTRATIONS = {
   "source": "https://latale.wiki.gg/wiki/Monster_Illustrations",
-  "updated": "2026-09-15",
+  "updated": "2026-09-20",
   "dungeons": {
     "Dragon Lair": [
+      "Invoke EX",
       "Mabem",
       "Mabem Soul",
       "Sir Percival",
       "Fierie",
-      "Chimera",
-      "Invoke EX"
+      "Chimera"
     ],
     "Shangri-la": [
+      "Hyunmu",
       "Zin Great Monkey",
       "Turban Shell",
-      "Frog Prince",
-      "Hyunmu"
+      "Frog Prince"
     ],
     "Dark Moon of the 16th": [
-      "Ninja Guardian",
-      "Tengu",
       "Dark Moon Princess"
     ],
+    "Rice Zone": [
+      "Doctor Rice"
+    ],
     "Treasure Vault": [
+      "Sphinx",
       "Assassin",
       "Robber"
-    ],
-    "Gothic Room": [
-      "Pandora"
     ],
     "Captain Johnny's Room": [
       "Captain Johnny",
       "Kraken Head 2"
     ],
-    "Rice Zone": [
-      "Doctor Rice"
+    "Gothic Room": [
+      "Pandora"
     ],
     "Cold Heart": [
       "Ocean King"
     ],
+    "Heart of Ktuka": [
+      "Coa"
+    ],
     "Chimera Laboratory": [
+      "Choen Palm",
       "Giant",
       "Stone Giant",
       "Aero Giant",
-      "Fire Giant",
-      "Choen Palm"
+      "Fire Giant"
+    ],
+    "Toad Mountain": [
+      "Rabana",
+      "Miss Flower",
+      "Nepenthes",
+      "Lizard Man"
+    ],
+    "Toad Cave": [
+      "Kalad Burg",
+      "Old Wolf",
+      "Werewolf",
+      "Sir Gawain"
     ],
     "Frozen Labyrinth": [
+      "Vintor",
       "Dandy Penguin",
       "White Wolf",
       "Igloo",
-      "Minotauros",
-      "Vintor"
-    ],
-    "Toad Forest": [
-      "Mountain Pig",
-      "Super Pig",
-      "Mothman",
-      "Harpy"
-    ],
-    "Toad Mountain": [
-      "Miss Flower",
-      "Nepenthes",
-      "Lizard Man",
-      "Rabana"
-    ],
-    "Toad Cave": [
-      "Old Wolf",
-      "Werewolf",
-      "Sir Gawain",
-      "Kalad Burg"
+      "Minotauros"
     ],
     "Toad Valley": [
       "Large Big Toad"
@@ -77,18 +73,89 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "King Asura"
     ],
     "Valhalla": [
+      "Pheonix",
+      "Valkyrie",
       "Humbaba",
       "Pin",
       "Frost Giant"
     ],
+    "Webfoot Octopus Temple": [
+      "UFO Octopus"
+    ],
+    "Hel's Door": [
+      "Hel"
+    ],
+    "Black Tower": [
+      "Formless One"
+    ],
+    "Outer Realm": [
+      "Siam Vespucci"
+    ],
+    "Constellation Cliff": [
+      "Luseria"
+    ],
+    "Magic Book Room": [
+      "Ifrit",
+      "Library Hermitage",
+      "Library Rideword",
+      "Library Bookworm",
+      "Library Story Fairy",
+      "Library Flying Armor",
+      "Velfa Librarian"
+    ],
+    "Forgotten Garden": [
+      "Degos",
+      "Garden Unicorn",
+      "Garden Pegasus",
+      "Garden Carbuncle",
+      "Garden Toy Knight",
+      "Garden Demon Armor",
+      "Garden Gnoll",
+      "Garden Angry Gnoll",
+      "Garden Flying Armor",
+      "Cerberus"
+    ],
+    "Star's Cradle": [
+      "Theseus",
+      "Corekeeper",
+      "Jewel dragon Larva",
+      "Contaminated Larva",
+      "Jewel Dragon",
+      "Luzman"
+    ],
+    "Collapsed Tower Underground": [
+      "Njord"
+    ],
+    "Ymir Institute": [
+      "Almae",
+      "Arwen",
+      "Agent Andy",
+      "Agent Joy",
+      "Agent Neo",
+      "Agent Jeong",
+      "Paladin Mustang",
+      "Dysfunctional Kai",
+      "Lightning Pulse",
+      "Gorgeous Gotha"
+    ],
+    "Chunsik Room": [
+      "Chuntrio Sik"
+    ],
+    "Starry Cats Royal Rumble": [
+      "MD"
+    ],
     "Road of Moon": [
+      "Tyr Phantom",
+      "Moon Light Lunaris",
       "Moon Pluton Tree Knight",
       "Moon Pluton Water Knight"
     ],
     "Road of Dream": [
+      "Agasura Phantom",
       "Moon Dark Dragon Knight"
     ],
     "World's Genesis": [
+      "Divine Phantom",
       "Black Dragon Phantom",
       "Thunder Phantom",
       "Yggdrasil Spear Einherjar",
@@ -98,23 +165,157 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Hraesvelgr",
       "Verdrfolnir"
     ],
-    "Garden Of the Priring": [
-      "Mutant Jewelring"
+    "Big Tube": [
+      "Bollywood"
     ],
-    "TAID Choco Garden": [
-      "Mutant Gingerbread Man"
+    "TAID Dragon Garden": [
+      "Dragon Garden Lord",
+      "Garden Soldier Jiangshi",
+      "Garden Maiden Jiangshi",
+      "Garden Officer Jiangshi",
+      "Garden Handmaiden",
+      "Garden High Officer",
+      "Garden Elite Militant",
+      "Garden Undead Sorcerer"
     ],
-    "Twisted Genesis": [
-      "Dark Unicorn",
-      "Blue Unicorn",
-      "Dark Pegasus",
-      "Blue Pegasus",
-      "Mutant Sky Dragon"
+    "Rising Dragon Temple": [
+      "Tahm",
+      "Temple Senior Soldier",
+      "Temple Royal Soldier",
+      "Temple Dragon Soldier",
+      "Temple Royal Archer",
+      "Temple Dragon Archer",
+      "Temple Royal Spearman",
+      "Temple Dragon Spearman",
+      "Temple Royal Militant",
+      "Temple Dragon Militant",
+      "Mindless Royal Officer",
+      "Temple Dragon Officer",
+      "Gui"
     ],
-    "Sunset Forest": [
-      "Mutant Flower Snake"
+    "Hidden Cave": [
+      "Nepenthes",
+      "Cave Zuko",
+      "Sealed Skeleton Warrior",
+      "Sealed Skeleton Patrol",
+      "Sealed Skeleton Archer",
+      "Hobgoblin Archer",
+      "Hobgoblin Thief"
+    ],
+    "Ruined Palace": [
+      "Geminus",
+      "Awaritia",
+      "Serus",
+      "Palace Ogre",
+      "Palace Ogre Worker",
+      "Palace Ogre Warrior",
+      "Palace Ogre Wizard",
+      "Palace Hobgoblin Warrior",
+      "Palace Hobgoblin Assassin",
+      "Palace Hobgoblin Worker",
+      "Palace Orc Worker",
+      "Palace Orc Warrior",
+      "Palace Orc Shaman",
+      "Palace Orc Commander",
+      "Palace Dark Elf Assassin",
+      "Palace White Zuko"
+    ],
+    "Aurora Garden": [
+      "Aurora",
+      "Iron Gardener Head",
+      "Ace of Hearts",
+      "Ace of Spades",
+      "Aurora Pegasus",
+      "Aurora Bow Bee",
+      "Golden Aurora Bow Bee",
+      "Boboring",
+      "Skullring"
+    ],
+    "Rivera City Hall": [
+      "Zekal",
+      "Rivera Swordsman",
+      "Rivera Shieldsman",
+      "Rivera Spearman",
+      "Rivera Elite Swordsman",
+      "Rivera Elite Assassin",
+      "Rivera Elite Wizard",
+      "Dietrich"
+    ],
+    "Manastone Laboratory": [
+      "Elrian",
+      "Deadly Spider Spearman",
+      "Deadly Spider Shaman",
+      "Fire Salamander",
+      "Poison Salamander",
+      "Curse Salamander",
+      "Frog Man Warrior",
+      "Frog Man Fighter",
+      "Frog Man Wizard",
+      "Jager"
+    ],
+    "Devil's Canyon": [
+      "Gallus",
+      "Corrupt Vedrfolnir",
+      "Demon Chimera",
+      "Black Keeper",
+      "Hell Keeper"
+    ],
+    "Mysterious Hall": [
+      "Minerva",
+      "Rubia",
+      "Misty",
+      "Fury Golem",
+      "Thunderblow",
+      "Pompey",
+      "Lunare",
+      "Thunderie",
+      "Fury Hound",
+      "Mystery Cube"
+    ],
+    "Sacred Hall": [
+      "Blaspheme",
+      "Imp Magician",
+      "Green Swamp Swordsman",
+      "Succubus Assassin",
+      "Butterfly Rider Shaman",
+      "Butterfly Rider Tracker",
+      "Elite Satyr Swordsman",
+      "Nightshade",
+      "Arcshade",
+      "Burnshade",
+      "Advanced Incubus Assassin",
+      "Advanced Incubus Knight",
+      "Advanced Incubus Magian",
+      "Baphomet"
+    ],
+    "Dwarf Aircraft": [
+      "Furin",
+      "Driller Bot",
+      "Laser Bot",
+      "Dwarf Striker",
+      "Dwarf Charger",
+      "Dwarf Thrower",
+      "Magma Lava Bubble",
+      "Gatling Squad",
+      "Cannon Squad",
+      "Shotgun Squad",
+      "Pink Aki Golem",
+      "Blue Aki Golem",
+      "Thief Kitty Bot",
+      "Knight Kitty Bot",
+      "Akiragon"
+    ],
+    "Solar Temple": [
+      "Darman",
+      "Freezing Genie",
+      "Chilling Genie",
+      "Desert Fox Fighter",
+      "Hateful Sand Spirit",
+      "Kaim Necromancer",
+      "Kaim Wizard"
     ],
     "Agni's Altar": [
+      "Aslan",
       "Sunset Shaman",
       "Desert Fox Shaman",
       "Phantom Shaman",
@@ -124,9 +325,11 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Mose Sniper",
       "Careful Agni Warrior",
       "Agile Agni Warrior",
-      "Kaim Necrowarrior"
+      "Kaim Necrowarrior",
+      "Varmon"
     ],
     "Treasure Cave": [
+      "Doctor SD",
       "Heartless Naga",
       "Vigilant Naga",
       "Blue Dragon Turtle",
@@ -139,34 +342,160 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Merman General"
     ],
     "Waterfall Forest": [
+      "Trinia",
       "Grugger Firetroop",
       "Karka Fighter",
       "Nightmare Pazuzu",
       "Blue Forest Liora",
-      "Trinia"
+      "Owlbear Troop",
+      "Violent Ettin",
+      "Chaotic Flareo"
     ],
-    "Hyle": [
-      "Shadow SaElemental Intensity Steed",
-      "Vengeful Phantom Warrior",
-      "Oblivion Phantom Warrior",
-      "Alloces Fighter",
-      "Alloces Warrior",
-      "Red Illusion Dragon",
-      "Michealla"
+    "Jewell Forest": [
+      "Veska",
+      "Grugger Commander",
+      "Karka Boxer",
+      "Poisonous Pazuzu",
+      "Troublesome Pazuzu",
+      "Field Liora",
+      "Owlbear Elite",
+      "Nasty Ettin",
+      "Helper Flareo",
+      "Cold Flareo",
+      "Fim"
     ],
-    "Promised Sancutary": [
-      "Gremory of the Past",
-      "Gremory of The Present",
-      "SaElemental Intensity Valkyrie Warrior",
-      "SaElemental Intensity Valkyrie Wizard",
-      "SaElemental Intensity Valkyrie Lancer",
-      "Awakened Phantom Warrior",
-      "Alloces Beserker",
-      "Blue Illusion Dragon",
-      "Purple Illusion Dragon",
-      "Barbatos"
+    "Chunsik Memorial": [
+      "Bong",
+      "Chun",
+      "Sik",
+      "Fast and Furious",
+      "Knight Troller",
+      "Revelator Monstradamus",
+      "Chunsik Bong, Knight of the Light",
+      "Beat Music Band",
+      "Heart Pirate Sniper",
+      "Fairy Bear Strong"
+    ],
+    "Ice Cream Garden": [
+      "Essential Calorie",
+      "Fil, Symbol of friendship",
+      "Finnie, Symbol of Love",
+      "Unique Patchwork Bunny Poppy",
+      "Unique Patchwork Bunny Happy",
+      "Heart Pirate Combatant",
+      "Fairy Bear Rolly",
+      "Depressed Snowball",
+      "Blunt Snowball",
+      "Mischievous Snowball",
+      "Petite Milky Way Colty",
+      "Petite Milky Way Sty",
+      "Petite Milky Way Bolty"
+    ],
+    "Book of Shadows": [
+      "Black Dragon",
+      "First Study",
+      "Third Study",
+      "Second Study",
+      "Green Graffiti Bug",
+      "Purple Graffiti Bug",
+      "Pink Graffiti Bug"
+    ],
+    "Floating Island": [
+      "Bilbradha",
+      "Possessed Face of Death",
+      "Frozen Hell Cowl",
+      "Blue Grass Noblesse",
+      "Mystery Society Noblesse",
+      "Secret Forest Warrior",
+      "Secret Forest Illusionist",
+      "Athenian Assassin",
+      "Athenian Illusionist"
+    ],
+    "Illusion Mist Swamp": [
+      "Devil's Illusion",
+      "Grim Reaper of Execution",
+      "Grim Reaper of Confusion",
+      "Grim Reaper of Cursing",
+      "Battle Knight Atter",
+      "Battle Knight Shooter",
+      "Battle Knight Dealer",
+      "Anxious Face of Death",
+      "Poison Hell Cowl",
+      "Athenian Warrior",
+      "Iris' Nightmare"
+    ],
+    "Euphony of Corals": [
+      "Levianthan Kraca",
+      "Leviathan Krill",
+      "Bubble Hermit Crab",
+      "Blue Seahorse Paladin",
+      "Green Seahorse Knight",
+      "Stingray Swordsman",
+      "Coral Lobster Sergeant",
+      "Roaring Whale",
+      "Sea Balloon",
+      "Siren"
+    ],
+    "Twin Caves": [
+      "Ocelino"
+    ],
+    "Canyon of Chaos": [
+      "Evil Iris",
+      "Predatory Spirit of fire",
+      "Corrupted Spirit of fire",
+      "Rampaging Spirit of water",
+      "Determined Servant",
+      "Destructive Servant",
+      "Screaming Spirit of Nature",
+      "Corrupted Spirit of Earth"
+    ],
+    "Frozen World": [
+      "Evil Order",
+      "Raving Darkness",
+      "Gluttonous Darkness",
+      "Chaotic Spirit of Water",
+      "Corrupted Spirit of Nature",
+      "Selfish Spirit of Nature",
+      "Destructive Spirit of Earth",
+      "Cracked Spirit of Earth",
+      "Possessed Spirit of Wind",
+      "Evil Spirit of Wind",
+      "Cynical Iris"
+    ],
+    "Ra's Palace": [
+      "Ra Natun",
+      "Priestess of Chaos",
+      "Sandstorm Archer",
+      "Ra's Minion",
+      "Palace Nakba",
+      "Golden Nakba",
+      "Destructive Fukuta",
+      "Ruah of the Desert"
+    ],
+    "Hall of Rest": [
+      "Anubis",
+      "Priestess of Destruction",
+      "Sandstorm Assassin",
+      "Ra's Guard",
+      "Sharp Fukuta",
+      "Angry Fukuta",
+      "Ruah of the Monastery",
+      "Ruah of the wind"
+    ],
+    "Chamber of Hell": [
+      "Malphas",
+      "Blue Spear Soldier",
+      "Red Tartaros Golem",
+      "Silver Gargoyle",
+      "Corrupted Shynic Phantom",
+      "Graveyard Dark Shaz",
+      "Goblin Masked Thief",
+      "Black Puppet",
+      "Blue Spear Magian",
+      "Ixion"
     ],
     "Champion's Memorial": [
+      "Randine",
       "Graveyard Blood Shaz",
       "Golden Gargoyle",
       "Invoke Masked Thief",
@@ -175,33 +504,78 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Cursing Shynic Phantom",
       "Blue Spear Assassin"
     ],
-    "Chamber of Hell": [
-      "Blue Spear Assassin",
-      "Blue Spear Soldier",
-      "Red Tartaros Golem",
-      "Silver Gargoyle",
-      "Corrupted Shynic Phantom",
-      "Graveyard Dark Shaz",
-      "Goblin Masked Thief",
-      "Junior Magic Broomstick",
-      "Fire Wizard Portrait",
-      "Water Wizard Portrait",
-      "Imperial Knight Armor",
-      "Elias Knight Armor",
-      "Wind Wizard Cloak",
-      "Earth Wizard Cloak",
-      "Junior Maestro"
+    "Warrior's Graveyard": [
+      "Letum",
+      "Doom Velkia Knight",
+      "Void Velkia Knight",
+      "Furious Velkia Knight",
+      "Red Velkia Knight",
+      "Blue Velkia Knight",
+      "Corrupted Velkia Knight",
+      "Green Watcher",
+      "Red Watcher",
+      "Blue Watcher"
     ],
-    "Fallout Shelter": [
-      "Mose Kingdom Senior Knight",
-      "Mose Kingdom Elite Knight",
-      "Mose Kingdom Senior Wizard",
-      "Mose Kingdom Elite Wizard",
-      "Golden Schrodinger",
-      "Silver Schrodinger",
-      "Prince Nox"
+    "Monster Tree Valley": [
+      "Arborum",
+      "Hungry Hill Ogre",
+      "Guard Hill Ogre",
+      "Boar Fighter",
+      "Boar Ranger",
+      "Lolipop Shukri",
+      "Cupcake Shukri",
+      "Quiet Pupping",
+      "Shy Pupping"
+    ],
+    "Divine Tree Rapier": [
+      "Requiem",
+      "Sequentia",
+      "Contaminated Grayjewel",
+      "Hunter Dark Kali",
+      "Raging Dark Kali",
+      "Apocalyptic DS",
+      "Titan Pole Agnus",
+      "Red Tractus",
+      "Blue Tractus",
+      "Intruding Tremendes",
+      "Compulsive Summonable Hunter",
+      "Restrictive Summonable Hunter"
+    ],
+    "Dragon Valley": [
+      "Kyrie",
+      "Angry Grayjewel",
+      "Corrupted Dark Kali",
+      "Blood DS",
+      "Gust Agnus",
+      "Green Tractus",
+      "Defected Tremendes",
+      "Obssessive Summonable Hunter"
+    ],
+    "Zerenis Training Center": [
+      "Zephyros",
+      "Musical Spirit of Intelligence",
+      "Sophomore Magic Broomstick",
+      "Wind Wizard Portrait",
+      "Eastland Knight Armor",
+      "Star Wizard Cloak"
+    ],
+    "Zerenis Headquarters": [
+      "Lazy Spirit Of Intelligence",
+      "Doctor Vampire",
+      "Engineer Vampire",
+      "Precious Succubus",
+      "Timid Succubus",
+      "Gardener Souly",
+      "Remu Remu",
+      "Epu Epu",
+      "Nemu Nemu",
+      "Calm Q-riring",
+      "Famous Q-riring",
+      "Einhorn",
+      "Chloris"
     ],
     "Dream Oneiro": [
+      "Bergelmir",
       "Sword Dancer Pavlov",
       "Saber Pavlov",
       "Highlander Pavlov",
@@ -212,18 +586,97 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Executive Valac",
       "Chairman Valac",
       "Blue Golden Boar",
-      "Bergelmir"
+      "Purple Golden Boar",
+      "Edda"
+    ],
+    "Fallout Shelter": [
+      "Prince Nox",
+      "Mose Kingdom Senior Knight",
+      "Mose Kingdom Elite Knight",
+      "Mose Kingdom Senior Wizard",
+      "Mose Kingdom Elite Wizard",
+      "Golden Schrodinger",
+      "Silver Schrodinger"
+    ],
+    "Void Star": [
+      "Shadow Snake",
+      "Corrupted Aergia",
+      "Destructive Dysnomia",
+      "Chaotic Dysnomia",
+      "Absurd Dysnomia",
+      "Black Winged Limos",
+      "Vengeful Horkos"
+    ],
+    "Oblivon Lake": [
+      "Rete of Oblivion",
+      "Blue Winged Limos",
+      "Red Winged Limos",
+      "Betrayed Aergia",
+      "Capturer Makai",
+      "Robber Makai",
+      "Miner Ponos",
+      "Explosive Ponos",
+      "Lake Algaea",
+      "Spike Algeae",
+      "Grieving Horkos",
+      "Loyal Horkos"
+    ],
+    "Flame's Cradle": [
+      "Lilith",
+      "Swordsman Souly",
+      "Reaper Souly",
+      "Decisive Stalker",
+      "Attentive Stalker",
+      "Mama Bear",
+      "King Bear"
+    ],
+    "Rosengarten": [
+      "Asmodea",
+      "Server vampire",
+      "Doctor Vampire",
+      "Engineer Vampire",
+      "Precious Succubus",
+      "Timid Succubus",
+      "Gardener Souly",
+      "Remu Remu",
+      "Epu Epu",
+      "Nemu Nemu",
+      "Calm Q-riring",
+      "Famous Q-riring",
+      "Einhorn"
+    ],
+    "Hyle": [
+      "Michealla",
+      "Shadow SaElemental Intensity Steed",
+      "Vengeful Phantom Warrior",
+      "Oblivion Phantom Warrior",
+      "Alloces Fighter",
+      "Alloces Warrior",
+      "Red Illusion Dragon"
+    ],
+    "Promised Sancutary": [
+      "Barbatos",
+      "Gremory of the Past",
+      "Gremory of The Present",
+      "SaElemental Intensity Valkyrie Warrior",
+      "SaElemental Intensity Valkyrie Wizard",
+      "SaElemental Intensity Valkyrie Lancer",
+      "Awakened Phantom Warrior",
+      "Alloces Beserker",
+      "Blue Illusion Dragon",
+      "Purple Illusion Dragon"
     ],
     "Icicle Prison": [
+      "Argos",
       "Boreas of the Bind",
       "Boreas of the Pain",
       "Boreas of Contamination",
       "Narke of Despair",
       "Snow Petite Einhorn",
-      "Hell Flame Fox",
-      "Argos"
+      "Hell Flame Fox"
     ],
     "Spring of the Echo": [
+      "Echo",
       "Escapee Snow Weasel",
       "Handsome Snowman",
       "Bad Boy Snowman",
@@ -236,16 +689,9 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Blue Petite Einhorn",
       "Red Flame Fox",
       "Blue Flame Fox",
-      "Liriope",
-      "Echo"
+      "Liriope"
     ],
-    "Heart of Reminiscience": [
-      "Oblivious Liocat",
-      "Joyful Knossos Golem",
-      "Raging Knossos Golem",
-      "Dull Knossos Golem",
-      "Mana Homun",
-      "Nakun Lancer",
+    "Heart of Reminisence": [
       "Pasiphae"
     ],
     "Acro Coffin": [
@@ -261,7 +707,15 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Minos"
     ],
     "Vanitas": [
-      "Vellosh"
+      "Vellosh",
+      "Definitely Gamaliel",
+      "Nehemoth of Blessing",
+      "Nehemoth of Promises",
+      "Nehemoth of Wishes",
+      "Blueberry Tariel",
+      "Banana Tariel",
+      "Silver Beaked Harab",
+      "Gha'agsheblah of Obstruction"
     ],
     "Purgatory Azreal": [
       "Likely Gamaliel",
@@ -282,16 +736,17 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Vice The Sinner"
     ],
     "Chronos' Time": [
+      "Chronos",
       "Electron Lepton",
       "Muon Lepton",
       "Tau Lepton",
       "Happy Quark",
       "Hungry Quark",
       "Joyful Quark",
-      "Bored Quark",
-      "Chronos"
+      "Bored Quark"
     ],
     "Kairos' Time": [
+      "Kairos",
       "Blue Atmos",
       "Red Atmos",
       "Black Atmos",
@@ -300,23 +755,20 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Teacher Theoria",
       "Professor Theoria",
       "Trainer Praxis",
-      "Player Praxis",
-      "Kairos"
-    ],
-    "Unknown Forest": [
-      "Mutant Ent"
+      "Player Praxis"
     ],
     "Chaotic Mirror": [
+      "Scylla",
       "Horse Dolly",
       "Sheepy Dolly",
       "Horsey Dolly",
       "Blue Controller",
       "Black Controller",
       "Rude Focalio",
-      "Hedonistic Focalo",
-      "Scylla"
+      "Hedonistic Focalo"
     ],
     "Theater Eugamon": [
+      "Glaucos",
       "Idol Canense",
       "Singer Canense",
       "Rocker Canense",
@@ -330,18 +782,18 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Hunter Gentleman",
       "Shadow Bird",
       "Shadow Eagle",
-      "Picus",
-      "Glaucos"
+      "Picus"
     ],
     "Entelechy of Life": [
+      "Magic Golem Ricaria",
       "Encroached Spirit Egg",
       "Corrupted Spirit Egg",
       "Reactor Dantalion",
       "Magic Golem No. 5",
-      "Magic Golem No. 9",
-      "Magic Golem Ricaria"
+      "Magic Golem No. 9"
     ],
     "Stump of Spirits": [
+      "El-Larsa",
       "Happy Moreni",
       "Lovely Moreni",
       "Mean Alparin",
@@ -350,27 +802,41 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Executive Dantalion",
       "Seir of Luck",
       "Sei of Happiness",
-      "Seir of Joy",
-      "El-Larsa"
+      "Seir of Joy"
     ],
-    "Euphony of the Vanished Star": [
-      "Fresh Amdusias",
-      "Ddraig Fflam",
+    "Euphony of Vanishing Star": [
       "Merlin"
     ],
     "Twilight Cathedral": [
-      "Morgana"
+      "Morgana",
+      "Shining Amdusias",
+      "Ciborium of Love",
+      "Ciborium of Hope",
+      "Ciborium of Faith",
+      "Faithful Viviana",
+      "Happy Viviana",
+      "Heartbroken Viviana",
+      "Chaotic Viviana",
+      "Grayjewel Masked Destective",
+      "Q-Riring Masked Destective",
+      "Star Squirrel Masked Detective",
+      "Apprentice Immortal Priest",
+      "Immortal Priest - Rank 7",
+      "Immortal Priest - Rank 5",
+      "Modred",
+      "Ddraig Fflam"
     ],
     "Trial of the Dark Moon": [
+      "Anshara",
       "Nebo of Initiatioon",
       "Nebo of Action",
       "Nebo of Results",
       "Manun Guardian of Souls",
       "Manun Guardian of Afterlife",
-      "Exhuasted Nantara",
-      "Anshara"
+      "Exhuasted Nantara"
     ],
     "Trial of the Earth": [
+      "Kishara",
       "Anz of Swiftness",
       "Anz of Perfection",
       "Anz of Sobriety",
@@ -380,10 +846,10 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Weak Natara",
       "Sad Nantara",
       "Diligent Lesser Kulla",
-      "Loyal Lesser Kulla",
-      "Kishara"
+      "Loyal Lesser Kulla"
     ],
     "Aegir Ruins": [
+      "Rafaela",
       "Angry Hronn",
       "Violent Hronn",
       "Calm Hronn",
@@ -391,10 +857,10 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Laser Kolga",
       "Rocket Kolga",
       "Hungry Hefring",
-      "Nauseous Hefring",
-      "Rafaela"
+      "Nauseous Hefring"
     ],
     "Atlas Garden": [
+      "Metheus",
       "Golden Madilo",
       "Silver Madlo",
       "Guardian Hiyade",
@@ -409,10 +875,10 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Victorious Hyas",
       "Rurupa",
       "Paruru",
-      "Menoeti",
-      "Metheus"
+      "Menoeti"
     ],
     "Niflheim Station": [
+      "Hel",
       "Ratatosk Mk. 1",
       "Ratatosk Mk. 9",
       "Ratatosk Mk. 16",
@@ -420,16 +886,47 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "High Class Ganglati",
       "Master Ganglati",
       "Warning Gullinkambi",
-      "Struggling Gullinkambi",
-      "Hel"
+      "Struggling Gullinkambi"
     ],
     "Muspelheim Tunnel": [
+      "Surtr",
       "Dizzy Heidrun",
       "Empty Heidrun",
       "Suffering Eiksyr",
       "Hard Working Eiksyr",
       "Studious Eiksyr",
       "Burning Phantom Sinmara",
+      "Frozen Phantom Sinmara",
+      "Blooming Phantom Sinmara"
+    ],
+    "Moksha": [
+      "Insidious Kilesa",
+      "Vicious Kilesa",
+      "Water Lila",
+      "Fire Lila",
+      "Wind Lila",
+      "Lightning Lila",
+      "Joyful Griffon",
+      "Energetic Griffon",
+      "Lefica"
+    ],
+    "Tears of Nornir": [
+      "Gremory Queen",
+      "Demon Winged Nero",
+      "Lightning Winged Nero",
+      "Child Aiona",
+      "Teen Aiona",
+      "Grand Aiona",
+      "Mornign Tracer",
+      "Afternoon Tracer",
+      "Evening Tracer",
+      "Lunar Orbit",
+      "Golden Orbit",
+      "Solar Orbit",
+      "Killer Papiyas",
+      "Shooter Papiyas",
+      "Sniper Papiyas",
+      "Slasher Papiyas",
       "Time Keeper",
       "Nirvana"
     ],
@@ -443,6 +940,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Yankas"
     ],
     "Gates of Lysithea": [
+      "Andreas",
       "Resentful Uccsinidin",
       "Raging Uccsinidin",
       "Anxious Uccsinidin",
@@ -455,6 +953,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Hellfire C"
     ],
     "Boundary of the Void": [
+      "Gnosis",
       "Talking Sophie",
       "Planning Sophie",
       "Furry Epiustin",
@@ -494,6 +993,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Ego Notoria"
     ],
     "Pseudaria": [
+      "Raudskinna",
       "Chaotic Pori",
       "Bloody Pori",
       "Cursed Pori",
@@ -515,6 +1015,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Bunny Bunny Luseria"
     ],
     "Emeraldia": [
+      "Dorothea",
       "Aripia of Pain",
       "Aripia of Sorrow",
       "Aripia of Anxiety",
@@ -523,16 +1024,20 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Grumpy Lion Heart",
       "Tin Woodcutter",
       "Bronze Woodcutter",
-      "Poison Vogas",
-      "Joyful Jellypi",
-      "Happy Jellypi",
-      "Cheerful Jellypi",
-      "Taciturn Oll-Ruwool",
-      "Calm Oll-Ruwool",
-      "Composed Oll-Ruwool",
-      "Ruthless Oll-Ruwool"
+      "Gold Woodcutter",
+      "Scarecrow Soldier",
+      "Scarecrow Rifleman",
+      "Scarecrow Knight",
+      "Scarecrow Inspector",
+      "Black Kalidah",
+      "Brown Kalidah",
+      "White Kalidah",
+      "Blue Kalidah",
+      "Tipeta",
+      "Tip"
     ],
     "Helepol Fort": [
+      "Dmitrij",
       "Cracra",
       "Crocro",
       "Cricri",
@@ -542,7 +1047,8 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Boring Decarabi",
       "Tired Decarabi"
     ],
-    "Trials of Iron": [
+    "Trial of Iron": [
+      "Tyrhenia",
       "Beautiful Egosword",
       "Cool Egosword",
       "Great Egosword",
@@ -551,8 +1057,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Yellow Gomgasal",
       "Proactive Tyren",
       "Passionate Tyren",
-      "Dedicated Tyren",
-      "Tyrhenia"
+      "Dedicated Tyren"
     ],
     "Mare Ingenii": [
       "Spike Vogas",
@@ -568,6 +1073,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Gabriella"
     ],
     "Wings of Icarus": [
+      "Grendel",
       "Kitty Dronimal",
       "Puppy Dronimal",
       "Bear Dronimal",
@@ -583,11 +1089,103 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Creed Soldier of Silence",
       "Creed Soldier of Eternity",
       "Craft Keeper",
-      "Fredia",
-      "Grendel"
+      "Fredia"
+    ],
+    "TAID Choco Garden": [
+      "Mutant Gingerbread Man"
+    ],
+    "Twisted Genesis": [
+      "Mutant Sky Dragon",
+      "Dark Unicorn",
+      "Blue Unicorn",
+      "Dark Pegasus",
+      "Blue Pegasus",
+      "Dark Wizard Disciple",
+      "Red Wizard Disciple",
+      "Black Giselle",
+      "Blue Giselle"
+    ],
+    "Sunset Forest": [
+      "Mutant Flower Snake",
+      "Innocent Wriggly",
+      "Lunatic Gargoyle",
+      "Grim Trench",
+      "Ant General",
+      "Rainbow Psyche"
+    ],
+    "Garden of the Priring": [
+      "Mutant Jewelring"
+    ],
+    "Unknown Forest": [
+      "Mutant Ent"
     ],
     "Unknown Beach": [
       "Mutant Clawrence"
+    ],
+    "Moon of the 16th": [
+      "Ninja Guardian",
+      "Tengu"
+    ],
+    "Monster Tower": [
+      "Tower Mountain Kong (Lv110)",
+      "Tower Lavi Kong (Lv.130)",
+      "Tower PPPPriring (Lv.140)",
+      "Tower Mermech (Lv.150)",
+      "Tower Rabana (Lv.160)",
+      "Tower Cerberus (190)",
+      "Tower Siam (200)"
+    ],
+    "Toad Forest": [
+      "Mountain Pig",
+      "Super Pig",
+      "Mothman",
+      "Harpy"
+    ],
+    "Monster Tower 110F": [
+      "Tower Calamity Jane (Lv.120)"
+    ],
+    "Fairy Castle": [
+      "Oberon and Titania"
+    ],
+    "Crash Zone": [
+      "Imperial Knight Captain"
+    ],
+    "Jiendia Park - Volcano": [
+      "Cikaikos"
+    ],
+    "Road of Flower": [
+      "Flower Phantom Priestess",
+      "Flower Silver Lunaris",
+      "Flower Tyr Battle Cat",
+      "Flower Tyr House Cat",
+      "Flower Tyr Street Cat"
+    ],
+    "Choco Garden": [
+      "Grape Ice Cream",
+      "Strawberry Ice Cream",
+      "Vegetable Fish Bread",
+      "Green Tea Fish Bread",
+      "Ice Fish Bread",
+      "White Chocolate Breadman",
+      "Sticky Rice Donut Breadman"
+    ],
+    "Heart of Reminiscence": [
+      "Oblivious Liocat",
+      "Joyful Knossos Golem",
+      "Raging Knossos Golem",
+      "Dull Knossos Golem",
+      "Mana Homun",
+      "Nakun Lancer"
+    ],
+    "Euphony of the Vanished Star": [
+      "Fresh Amdusias",
+      "Cheerful Amdusias",
+      "QB of Destruction",
+      "QB of Demolition",
+      "Cute Hamama",
+      "Nice Hamama",
+      "Green Hedgehog",
+      "Yello Hedgehog"
     ],
     "Inspirational Playground": [
       "Spring Brown Pony",
@@ -600,15 +1198,12 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Priring Fire Truck",
       "Green Slide-saurus",
       "Blue Slide-saurus",
-      "Orange Slide-saurus",
-      "Tire Man of Inspiration"
+      "Orange Slide-saurus"
     ],
     "Nectar Circus Hall": [
       "Battle Velfa Plane",
       "Priring Taxi",
-      "Priring Racing Car",
-      "Gamza (Potato)",
-      "Mungchi"
+      "Priring Racing Car"
     ],
     "Nest of the Blind Bird": [
       "Emerald Strange Bird",
@@ -617,8 +1212,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Brown Rock Troll",
       "Black Roll Troll",
       "Debesys Jewel Troll",
-      "Debesys Steel Spider",
-      "Peridot, The Strange Bird"
+      "Debesys Steel Spider"
     ],
     "Rikimo Pelke": [
       "Spring Ciukas",
@@ -639,166 +1233,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
       "Arrogant Raganaz",
       "Foolish Raganaz",
       "Giltine",
-      "Lauma",
-      "Belial"
-    ],
-    "TAID Dragon Garden": [
-      "Garden Soldier Jiangshi",
-      "Garden Maiden Jiangshi",
-      "Dragon Garden Lord"
-    ],
-    "Rising Dragon Temple": [
-      "Tahm"
-    ],
-    "Hidden Cave": [
-      "Nepenthes"
-    ],
-    "Ruined Palace": [
-      "Geminus"
-    ],
-    "Aurora Garden": [
-      "Aurora"
-    ],
-    "Rivera City Hall": [
-      "Zekal"
-    ],
-    "Manastone Laboratory": [
-      "Elrian"
-    ],
-    "Devil's Canyon": [
-      "Corrupt Vedrfolnir",
-      "Demon Chimera",
-      "Black Keeper",
-      "Hell Keeper",
-      "Gallus"
-    ],
-    "Mysterious Hall": [
-      "Rubia",
-      "Misty",
-      "Fury Golem",
-      "Thunderblow",
-      "Pompey",
-      "Lunare",
-      "Thunderie",
-      "Fury Hound",
-      "Mystery Cube",
-      "Minerva"
-    ],
-    "Dwarf Aircraft": [
-      "Driller Bot",
-      "Laser Bot",
-      "Dwarf Striker",
-      "Dwarf Charger",
-      "Akiragon",
-      "Furin"
-    ],
-    "Sacred Hall": [
-      "Imp Magician",
-      "Green Swamp Swordsman",
-      "Succubus Assassin",
-      "Butterfly Rider Shaman",
-      "Butterfly Rider Tracker",
-      "Elite Satyr Swordsman",
-      "Nightshade",
-      "Arcshade",
-      "Burnshade",
-      "Advanced Incubus Assassin",
-      "Advanced Incubus Knight",
-      "Advanced Incubus Magian",
-      "Baphomet",
-      "Blaspheme"
-    ],
-    "Solar Temple": [
-      "Freezing Genie",
-      "Chilling Genie",
-      "Desert Fox Fighter",
-      "Hateful Sand Spirit",
-      "Kaim Necromancer",
-      "Kaim Wizard",
-      "Darman"
-    ],
-    "Chunsik Memorial": [
-      "Bong",
-      "Chun",
-      "Sik"
-    ],
-    "Ice Cream Garden": [
-      "Essential Calorie"
-    ],
-    "Book of Shadows": [
-      "Black Dragon"
-    ],
-    "Floating Island": [
-      "Bilbradha"
-    ],
-    "Illusion Mist Swamp": [
-      "Devil's Illusion"
-    ],
-    "Euphony of Corals": [
-      "Levianthan Kraca",
-      "Leviathan Krill"
-    ],
-    "Twin Caves": [
-      "Ocelino"
-    ],
-    "Jewell Forest": [
-      "Veska"
-    ],
-    "Canyon of Chaos": [
-      "Evil Iris"
-    ],
-    "Frozen World": [
-      "Evil Order"
-    ],
-    "Forgotten Garden": [
-      "Degos",
-      "Garden Unicorn",
-      "Garden Pegasus",
-      "Garden Carbuncle",
-      "Garden Toy Knight",
-      "Garden Demon Armor",
-      "Garden Gnoll",
-      "Garden Angry Gnoll",
-      "Garden Flying Armor",
-      "Cerberus"
-    ],
-    "Ymir Institute": [
-      "Almae",
-      "Arwen",
-      "Agent Andy",
-      "Agent Joy",
-      "Agent Neo",
-      "Agent Jeong",
-      "Paladin Mustang",
-      "Dysfunctional Kai",
-      "Lightning Pulse",
-      "Gorgeous Gotha"
-    ],
-    "Moksha": [
-      "Insidious Kilesa",
-      "Vicious Kilesa",
-      "Water Lila",
-      "Fire Lila",
-      "Wind Lila",
-      "Lightning Lila",
-      "Joyful Griffon",
-      "Energetic Griffon",
-      "Lefica"
-    ],
-    "Zerenis Headquarters": [
-      "Lazy Spirit Of Intelligence",
-      "Doctor Vampire",
-      "Engineer Vampire",
-      "Precious Succubus",
-      "Timid Succubus",
-      "Gardener Souly",
-      "Remu Remu",
-      "Epu Epu",
-      "Nemu Nemu",
-      "Calm Q-riring",
-      "Famous Q-riring",
-      "Einhorn",
-      "Chloris"
+      "Lauma"
     ]
   }
 };

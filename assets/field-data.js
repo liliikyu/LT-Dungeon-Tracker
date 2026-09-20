@@ -619,7 +619,7 @@ window.LT_FIELD_DATA = {
     "Bongolle Train": {
       "illustrations": [
         {
-          "name": "Niez",
+          "name": "Nez",
           "group": "Lv. 121 ~ 140",
           "level": "Lv. 121 ~ 140",
           "sourceField": "Bongolle Train"

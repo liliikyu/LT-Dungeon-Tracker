@@ -2631,7 +2631,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Mossy Temple"
         },
         {
-          "name": "Grey FootprElemental Intensity Cat",
+          "name": "Grey Footprint Intensity Cat",
           "group": "Lv. 181 ~ 200",
           "level": "Lv. 181 ~ 200",
           "sourceField": "Mossy Temple"

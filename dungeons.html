@@ -60,12 +60,8 @@
 
       <div class="range-row" id="range-filters">
         <label class="range-chip all-chip"><input type="checkbox" value="all" checked><span>All</span></label>
-        <label class="range-chip"><input type="checkbox" value="lv-1-199"><span>Lv. 1 ~ 199</span></label>
-        <label class="range-chip"><input type="checkbox" value="lv-200-235"><span>Lv. 200 ~ 235</span></label>
-        <label class="range-chip"><input type="checkbox" value="ulv-1-1000"><span>ULv. 1 ~ ULv. 1000</span></label>
-        <label class="range-chip"><input type="checkbox" value="ulv-1300-3500"><span>ULv. 1300 ~ ULv. 3500</span></label>
-        <label class="range-chip"><input type="checkbox" value="ulv-3700-8000"><span>ULv. 3700 ~ ULv. 8000</span></label>
-        <label class="range-chip"><input type="checkbox" value="ulv-8300-9999"><span>ULv. 8300 ~ ULv. 9999</span></label>
+        <label class="range-chip"><input type="checkbox" value="lv-1-235"><span>Lv. 1 ~ 235</span></label>
+        <label class="range-chip"><input type="checkbox" value="ulv-1-9999"><span>ULv. 1 ~ ULv. 9999</span></label>
         <label class="range-chip"><input type="checkbox" value="slv-1-plus"><span>SLv. 1 ~</span></label>
       </div>
 
@@ -191,7 +187,7 @@
         await loadScript(`assets/dungeon-unique-loot.js?ts=${stamp}`);
         await loadScript(`assets/dungeon-achievements.js?ts=${stamp}`);
         await loadScript(`assets/scenario-data.js?ts=${stamp}`);
-        await loadScript("assets/app.js?v=13.9.4.69-dungeon-levels-fix2");
+        await loadScript("assets/app.js?v=13.9.4.69-boss-level-logic");
       })();
     })();
   </script>

@@ -47,6 +47,17 @@ ALIASES = {
 # been mis-assigned when Location cells span many rows. These values mirror the
 # Official La Tale Wiki Monster Illustrations page and replace (not append to)
 # the parsed group so monsters cannot bleed in from an adjacent dungeon.
+DUNGEON_MONSTER_LEVEL_FIXES = {
+    # In-game Illustration Book places the regular Invoke / Dragon Lair monsters
+    # in the Lv. 21 ~ 40 group. The wiki HTML currently associates them with the
+    # preceding Lv. 1 ~ 20 collapsible band.
+    ("Dragon Lair", "Mabem"): "Lv. 21 ~ 40",
+    ("Dragon Lair", "Mabem Soul"): "Lv. 21 ~ 40",
+    ("Dragon Lair", "Sir Percival"): "Lv. 21 ~ 40",
+    ("Dragon Lair", "Fierie"): "Lv. 21 ~ 40",
+    ("Dragon Lair", "Chimera"): "Lv. 21 ~ 40",
+}
+
 KNOWN_DUNGEON_ILLUSTRATIONS = {
     "Acro Coffin": [
         "Drowsy Liocat", "Aquila Warrior", "Aquila Champion", "Wind Star Squirrel",
@@ -288,9 +299,9 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
             dungeon = canonical_dungeon(location)
             if not dungeon:
                 continue
-            level = table_level
+            level = DUNGEON_MONSTER_LEVEL_FIXES.get((dungeon, name), table_level)
             if level:
-                level_by_monster.setdefault(name, level)
+                level_by_monster[name] = level
             bucket = dungeons.setdefault(dungeon, [])
             if not any(entry.get("name") == name for entry in bucket):
                 bucket.append({"name": name, "group": level, "level": level})

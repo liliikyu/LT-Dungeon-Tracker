@@ -20,7 +20,19 @@ def pint(v,d=1):
   except:return d
 class P(HTMLParser):
   def __init__(self):
-    super().__init__();self.tables=[];self.depth=0;self.rows=None;self.row=None;self.parts=None;self.attrs={};self.heading_parts=None;self.current_heading=''
+    super().__init__();self.tables=[];self.depth=0;self.rows=None;self.row=None;self.parts=None;self.attrs={};self.heading_parts=None;self.current_heading='';self.current_level='';self.recent_text=[]
+
+  def _capture_level(self,text):
+    if not text:return
+    self.recent_text.append(text)
+    self.recent_text=self.recent_text[-12:]
+    probe=clean(' '.join(self.recent_text))
+    m=re.search(r'((?:S?Lv\.?\s*)?\d+\s*[~\-–—]\s*\d+)\s*(?:Monsters?)?',probe,re.I)
+    if m:
+      label=clean(m.group(1))
+      label=re.sub(r'^Lv\s+','Lv. ',label,flags=re.I)
+      label=re.sub(r'^SLv\s+','SLv. ',label,flags=re.I)
+      self.current_level=label
   def handle_starttag(self,t,a):
     t=t.lower();a=dict(a)
     if t in ('h1','h2','h3','h4','h5','h6') and self.depth==0:
@@ -32,6 +44,7 @@ class P(HTMLParser):
     elif self.depth==1 and t in ('td','th') and self.row is not None:self.parts=[];self.attrs=a
     elif self.parts is not None and t in ('br','p','div','li'):self.parts.append(' ')
   def handle_data(self,d):
+    self._capture_level(d)
     if self.parts is not None:self.parts.append(d)
     elif self.heading_parts is not None:self.heading_parts.append(d)
   def handle_endtag(self,t):
@@ -43,7 +56,7 @@ class P(HTMLParser):
       self.row=None
     elif t=='table' and self.depth:
       if self.depth==1 and self.rows is not None:
-        self.tables.append((self.current_heading,self.rows));self.rows=None
+        self.tables.append((self.current_heading,self.current_level,self.rows));self.rows=None
       self.depth-=1
     elif t in ('h1','h2','h3','h4','h5','h6') and self.heading_parts is not None:
       heading=clean(''.join(self.heading_parts))
@@ -115,9 +128,9 @@ def parse(html, with_category=False, with_group=False):
   # across table boundaries so the following Name / Given Stats / Location
   # table inherits it.
   pending_section=''
-  for heading,raw in p.tables:
+  for heading,captured_level,raw in p.tables:
     table=expand(raw)
-    heading_section=level_section(heading) if with_group else ''
+    heading_section=(captured_level or level_section(heading)) if with_group else ''
     table_section=''
     if with_group:
       for probe in table:

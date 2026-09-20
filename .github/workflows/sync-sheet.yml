@@ -2,6 +2,11 @@ name: Sync Google Sheet
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/sync_sheet.py"
+      - ".github/workflows/sync-sheet.yml"
   schedule:
     - cron: "17 */6 * * *"  # every 6 hours (UTC)
 

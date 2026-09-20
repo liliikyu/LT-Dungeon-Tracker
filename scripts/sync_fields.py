@@ -15,6 +15,14 @@ OUTPUT=ROOT/'assets'/'field-data.js'
 API='https://latale.wiki.gg/api.php'
 PAGES={'monsters':('Monster_Illustrations','https://latale.wiki.gg/wiki/Monster_Illustrations'),'codex':('Item_Codex','https://latale.wiki.gg/wiki/Item_Codex')}
 def clean(v): return re.sub(r'\s+',' ',re.sub(r'\[[^\]]+\]','',v or '')).strip()
+
+MONSTER_NAME_FIXES={
+  'FootprElemental Intensity Cat':'Footprint Cat',
+}
+def monster_name(v):
+  n=clean(v)
+  return MONSTER_NAME_FIXES.get(n,n)
+
 def pint(v,d=1):
   try:return max(1,int(v or d))
   except:return d
@@ -179,7 +187,7 @@ def parse(html, with_category=False, with_group=False):
             if not field_name(row_loc) or not row_name:
               continue
         if max(loc,name)>=len(r):continue
-        n=clean(r[name]);f=field_name(r[loc])
+        n=monster_name(r[name]) if with_group else clean(r[name]);f=field_name(r[loc])
         if n and f:
           if with_category:
             category=normalize_category(r[cat] if cat is not None and cat<len(r) else '')

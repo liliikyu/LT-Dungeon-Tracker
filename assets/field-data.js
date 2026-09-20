@@ -2475,15 +2475,63 @@ window.LT_FIELD_DATA = {
     "Monster Tower": {
       "illustrations": [
         {
-          "name": "Tower Undertaker (Lv.170)",
+          "name": "Tower Mountain Kong (Lv. 110)",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
+          "sourceField": "Monster Tower"
+        },
+        {
+          "name": "Tower Calamity Jane (Lv. 120)",
+          "group": "Lv. 101 ~ 120",
+          "level": "Lv. 101 ~ 120",
+          "sourceField": "Monster Tower"
+        },
+        {
+          "name": "Tower Lavi Kong (Lv. 130)",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
+          "sourceField": "Monster Tower"
+        },
+        {
+          "name": "Tower PPPPriring (Lv. 140)",
+          "group": "Lv. 121 ~ 140",
+          "level": "Lv. 121 ~ 140",
+          "sourceField": "Monster Tower"
+        },
+        {
+          "name": "Tower Mermech (Lv. 150)",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
+          "sourceField": "Monster Tower"
+        },
+        {
+          "name": "Tower Rabana (Lv. 160)",
+          "group": "Lv. 141 ~ 160",
+          "level": "Lv. 141 ~ 160",
+          "sourceField": "Monster Tower"
+        },
+        {
+          "name": "Tower Undertaker (Lv. 170)",
           "group": "Lv. 161 ~ 180",
           "level": "Lv. 161 ~ 180",
           "sourceField": "Monster Tower"
         },
         {
-          "name": "Tower King Asura (Lv.180)",
+          "name": "Tower King Asura (Lv. 180)",
           "group": "Lv. 161 ~ 180",
           "level": "Lv. 161 ~ 180",
+          "sourceField": "Monster Tower"
+        },
+        {
+          "name": "Tower Cerberus (Lv. 190)",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
+          "sourceField": "Monster Tower"
+        },
+        {
+          "name": "Tower Siam (Lv. 200)",
+          "group": "Lv. 181 ~ 200",
+          "level": "Lv. 181 ~ 200",
           "sourceField": "Monster Tower"
         }
       ],

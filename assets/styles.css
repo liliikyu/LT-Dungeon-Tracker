@@ -2136,3 +2136,47 @@ body.conquest-modal-open{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   ::view-transition-old(root),::view-transition-new(root){animation:none;}
 }
+
+/* v13.9.4.69: raised tab treatment for Fields / Dungeons / Titles only */
+.site-nav:has(.tracker-tab-link){
+  align-self:flex-end;
+  gap:0;
+}
+.tracker-tab-link{
+  position:relative;
+  height:34px;
+  margin-bottom:-1px;
+  padding:0 16px;
+  border:1px solid var(--line);
+  border-bottom-color:var(--line);
+  border-radius:8px 8px 0 0;
+  background:color-mix(in srgb,var(--panel-2) 92%,var(--bg) 8%);
+  color:var(--muted);
+  font-weight:750;
+}
+.tracker-tab-link + .tracker-tab-link{margin-left:-1px;}
+.tracker-tab-link:hover{
+  z-index:2;
+  color:var(--text);
+  background:color-mix(in srgb,var(--panel-2) 82%,var(--accent) 18%);
+}
+.tracker-tab-link.active{
+  z-index:3;
+  color:var(--accent);
+  background:var(--panel);
+  border-color:var(--line);
+  border-bottom-color:var(--panel);
+  box-shadow:0 -1px 0 color-mix(in srgb,var(--accent) 32%,transparent);
+}
+.tracker-tab-link.active::after{
+  content:"";
+  position:absolute;
+  left:-1px;right:-1px;bottom:-2px;
+  height:2px;
+  background:var(--panel);
+}
+.site-nav-divider{margin-left:8px;}
+@media(max-width:760px){
+  .site-nav:has(.tracker-tab-link){align-self:auto;gap:0;overflow-x:auto;padding-top:4px;}
+  .tracker-tab-link{flex:0 0 auto;min-width:96px;height:34px;padding:0 12px;}
+}

@@ -192,6 +192,12 @@ class TableParser(HTMLParser):
             detected = monster_section(" ".join(self._recent_text))
             if detected:
                 self._current_section = detected
+                # Wiki level/category labels can appear inside the collapsible
+                # table wrapper after <table> has already opened. Update the
+                # active table too, otherwise every section is shifted back by
+                # one band (for example Shangri-la appearing as 1~20/21~40).
+                if self._table_depth == 1:
+                    self._table_section = detected
         if self._cell_parts is not None:
             self._cell_parts.append(data)
 

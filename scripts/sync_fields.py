@@ -258,6 +258,13 @@ def main():
   if not monsters:raise RuntimeError('No field Monster Illustrations parsed; existing snapshot preserved')
   if not codex:raise RuntimeError('No field Item Codex entries parsed; existing snapshot preserved')
 
+  # TAID locations are dungeons, not field maps. The wiki Monster Illustration
+  # source can list them alongside field locations, so exclude them here.
+  for source in (monsters, codex):
+    for field in list(source):
+      if re.match(r'^\s*Taid\s*:', field, flags=re.I):
+        source.pop(field, None)
+
   # The wiki currently omits/misplaces several Monster Tower illustration rows.
   # Keep the known Tower sequence together in the Monster Tower field.
   tower_names={name for name,_ in MONSTER_TOWER_ILLUSTRATIONS}

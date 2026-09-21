@@ -158,17 +158,29 @@
   }
   function materialRows(key,req){
     const st=getState(key),rows=[];
-    for(const [name,requiredRaw] of Object.entries(req.mats)){
+    Object.entries(req.mats).forEach(([name,requiredRaw],index)=>{
       const required=Math.ceil(requiredRaw),owned=Math.max(0,Number(st.mats?.[name])||0),remaining=Math.max(0,required-owned);
-      rows.push(`<div class="battle-material-row"><span class="battle-material-name">${esc(name)}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}"><span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span></div>`);
-    }
+      rows.push(`<div class="battle-material-row battle-stacked-material">
+        <span class="battle-material-name"><small>MATERIAL ${index+1}</small><span>${esc(name)}</span></span>
+        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}">
+        <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
+      </div>`);
+    });
     if(req.stoneName||req.stoneRequired>0){
       const owned=Math.max(0,Number(st.mats?.["__stone"])||0),remaining=Math.max(0,req.stoneRequired-owned);
-      rows.push(`<div class="battle-material-row ascension"><span class="battle-material-name">${esc(req.stoneName||"Ascension Stone")}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="__stone" value="${esc(owned)}"><span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span></div>`);
+      rows.push(`<div class="battle-material-row battle-stacked-material ascension">
+        <span class="battle-material-name"><small>ASCENSION STONE</small><span>${esc(req.stoneName||"Ascension Stone")}</span></span>
+        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="__stone" value="${esc(owned)}">
+        <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
+      </div>`);
     }else{
-      rows.push(`<div class="battle-material-row ascension muted"><span class="battle-material-name">Ascension Stone</span><input type="number" value="0" disabled><span class="battle-material-total">/ 0 remaining</span></div>`);
+      rows.push(`<div class="battle-material-row battle-stacked-material ascension muted">
+        <span class="battle-material-name"><small>ASCENSION STONE</small><span>Not required</span></span>
+        <input type="number" value="0" disabled>
+        <span class="battle-material-total">/ 0 remaining</span>
+      </div>`);
     }
-    rows.push('<div class="battle-ely-row"><span class="battle-material-name">Ely</span><strong>—</strong><span class="battle-material-total">Not supplied in item_upgrade</span></div>');
+    rows.push('<div class="battle-ely-row battle-stacked-ely"><span class="battle-material-name"><small>Ely</small><span>Not supplied in item_upgrade</span></span><strong>—</strong><span class="battle-material-total"></span></div>');
     return rows.join("");
   }
   function battleCalculator(slot,key,title,mode,opts={}){

@@ -3977,3 +3977,39 @@ body.conquest-modal-open{overflow:hidden}
     margin:8px 12px 0;
   }
 }
+
+
+/* v13.9.4.109 — evolve progression cards */
+.evolve-progress-box{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+  margin:8px 10px 0;
+}
+.evolve-progress-box>div{
+  display:grid;
+  gap:2px;
+  padding:7px 8px;
+  border:1px solid var(--line-soft);
+  border-radius:7px;
+  background:var(--panel-2);
+}
+.evolve-progress-box span{
+  color:var(--muted);
+  font-size:8.5px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.evolve-progress-box strong{
+  color:var(--text);
+  font-size:10.5px;
+}
+.evolve-rule-note code{
+  font-size:inherit;
+}
+@media(max-width:760px){
+  .evolve-progress-box{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    margin:8px 12px 0;
+  }
+}

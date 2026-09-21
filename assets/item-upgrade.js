@@ -165,7 +165,7 @@
     if(n>=1000){
       const b=n/1000;
       const decimals=Number.isInteger(b)?0:(b>=10?1:2);
-      return b.toFixed(decimals).replace(/\.?0+$/,"")+"B";
+      return Number(b.toFixed(decimals)).toLocaleString(undefined,{maximumFractionDigits:decimals})+"B";
     }
     return n.toLocaleString()+"M";
   }

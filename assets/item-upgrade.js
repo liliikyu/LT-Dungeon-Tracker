@@ -114,7 +114,6 @@
   }
   function requirements(slot,key,item,entry){
     const {st,stages}=ensureTargets(slot,key,item,entry);
-    if(st.maxed)return {mats:{},stoneName:"",stoneRequired:0,remainingTotal:0,rawTotal:0,completion:100,expected:false};
     const mats={};let stoneRequired=0,stoneName="",expected=false;
     for(const s of stages){
       const seq=Number(s.sequence)||0;if(seq<=Number(st.current)||seq>Number(st.target))continue;
@@ -131,6 +130,9 @@
     const stoneOwned=Math.max(0,Number(st.mats?.["__stone"])||0);
     const stoneRemaining=Math.max(0,Math.ceil(stoneRequired)-stoneOwned);
     const target=Math.max(1,Number(st.target)||1),completion=Math.min(100,Math.round((Number(st.current)||0)/target*100));
+    if(st.maxed){
+      return {mats,stoneName,stoneRequired:Math.ceil(stoneRequired),stoneRemaining:0,remainingTotal:0,rawTotal,completion:100,expected};
+    }
     return {mats,stoneName,stoneRequired:Math.ceil(stoneRequired),stoneRemaining,remainingTotal,rawTotal,completion,expected};
   }
   function runsText(remaining){if(remaining<=0)return"0 runs";const best=Math.ceil(remaining/RUN_MAX),worst=Math.ceil(remaining/RUN_MIN);return best===worst?best+" runs":best+"–"+worst+" runs";}
@@ -138,7 +140,7 @@
   function seriesSelect(slot,key){
     const groups=seriesGroups(slot),st=getState(key);
     if(!st.seriesId&&groups.length)st.seriesId=groups[0].id;
-    return `<select class="battle-series-select" data-key="${esc(key)}" data-slot="${esc(slot)}">${groups.map(g=>`<option value="${esc(g.id)}" ${g.id===st.seriesId?"selected":""}>${esc(groupLabel(g,slot))}</option>`).join("")}</select>`;
+    return `<select class="battle-series-select" data-key="${esc(key)}" data-slot="${esc(slot)}" ${st.maxed?"disabled":""}>${groups.map(g=>`<option value="${esc(g.id)}" ${g.id===st.seriesId?"selected":""}>${esc(groupLabel(g,slot))}</option>`).join("")}</select>`;
   }
   function typeChoices(group,key,st){
     const enabled=group.entries.length>1;
@@ -150,7 +152,7 @@
     const {st,stages}=ensureTargets("",key,item,entry),value=kind==="current"?st.current:st.target;
     const baseLabel=item?.progressionType==="tier"?"Base":"+0";
     const opts=[`<option value="0" ${Number(value)===0?"selected":""}>${baseLabel}</option>`].concat(stages.map(s=>`<option value="${s.sequence}" ${Number(value)===Number(s.sequence)?"selected":""}>${esc(stageName(item,s))}</option>`));
-    return `<select class="battle-${kind}-select" data-key="${esc(key)}">${opts.join("")}</select>`;
+    return `<select class="battle-${kind}-select" data-key="${esc(key)}" ${st.maxed?"disabled":""}>${opts.join("")}</select>`;
   }
   function detailTable(item,entry){
     const stages=stagesFor(item,entry);
@@ -159,18 +161,18 @@
   function materialRows(key,req){
     const st=getState(key),rows=[];
     Object.entries(req.mats).forEach(([name,requiredRaw],index)=>{
-      const required=Math.ceil(requiredRaw),owned=Math.max(0,Number(st.mats?.[name])||0),remaining=Math.max(0,required-owned);
+      const required=Math.ceil(requiredRaw),owned=Math.max(0,Number(st.mats?.[name])||0),remaining=st.maxed?0:Math.max(0,required-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material">
         <span class="battle-material-name"><small>MATERIAL ${index+1}</small><span>${esc(name)}</span></span>
-        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}">
+        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
         <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
       </div>`);
     });
     if(req.stoneName||req.stoneRequired>0){
-      const owned=Math.max(0,Number(st.mats?.["__stone"])||0),remaining=Math.max(0,req.stoneRequired-owned);
+      const owned=Math.max(0,Number(st.mats?.["__stone"])||0),remaining=st.maxed?0:Math.max(0,req.stoneRequired-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material ascension">
         <span class="battle-material-name"><small>ASCENSION STONE</small><span>${esc(req.stoneName||"Ascension Stone")}</span></span>
-        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="__stone" value="${esc(owned)}">
+        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="__stone" value="${esc(owned)}" ${st.maxed?"disabled":""}>
         <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
       </div>`);
     }else{
@@ -270,13 +272,17 @@
     materials.forEach(([name,requiredRaw],index)=>{
       const required=Math.ceil(requiredRaw);
       const owned=Math.max(0,Number(st.mats?.[name])||0);
-      const remaining=Math.max(0,required-owned);
-      rows.push(`<div class="battle-material-row gem-material-row"><span class="battle-material-name"><small>Material ${index+1}</small>${esc(name)}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}"><span class="battle-material-total">/ ${required.toLocaleString()} <small>${remaining.toLocaleString()} remaining</small></span></div>`);
+      const remaining=st.maxed?0:Math.max(0,required-owned);
+      rows.push(`<div class="battle-material-row battle-stacked-material gem-material-row">
+        <span class="battle-material-name"><small>MATERIAL ${index+1}</small><span>${esc(name)}</span></span>
+        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
+        <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
+      </div>`);
     });
     if(!materials.length){
-      rows.push('<div class="battle-material-row gem-material-row muted"><span class="battle-material-name"><small>Material</small>Not available</span><input type="number" value="0" disabled><span class="battle-material-total">/ 0</span></div>');
+      rows.push('<div class="battle-material-row battle-stacked-material gem-material-row muted"><span class="battle-material-name"><small>MATERIAL</small><span>Not available</span></span><input type="number" value="0" disabled><span class="battle-material-total">/ 0 remaining</span></div>');
     }
-    rows.push('<div class="gem-ely-row"><span>Ely</span><strong>—</strong><small>Not supplied in item_upgrade</small></div>');
+    rows.push('<div class="battle-ely-row battle-stacked-ely gem-ely-row"><span class="battle-material-name"><small>Ely</small><span>Not supplied in item_upgrade</span></span><strong>—</strong><span class="battle-material-total"></span></div>');
     return rows.join("");
   }
 
@@ -296,7 +302,7 @@
     return `<article class="battle-item-card ${st.maxed?"maxed":""}">
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select gem series</span>${seriesSelect(slot,key)}</label>
-      <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong>${entry.dungeonName?` · ${esc(entry.dungeonName)}`:""}</div>
+      <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
       ${!item?`<div class="upgrade-unavailable-copy"><strong>Upgrade stage data not available for this series.</strong><br>The series is listed in <code>dungeon_drop</code>, but no matching upgrade rows are currently available in <code>item_upgrade</code>.</div>`:`
         <div class="battle-stage-pair">
           <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
@@ -335,14 +341,28 @@
   function latestItems(slot){const list=itemBySlot[slot]||[];if(!list.length)return[];const max=Math.max(...list.map(x=>dungeonNum(x.dungeonId)));return list.filter(x=>dungeonNum(x.dungeonId)===max);}
   function simpleStageOptions(item,current){const stages=item.stages||[];return ['<option value="0">Base</option>'].concat(stages.map(s=>`<option value="${s.sequence}" ${Number(current)===Number(s.sequence)?"selected":""}>${esc(stageName(item,s))}</option>`)).join("");}
   function compactCard(item,mode){
-    const key="compact:"+item.itemId,st=getState(key),stages=item.stages||[],max=Math.max(0,...stages.map(s=>Number(s.sequence)||0));if(!st.target)st.target=max;
+    const key="compact:"+item.itemId,st=getState(key),stages=item.stages||[],max=Math.max(0,...stages.map(s=>Number(s.sequence)||0));
+    if(!st.target||st.target>max)st.target=max;
     const req=requirements(itemSlot(item),key,item,{itemName:item.itemName});
-    return `<article class="upgrade-calc-card"><header class="upgrade-calc-head"><div><strong>${esc(item.itemName)}</strong><small>${esc(item.dungeonName||item.dungeonId||"Dungeon not specified")}</small></div></header><div class="upgrade-calc-controls"><label class="upgrade-field"><span>Current stage</span><select class="battle-current-select" data-key="${esc(key)}">${simpleStageOptions(item,st.current)}</select></label><label class="upgrade-field"><span>Materials owned</span><input class="compact-mats" data-key="${esc(key)}" data-material="${esc(Object.keys(req.mats)[0]||"Material")}" type="number" min="0" value="${esc(st.mats?.[Object.keys(req.mats)[0]]||0)}"></label></div><div class="upgrade-calc-summary"><div><span>Remaining to max</span><strong>${req.remainingTotal.toLocaleString()}</strong></div><div><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong></div></div>${mode==="detailed"?detailTable(item,{itemName:item.itemName}):""}</article>`;
+    return `<article class="battle-item-card special-item-card ${st.maxed?"maxed":""}">
+      <header class="battle-item-head">
+        <strong>${esc(item.itemName)}</strong>
+        <label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label>
+      </header>
+      <div class="special-source-line">${esc(item.dungeonName||item.dungeonId||"Dungeon not specified")}</div>
+      <div class="battle-stage-pair">
+        <label class="battle-field"><span>Current stage</span>${stageSelect(item,{itemName:item.itemName},key,"current")}</label>
+        <label class="battle-field"><span>Target stage</span>${stageSelect(item,{itemName:item.itemName},key,"target")}</label>
+      </div>
+      <div class="battle-materials special-materials">${gemMaterialRows(key,req)}</div>
+      <div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>
+      ${mode==="detailed"?gemDetailTable(item,{itemName:item.itemName}):""}
+    </article>`;
   }
   const unavailable=new Set(["totem","pendant","badge_5"]);
   const labels={charm:"Charm",totem:"Totem",relic:"Relic",watch:"Watch",necklace:"Necklace",textbook:"Textbook",sticker:"Sticker",belt:"Belt",brooch:"Brooch",pendant:"Pendant",badge_1:"Badge 1",badge_2:"Badge 2",badge_3:"Badge 3",badge_4:"Badge 4",badge_5:"Badge 5",badge_6:"Badge 6"};
   function unavailableCard(slot){return `<article class="upgrade-calc-card unavailable"><header class="upgrade-calc-head"><div><strong>${esc(labels[slot]||slot)}</strong><small>Upgrade data not yet available</small></div></header><div class="upgrade-unavailable-copy">Data not available in <code>item_upgrade</code>.</div></article>`;}
-  function renderSpecials(mode){const slots=["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","pendant","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"];return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="upgrade-card-grid">${slots.map(s=>unavailable.has(s)?unavailableCard(s):(latestItems(s).map(x=>compactCard(x,mode)).join("")||unavailableCard(s))).join("")}</div></section>`;}
+  function renderSpecials(mode){const slots=["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","pendant","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"];return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="battle-three-grid specials-card-grid">${slots.map(s=>unavailable.has(s)?unavailableCard(s):(latestItems(s).map(x=>compactCard(x,mode)).join("")||unavailableCard(s))).join("")}</div></section>`;}
   function renderGems(mode){return renderGemSection(mode);}
 
   let mode=localStorage.getItem(MODE_KEY)==="detailed"?"detailed":"simple";

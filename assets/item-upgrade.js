@@ -113,7 +113,35 @@
     st.typeIndex=Math.max(0,Math.min(Number(st.typeIndex)||0,group.entries.length-1));
     return {group,entry:group.entries[st.typeIndex],state:st};
   }
-  function upgradeItemFor(entry){return entry?upgradeById.get(normId(entry.itemId))||null:null;}
+  function upgradeItemFor(entry){
+    if(!entry)return null;
+    const direct=upgradeById.get(normId(entry.itemId));
+    if(direct)return direct;
+    if(normId(entry.itemId)==="dng_138_badge_6"){
+      return {
+        itemId:entry.itemId,
+        itemName:entry.itemName||"Unknown Star Badge",
+        dungeonId:entry.dungeonId||"dng_138",
+        dungeonName:entry.dungeonName||"",
+        progressionType:"enhancement",
+        syntheticRule:"badge6_copy_70",
+        stages:Array.from({length:30},(_,i)=>({
+          sequence:i+1,
+          key:"enh_"+(i+1),
+          name:"+"+(i+1),
+          enhancementLevel:i+1,
+          materialCost:"1",
+          ascensionStoneCost:"",
+          materialName:entry.itemName||"Unknown Star Badge",
+          ascensionStoneName:"",
+          elyCostMillions:"100",
+          successRate:"70%",
+          upgradeItemId:(entry.itemId||"dng_138_badge_6")+"_enh_"+(i+1)
+        }))
+      };
+    }
+    return null;
+  }
   function prefixOf(name){return String(name||"").split(/\s+/)[0].toLowerCase();}
   function stagesFor(item,entry){
     if(!item)return[];
@@ -141,11 +169,13 @@
   }
   function requirements(slot,key,item,entry){
     const {st,stages}=ensureTargets(slot,key,item,entry);
-    const mats={};let stoneRequired=0,stoneName="",expected=false;
+    const mats={};let stoneRequired=0,stoneName="",expected=false,elyMillions=0;
     for(const s of stages){
       const seq=Number(s.sequence)||0;if(seq<=Number(st.current)||seq>Number(st.target))continue;
       const cost=number(s.materialCost),success=rate(s.successRate),effective=cost/success;
+      const ely=number(s.elyCostMillions);
       if(success<1)expected=true;
+      if(ely>0)elyMillions+=ely/success;
       for(const name of splitMaterials(s))mats[name]=(mats[name]||0)+effective;
       const stone=number(s.ascensionStoneCost);if(stone>0){stoneRequired+=stone;s.ascensionStoneName&&(stoneName=s.ascensionStoneName);}
     }
@@ -158,9 +188,9 @@
     const stoneRemaining=Math.max(0,Math.ceil(stoneRequired)-stoneOwned);
     const target=Math.max(1,Number(st.target)||1),completion=Math.min(100,Math.round((Number(st.current)||0)/target*100));
     if(st.maxed){
-      return {mats,stoneName,stoneRequired:Math.ceil(stoneRequired),stoneRemaining:0,remainingTotal:0,rawTotal,completion:100,expected};
+      return {mats,stoneName,stoneRequired:Math.ceil(stoneRequired),stoneRemaining:0,remainingTotal:0,rawTotal,completion:100,expected,elyMillions:0};
     }
-    return {mats,stoneName,stoneRequired:Math.ceil(stoneRequired),stoneRemaining,remainingTotal,rawTotal,completion,expected};
+    return {mats,stoneName,stoneRequired:Math.ceil(stoneRequired),stoneRemaining,remainingTotal,rawTotal,completion,expected,elyMillions};
   }
   function runsText(remaining){if(remaining<=0)return"0 runs";const best=Math.ceil(remaining/RUN_MAX),worst=Math.ceil(remaining/RUN_MIN);return best===worst?best+" runs":best+"–"+worst+" runs";}
 
@@ -183,7 +213,7 @@
   }
   function detailTable(item,entry){
     const stages=stagesFor(item,entry);
-    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ascension Stone</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(s.materialCost||"—")}</td><td>${s.ascensionStoneCost&&number(s.ascensionStoneCost)>0?esc(s.ascensionStoneCost):"—"}</td><td>—</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ascension Stone</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(s.materialCost||"—")}</td><td>${s.ascensionStoneCost&&number(s.ascensionStoneCost)>0?esc(s.ascensionStoneCost):"—"}</td><td>${number(s.elyCostMillions)>0?esc(number(s.elyCostMillions).toLocaleString()+"M"):"—"}</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
   }
   function materialRows(key,req){
     const st=getState(key),rows=[];
@@ -309,7 +339,12 @@
     if(!materials.length){
       rows.push('<div class="battle-material-row battle-stacked-material gem-material-row muted"><span class="battle-material-name"><small>MATERIAL</small><span>Not available</span></span><input type="number" value="0" disabled><span class="battle-material-total">/ 0 remaining</span></div>');
     }
-    rows.push('<div class="battle-ely-row battle-stacked-ely gem-ely-row"><span class="battle-material-name"><small>Ely</small><span>Not supplied in item_upgrade</span></span><strong>—</strong><span class="battle-material-total"></span></div>');
+    if(req.elyMillions>0){
+      const ely=req.elyMillions>=1000?(req.elyMillions/1000).toFixed(req.elyMillions>=10000?1:2).replace(/\.0+$/,"")+"B":Math.ceil(req.elyMillions).toLocaleString()+"M";
+      rows.push(`<div class="battle-ely-row battle-stacked-ely gem-ely-row"><span class="battle-material-name"><small>Ely</small><span>${req.expected?"Expected cost at current success rate":"Required Ely"}</span></span><strong>${esc(ely)}</strong><span class="battle-material-total"></span></div>`);
+    }else{
+      rows.push('<div class="battle-ely-row battle-stacked-ely gem-ely-row"><span class="battle-material-name"><small>Ely</small><span>Not supplied in item_upgrade</span></span><strong>—</strong><span class="battle-material-total"></span></div>');
+    }
     return rows.join("");
   }
 
@@ -378,12 +413,15 @@
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select ${esc(title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
+      ${item?.syntheticRule==="badge6_copy_70"?`<div class="special-rule-note"><strong>Upgrade rule</strong><span>Each attempt consumes <b>1 × ${esc(entry.itemName)}</b> + <b>100M Ely</b> with a <b>70% success rate</b>.</span><small>Expected-cost calculation uses 1 ÷ 70% ≈ 1.43 attempts per successful enhancement.</small></div>`:""}
       ${!item?missingUpgradeCopy(latest):`
         <div class="special-current-stage">
           <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
         </div>
         <div class="battle-materials special-materials">${gemMaterialRows(key,req)}</div>
-        <div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>
+        ${item.syntheticRule==="badge6_copy_70"
+          ?`<div class="battle-estimate"><span>Expected attempts</span><strong>≈${Math.ceil(req.rawTotal)} attempts</strong><small>Based on 70% success; actual attempts may vary.</small></div>`
+          :`<div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>`}
         ${mode==="detailed"?gemDetailTable(item,entry):""}
       `}
     </article>`;

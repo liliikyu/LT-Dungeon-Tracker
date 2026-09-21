@@ -186,7 +186,12 @@
       const ely=number(s.elyCostMillions);
       if(success<1)expected=true;
       if(ely>0)elyMillions+=ely/success;
-      for(const name of splitMaterials(s))mats[name]=(mats[name]||0)+effective;
+      const materialNames=splitMaterials(s);
+      if(materialNames.length){
+        for(const name of materialNames)mats[name]=(mats[name]||0)+effective;
+      }else if(item?.progressionType==="evolve"&&cost>0){
+        mats["Evolution material"]=(mats["Evolution material"]||0)+effective;
+      }
       const stone=number(s.ascensionStoneCost);if(stone>0){stoneRequired+=stone;s.ascensionStoneName&&(stoneName=s.ascensionStoneName);}
     }
     let remainingTotal=0,rawTotal=0;
@@ -408,6 +413,19 @@
     return section("GEMS",sectionPreview(parts,refs),`<div class="battle-three-grid">${cards}</div>`);
   }
 
+  function evolveProgressSummary(item,key,req){
+    const {st,stages}=ensureTargets("totem",key,item,null);
+    const current=Number(st.current)||0;
+    const max=stages.length?Math.max(...stages.map(s=>Number(s.sequence)||0)):0;
+    const remaining=Math.max(0,max-current);
+    return `<div class="evolve-progress-box">
+      <div><span>Progression</span><strong>Evolve</strong></div>
+      <div><span>Current</span><strong>${current?("+"+current):"+0"}</strong></div>
+      <div><span>Goal</span><strong>+${max}</strong></div>
+      <div><span>Remaining evolutions</span><strong>${remaining}</strong></div>
+    </div>`;
+  }
+
   function specialCalculator(slot,key,title,mode){
     const sel=selectedEntry(slot,key);
     if(!sel)return `<article class="battle-item-card unavailable"><header class="battle-item-head"><strong>${esc(title)}</strong></header><div class="upgrade-unavailable-copy">No item series found in dungeon_drop.</div></article>`;
@@ -424,14 +442,16 @@
       <label class="battle-field full"><span>Select ${esc(title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
       ${item?.syntheticRule==="badge6_copy_70"?`<div class="special-rule-note"><strong>Upgrade rule</strong><span>Each attempt consumes <b>1 × ${esc(entry.itemName)}</b> + <b>100M Ely</b> with a <b>70% success rate</b>.</span><small>Expected-cost calculation uses 1 ÷ 70% ≈ 1.43 attempts per successful enhancement.</small></div>`:""}
+      ${item?.progressionType==="evolve"?`<div class="special-rule-note evolve-rule-note"><strong>Evolution progression</strong><span>This series evolves level-by-level rather than changing Battle tiers.</span><small>The tracker follows <code>stage_sequence</code> from +1 through the final evolution level.</small></div>`:""}
       ${!item?missingUpgradeCopy(latest):`
+        ${item.progressionType==="evolve"?evolveProgressSummary(item,key,req):""}
         <div class="special-current-stage">
-          <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
+          <label class="battle-field"><span>${item.progressionType==="evolve"?"Current evolution":"Current stage"}</span>${stageSelect(item,entry,key,"current")}</label>
         </div>
         <div class="battle-materials special-materials">${gemMaterialRows(key,req)}</div>
         ${item.syntheticRule==="badge6_copy_70"
           ?`<div class="battle-estimate"><span>Expected attempts</span><strong>≈${Math.ceil(req.rawTotal)} attempts</strong><small>Based on 70% success; actual attempts may vary.</small></div>`
-          :`<div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>`}
+          :`<div class="battle-estimate"><span>${item.progressionType==="evolve"?"Estimated runs to max":"Estimated runs"}</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>`}
         ${mode==="detailed"?gemDetailTable(item,entry):""}
       `}
     </article>`;

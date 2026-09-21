@@ -3248,3 +3248,52 @@ body.conquest-modal-open{overflow:hidden}
     grid-column:2;
   }
 }
+
+
+/* v13.9.4.95 — Battle material readability and alignment */
+.battle-materials{
+  grid-template-columns:minmax(0,1fr) 108px 138px;
+  column-gap:8px;
+  row-gap:6px;
+  align-items:center;
+}
+.battle-material-row,
+.battle-ely-row{
+  display:contents;
+}
+.battle-material-name{
+  font-size:12px;
+  line-height:1.35;
+  font-weight:600;
+}
+.battle-material-row input{
+  width:108px;
+  height:30px;
+  justify-self:stretch;
+}
+.battle-material-total{
+  font-size:10.5px;
+}
+.battle-ely-row strong{
+  font-size:11px;
+}
+.battle-estimate strong{
+  color:var(--text);
+  font-size:11px;
+}
+@media(max-width:1180px){
+  .battle-materials{
+    grid-template-columns:minmax(0,1fr) 96px 124px;
+  }
+  .battle-material-row input{width:96px;}
+}
+@media(max-width:560px){
+  .battle-materials{
+    grid-template-columns:minmax(0,1fr) 82px;
+  }
+  .battle-material-total,
+  .battle-ely-row .battle-material-total{
+    grid-column:2;
+  }
+  .battle-material-row input{width:82px;}
+}

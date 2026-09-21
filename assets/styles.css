@@ -2861,3 +2861,68 @@ body.conquest-modal-open{overflow:hidden}
     display:none;
   }
 }
+
+
+/* v13.9.4.87 — Item Upgrade Tracker full draft */
+.upgrade-page{padding:14px 0 28px;}
+.upgrade-mode-switch{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel-2);}
+.upgrade-mode-switch button{height:31px;padding:0 12px;border:0;border-left:1px solid var(--line);background:transparent;color:var(--muted);font-size:11px;font-weight:750;cursor:pointer;}
+.upgrade-mode-switch button:first-child{border-left:0;}
+.upgrade-mode-switch button.active{background:color-mix(in srgb,var(--panel-2) 82%,var(--accent) 18%);color:var(--accent);}
+.upgrade-game-tabs{display:flex;gap:0;margin-top:10px;border-bottom:1px solid var(--line);}
+.upgrade-game-tab{min-width:120px;height:36px;padding:0 18px;border:1px solid var(--line);border-bottom:0;margin-right:-1px;border-radius:8px 8px 0 0;background:var(--panel-2);color:var(--muted);font-size:12px;font-weight:800;cursor:pointer;}
+.upgrade-game-tab.active{position:relative;z-index:2;background:var(--panel);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,var(--line));}
+.upgrade-info-strip{display:flex;flex-wrap:wrap;gap:10px 18px;padding:9px 11px;border:1px solid var(--line);border-top:0;border-radius:0 0 9px 9px;background:var(--panel);color:var(--muted);font-size:10.5px;}
+.upgrade-info-strip strong{color:var(--text);}
+.muted-inline{color:var(--muted);}
+.upgrade-tab-content{margin-top:10px;}
+.upgrade-section-block{margin-top:12px;}
+.upgrade-section-block:first-child{margin-top:0;}
+.upgrade-section-block h2{margin:0 0 7px;font-size:13px;color:var(--text);}
+.upgrade-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.upgrade-calc-card{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);}
+.upgrade-calc-card.unavailable{opacity:.82;}
+.upgrade-calc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 11px;border-bottom:1px solid var(--line-soft);background:var(--panel-2);}
+.upgrade-calc-head strong{display:block;font-size:12.5px;}
+.upgrade-calc-head small{display:block;margin-top:2px;color:var(--muted);font-size:10px;line-height:1.3;}
+.upgrade-card-badges{display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end;}
+.upgrade-latest-badge,.upgrade-unavailable-badge{display:inline-flex;align-items:center;min-height:20px;padding:2px 6px;border:1px solid var(--line);border-radius:999px;font-size:8.5px;font-weight:850;white-space:nowrap;}
+.upgrade-latest-badge{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,var(--line));background:color-mix(in srgb,var(--panel-3) 90%,var(--accent) 10%);}
+.upgrade-unavailable-badge{color:var(--muted);}
+.upgrade-calc-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:10px 11px 8px;}
+.upgrade-field{display:grid;gap:4px;}
+.upgrade-field>span{color:var(--muted);font-size:9.5px;font-weight:700;}
+.upgrade-field select,.upgrade-field input{height:31px;border:1px solid var(--line);border-radius:7px;background:var(--panel-2);color:var(--text);padding:0 8px;font-size:11px;min-width:0;width:100%;}
+.upgrade-inline-check{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:10px;font-weight:700;}
+.upgrade-max-check{align-self:end;min-height:31px;}
+.upgrade-inline-check input{accent-color:var(--accent);}
+.upgrade-calc-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:0 11px 10px;}
+.upgrade-calc-summary>div{padding:7px 8px;border:1px solid var(--line-soft);border-radius:7px;background:var(--panel-2);min-width:0;}
+.upgrade-calc-summary span{display:block;color:var(--muted);font-size:9px;margin-bottom:2px;}
+.upgrade-calc-summary strong{display:block;font-size:11px;line-height:1.25;overflow-wrap:anywhere;}
+.upgrade-estimate-note{display:block;padding:0 11px 10px;color:var(--muted);font-size:9.5px;font-style:italic;}
+.upgrade-detail-table-wrap{overflow:auto;border-top:1px solid var(--line-soft);}
+.upgrade-detail-table{width:100%;border-collapse:collapse;font-size:10px;}
+.upgrade-detail-table th,.upgrade-detail-table td{padding:6px 7px;border-bottom:1px solid var(--line-soft);text-align:left;white-space:nowrap;}
+.upgrade-detail-table th{background:var(--panel-2);font-size:9px;color:var(--muted);}
+.upgrade-detail-table tr:last-child td{border-bottom:0;}
+.upgrade-unavailable-copy{padding:11px;color:var(--muted);font-size:10.5px;line-height:1.4;}
+.upgrade-group-summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin:0 0 8px;padding:9px 10px;border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));border-radius:9px;background:color-mix(in srgb,var(--panel) 94%,var(--accent) 6%);}
+.upgrade-group-summary>div:first-child strong{display:block;font-size:11.5px;}
+.upgrade-group-summary>div:first-child small{display:block;margin-top:2px;color:var(--muted);font-size:9.5px;}
+.upgrade-group-checks{display:flex;flex-wrap:wrap;gap:5px 10px;}
+.upgrade-group-checks label{font-size:9.5px;color:var(--muted);white-space:nowrap;}
+.upgrade-group-checks input{accent-color:var(--accent);}
+.upgrade-group-total{text-align:right;white-space:nowrap;}
+.upgrade-group-total span{display:block;color:var(--muted);font-size:9px;}
+.upgrade-group-total strong{font-size:14px;color:var(--accent);}
+@media(max-width:980px){
+  .upgrade-card-grid{grid-template-columns:1fr;}
+  .upgrade-group-summary{grid-template-columns:1fr;}
+  .upgrade-group-total{text-align:left;}
+}
+@media(max-width:680px){
+  .upgrade-game-tab{min-width:0;flex:1;padding-inline:8px;}
+  .upgrade-calc-controls,.upgrade-calc-summary{grid-template-columns:1fr;}
+  .upgrade-info-strip{display:grid;}
+}

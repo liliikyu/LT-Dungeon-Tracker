@@ -493,7 +493,7 @@
     if(ci===ti&&st.target<st.current)st.target=st.current;
 
     const rows=[];
-    let elyMillions=0,elyComplete=true,totalMats=0,materialsComplete=true;
+    let elyMillions=0,elyComplete=true,totalMats=0,totalRemainingMats=0,materialsComplete=true;
 
     for(let i=ci;i<=ti;i++){
       const group=groups[i],entry=group.entries[0],item=upgradeItemFor(entry);
@@ -556,7 +556,10 @@
         const stateKey=entry.itemId+"::"+m.name;
         const owned=Math.max(0,Number(st.mats?.[stateKey])||0);
         const remaining=st.maxed?0:Math.max(0,required-owned);
-        if(m.complete)totalMats+=required;
+        if(m.complete){
+          totalMats+=required;
+          totalRemainingMats+=remaining;
+        }
         return {...m,required,owned,remaining,stateKey,index:index+1};
       });
 
@@ -570,13 +573,13 @@
       });
     }
 
-    return {groups,st,ci,ti,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,materialsComplete,elyMillions,elyComplete};
+    return {groups,st,ci,ti,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,totalRemainingMats,materialsComplete,elyMillions,elyComplete};
   }
 
   function evolutionChainCalculator(slot,key,title,mode){
     const plan=evolutionPlan(slot,key);
     if(!plan)return unavailableCard(slot);
-    const {st,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,materialsComplete,elyMillions,elyComplete}=plan;
+    const {st,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,totalRemainingMats,materialsComplete,elyMillions,elyComplete}=plan;
     const currentLatest=currentGroup.id===latestSeriesId(slot);
     const targetLatest=targetGroup.id===latestSeriesId(slot);
 
@@ -629,6 +632,11 @@
         </div>
       </details>
       ${slot==="badge_5"?'<div class="evolution-assumption-note">Older Badge 5 phases without <code>item_upgrade</code> rows assume <strong>10 matts per enhancement</strong>.</div>':""}
+      <div class="evolution-material-total">
+        <span><small>Material</small><strong>Total for selected path</strong></span>
+        <b>${st.maxed?"0":(materialsComplete?totalRemainingMats.toLocaleString()+" matts":totalRemainingMats.toLocaleString()+" known + TBC")}</b>
+        ${!materialsComplete&&rows.length?'<small>Some material costs are not supplied for the selected evolution path.</small>':""}
+      </div>
       <div class="evolution-ely-total">
         <span><small>Ely</small><strong>Total for selected path</strong></span>
         <b>${esc(elyText)}</b>

@@ -265,11 +265,12 @@
     if(el.classList.contains("battle-current-select"))st.current=Number(el.value)||0;
     if(el.classList.contains("battle-target-select"))st.target=Number(el.value)||0;
     if(el.classList.contains("battle-maxed-check"))st.maxed=el.checked;
+    if(el.classList.contains("battle-material-input")||el.classList.contains("compact-mats")){st.mats=st.mats||{};st.mats[el.dataset.material]=Math.max(0,Number(el.value)||0);}
     saveState();render();
   });
   $("upgrade-tab-content")?.addEventListener("input",(event)=>{
     const el=event.target,key=el.dataset?.key;if(!key)return;
-    if(el.classList.contains("battle-material-input")||el.classList.contains("compact-mats")){const st=getState(key);st.mats=st.mats||{};st.mats[el.dataset.material]=Math.max(0,Number(el.value)||0);saveState();render();}
+    if(el.classList.contains("battle-material-input")||el.classList.contains("compact-mats")){const st=getState(key);st.mats=st.mats||{};st.mats[el.dataset.material]=Math.max(0,Number(el.value)||0);saveState();}
   });
 
   render();

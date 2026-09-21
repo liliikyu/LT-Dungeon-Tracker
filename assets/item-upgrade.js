@@ -482,7 +482,8 @@
     if(!st.currentSeriesId||!groups.some(g=>g.id===st.currentSeriesId))st.currentSeriesId=groups[0].id;
     if(!st.targetSeriesId||!groups.some(g=>g.id===st.targetSeriesId))st.targetSeriesId=groups[groups.length-1].id;
     let ci=groups.findIndex(g=>g.id===st.currentSeriesId),ti=groups.findIndex(g=>g.id===st.targetSeriesId);
-    if(ci<0)ci=0;if(ti<ci){ti=ci;st.targetSeriesId=groups[ti].id;}
+    if(ci<0)ci=0;
+    if(ti<ci){ti=ci;st.targetSeriesId=groups[ti].id;}
     const currentGroup=groups[ci],targetGroup=groups[ti];
     const currentEntry=currentGroup.entries[0],targetEntry=targetGroup.entries[0];
     const currentMax=evolutionPhaseMax(slot,currentEntry),targetMax=evolutionPhaseMax(slot,targetEntry);
@@ -491,7 +492,9 @@
     st.target=Math.max(0,Math.min(Number(st.target)||0,targetMax));
     if(ci===ti&&st.target<st.current)st.target=st.current;
 
-    const rows=[];let elyMillions=0,elyComplete=true,totalMats=0,materialsComplete=true;
+    const rows=[];
+    let elyMillions=0,elyComplete=true,totalMats=0,materialsComplete=true;
+
     for(let i=ci;i<=ti;i++){
       const group=groups[i],entry=group.entries[0],item=upgradeItemFor(entry);
       const max=evolutionPhaseMax(slot,entry);
@@ -499,56 +502,108 @@
       const to=i===ti?st.target:max;
       const enteringLaterSeries=i>ci;
       if(to<=from&&!enteringLaterSeries)continue;
-      let qty=0,phaseEly=0,phaseElyComplete=true,phaseMaterialsComplete=true,materials=[];
+
+      let phaseEly=0,phaseElyComplete=true,phaseMaterialsComplete=true;
+      const materialTotals=new Map();
+
       if(item){
         const stages=stagesFor(item,entry).filter(s=>{
           const seq=Number(s.sequence)||0;
           if(enteringLaterSeries&&seq===0)return true;
           return seq>from&&seq<=to;
         });
+
         for(const s of stages){
           const materialEntries=stageMaterialEntries(s);
           if(materialEntries.length){
             for(const material of materialEntries){
-              if(material.cost>0)qty+=material.cost/rate(s.successRate);
-              else phaseMaterialsComplete=false;
-              if(!materials.includes(material.name))materials.push(material.name);
+              const rawMatch=Array.isArray(s.materials)
+                ? s.materials.find(m=>String(m.name||"").trim()===String(material.name||"").trim())
+                : null;
+              const rawCost=String(rawMatch?.cost ?? s.materialCost ?? "").trim();
+              const known=material.cost>0;
+              const existing=materialTotals.get(material.name)||{name:material.name,required:0,complete:true};
+              if(known)existing.required+=material.cost/rate(s.successRate);
+              else if(rawCost&&rawCost!=="0")existing.complete=false;
+              materialTotals.set(material.name,existing);
+              if(!known&&rawCost&&rawCost!=="0")phaseMaterialsComplete=false;
             }
           }else{
             const costRaw=String(s.materialCost??"").trim();
             if(costRaw&&costRaw!=="0")phaseMaterialsComplete=false;
           }
+
           const ev=number(s.elyCostMillions);
-          if(ev>0)phaseEly+=ev/rate(s.successRate); else phaseElyComplete=false;
+          if(ev>0)phaseEly+=ev/rate(s.successRate);
+          else phaseElyComplete=false;
         }
+
         if(!stages.length){
-          const steps=to-from;qty=steps*10;phaseElyComplete=false;
+          const steps=to-from;
+          const fallbackName="Upgrade material";
+          materialTotals.set(fallbackName,{name:fallbackName,required:steps*10,complete:true});
+          phaseElyComplete=false;
         }
       }else{
-        qty=(to-from)*10;phaseElyComplete=false;
+        const steps=to-from;
+        const fallbackName="Upgrade material";
+        materialTotals.set(fallbackName,{name:fallbackName,required:steps*10,complete:true});
+        phaseElyComplete=false;
       }
-      qty=Math.ceil(qty);totalMats+=qty;
-      if(!phaseMaterialsComplete)materialsComplete=false;
-      if(phaseElyComplete)elyMillions+=phaseEly;else elyComplete=false;
-      rows.push({group,entry,from,to,qty,materials,materialsComplete:phaseMaterialsComplete});
+
+      const materials=[...materialTotals.values()].map((m,index)=>{
+        const required=Math.ceil(m.required);
+        const stateKey=entry.itemId+"::"+m.name;
+        const owned=Math.max(0,Number(st.mats?.[stateKey])||0);
+        const remaining=st.maxed?0:Math.max(0,required-owned);
+        if(m.complete)totalMats+=required;
+        return {...m,required,owned,remaining,stateKey,index:index+1};
+      });
+
+      if(!phaseMaterialsComplete||materials.some(m=>!m.complete))materialsComplete=false;
+      if(phaseElyComplete)elyMillions+=phaseEly;
+      else elyComplete=false;
+
+      rows.push({
+        group,entry,from,to,materials,
+        materialsComplete:phaseMaterialsComplete&&materials.every(m=>m.complete)
+      });
     }
+
     return {groups,st,ci,ti,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,materialsComplete,elyMillions,elyComplete};
   }
-  function evolutionChainCalculator(slot,key,title){
+
+  function evolutionChainCalculator(slot,key,title,mode){
     const plan=evolutionPlan(slot,key);
     if(!plan)return unavailableCard(slot);
     const {st,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,materialsComplete,elyMillions,elyComplete}=plan;
     const currentLatest=currentGroup.id===latestSeriesId(slot);
     const targetLatest=targetGroup.id===latestSeriesId(slot);
+
     const materialRows=rows.length?rows.map((r,index)=>{
-      const source=r.materials.length?r.materials.join(" + "):"Upgrade material";
+      const phaseMaterials=r.materials.length?r.materials.map(material=>{
+        const remainingText=material.complete
+          ? (st.maxed?0:material.remaining).toLocaleString()+" remaining"
+          : "TBC remaining";
+        return `<div class="evolution-phase-material">
+          <span class="evolution-phase-material-name">${esc(r.group.dungeonName||r.group.id)} · ${esc(material.name)}</span>
+          <input class="battle-material-input evolution-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(material.stateKey)}" value="${esc(material.owned)}" ${st.maxed?"disabled":""}>
+          <span class="evolution-phase-remaining">/ ${esc(remainingText)}</span>
+        </div>`;
+      }).join(""):'<div class="evolution-phase-material muted"><span>Upgrade material not specified</span></div>';
+
+      const rangeLabel=r.from===0&&r.to===0?"Evolution → +0":("+"+r.from+" → +"+r.to);
       return `<div class="evolution-material-row">
-        <span><small>${index+1}. ${esc(r.group.dungeonName||r.group.id)}</small><strong>${esc(r.entry.itemName)}</strong><em>${esc(source)}</em></span>
-        <b>${r.materialsComplete?r.qty.toLocaleString()+" matts":"TBC"}</b>
-        <small>${r.from===0&&r.to===0?"Evolution → +0":("+"+r.from+" → +"+r.to)}</small>
+        <div class="evolution-material-copy">
+          <strong>${index+1}. ${esc(r.entry.itemName)}</strong>
+          ${phaseMaterials}
+          ${mode==="detailed"?`<small class="evolution-range-detail">${esc(rangeLabel)}</small>`:""}
+        </div>
       </div>`;
     }).join(""):'<div class="evolution-material-empty">No upgrades required for the selected range.</div>';
+
     const elyText=st.maxed?"0":(rows.length&&elyComplete?formatElyMillions(elyMillions):"—");
+
     return `<article class="battle-item-card special-item-card evolution-chain-card ${st.maxed?"maxed":""}">
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
       <div class="evolution-stage-block">
@@ -616,7 +671,7 @@
     return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="battle-three-grid specials-card-grid">${slots.map(slot=>{
       if(slot==="pendant") return unavailableCard(slot);
       const title=labels[slot]||slot;
-      if(slot==="totem"||slot==="badge_5")return seriesGroups(slot).length?evolutionChainCalculator(slot,"special:"+slot,title):unavailableCard(slot);
+      if(slot==="totem"||slot==="badge_5")return seriesGroups(slot).length?evolutionChainCalculator(slot,"special:"+slot,title,mode):unavailableCard(slot);
       return seriesGroups(slot).length?specialCalculator(slot,"special:"+slot,title,mode):unavailableCard(slot);
     }).join("")}</div></section>`;
   }

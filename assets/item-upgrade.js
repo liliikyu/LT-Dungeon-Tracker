@@ -462,19 +462,20 @@
     st.target=Math.max(0,Math.min(Number(st.target)||0,targetMax));
     if(ci===ti&&st.target<st.current)st.target=st.current;
 
-    const rows=[];let elyMillions=0,elyComplete=true,totalMats=0;
+    const rows=[];let elyMillions=0,elyComplete=true,totalMats=0,materialsComplete=true;
     for(let i=ci;i<=ti;i++){
       const group=groups[i],entry=group.entries[0],item=upgradeItemFor(entry);
       const max=evolutionPhaseMax(slot,entry);
       const from=i===ci?st.current:0;
       const to=i===ti?st.target:max;
       if(to<=from)continue;
-      let qty=0,phaseEly=0,phaseElyComplete=true,materials=[];
+      let qty=0,phaseEly=0,phaseElyComplete=true,phaseMaterialsComplete=true,materials=[];
       if(item){
         const stages=stagesFor(item,entry).filter(s=>Number(s.sequence)>from&&Number(s.sequence)<=to);
         for(const s of stages){
-          const cost=number(s.materialCost);
+          const costRaw=String(s.materialCost??"").trim(),cost=number(s.materialCost);
           if(cost>0)qty+=cost/rate(s.successRate);
+          else if(costRaw&&costRaw!=="0")phaseMaterialsComplete=false;
           const names=splitMaterials(s);for(const n of names)if(!materials.includes(n))materials.push(n);
           const ev=number(s.elyCostMillions);
           if(ev>0)phaseEly+=ev/rate(s.successRate); else phaseElyComplete=false;
@@ -486,22 +487,23 @@
         qty=(to-from)*10;phaseElyComplete=false;
       }
       qty=Math.ceil(qty);totalMats+=qty;
+      if(!phaseMaterialsComplete)materialsComplete=false;
       if(phaseElyComplete)elyMillions+=phaseEly;else elyComplete=false;
-      rows.push({group,entry,from,to,qty,materials});
+      rows.push({group,entry,from,to,qty,materials,materialsComplete:phaseMaterialsComplete});
     }
-    return {groups,st,ci,ti,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,elyMillions,elyComplete};
+    return {groups,st,ci,ti,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,materialsComplete,elyMillions,elyComplete};
   }
   function evolutionChainCalculator(slot,key,title){
     const plan=evolutionPlan(slot,key);
     if(!plan)return unavailableCard(slot);
-    const {st,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,elyMillions,elyComplete}=plan;
+    const {st,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,materialsComplete,elyMillions,elyComplete}=plan;
     const currentLatest=currentGroup.id===latestSeriesId(slot);
     const targetLatest=targetGroup.id===latestSeriesId(slot);
     const materialRows=rows.length?rows.map((r,index)=>{
       const source=r.materials.length?r.materials.join(" + "):"Upgrade material";
       return `<div class="evolution-material-row">
         <span><small>${index+1}. ${esc(r.group.dungeonName||r.group.id)}</small><strong>${esc(r.entry.itemName)}</strong><em>${esc(source)}</em></span>
-        <b>${r.qty.toLocaleString()} matts</b>
+        <b>${r.materialsComplete?r.qty.toLocaleString()+" matts":"TBC"}</b>
         <small>+${r.from} → +${r.to}</small>
       </div>`;
     }).join(""):'<div class="evolution-material-empty">No upgrades required for the selected range.</div>';
@@ -525,9 +527,10 @@
         <small class="evolution-latest-note">Is latest: <strong>${targetLatest?"Yes":"No"}</strong></small>
       </div>
       <div class="evolution-material-list">
-        <div class="evolution-material-head"><span>Upgrade Material</span><strong>${st.maxed?"0":totalMats.toLocaleString()} matts total</strong></div>
+        <div class="evolution-material-head"><span>Upgrade Material</span><strong>${st.maxed?"0 matts total":(materialsComplete?totalMats.toLocaleString()+" matts total":totalMats.toLocaleString()+" known + TBC")}</strong></div>
         ${materialRows}
       </div>
+      ${slot==="badge_5"?'<div class="evolution-assumption-note">Older Badge 5 phases without <code>item_upgrade</code> rows assume <strong>10 matts per enhancement</strong>.</div>':""}
       <div class="evolution-ely-total">
         <span><small>Ely</small><strong>Total for selected path</strong></span>
         <b>${esc(elyText)}</b>

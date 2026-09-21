@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="dark light">
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=13.9.4.31">
   <title>LaTale Extra Tools · Item Upgrade Tracker</title>
-  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.90-battle-fix">
+  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.91-review-ready">
 </head>
 <body class="extra-tools-page item-upgrade-page">
   <header class="topbar">
@@ -52,12 +52,32 @@
     <div id="upgrade-tab-content" class="upgrade-tab-content" aria-live="polite"></div>
 
     <div class="upgrade-note">
-      Current sheet coverage is limited to the latest dungeon data available for each slot, up to SL8000-era entries. <strong>Totem, Pendant, and Badge 5 are shown as Data not available</strong> until their upgrade rows are added. Badge 6 uses the sheet's 70% success rate, so its calculator shows an expected material/run estimate rather than a guaranteed total.
+      Build v13.9.4.91 · Current sheet coverage is limited to the latest dungeon data available for each slot, up to SL8000-era entries. <strong>Totem, Pendant, and Badge 5 are shown as Data not available</strong> until their upgrade rows are added. Badge 6 uses the sheet's 70% success rate, so its calculator shows an expected material/run estimate rather than a guaranteed total.
     </div>
   </main>
 
   <script src="assets/global-header.js?v=13.9.4.85-soft-ex"></script>
-  <script src="assets/item-upgrade-data.js?v=13.9.4.89-gems"></script>
-  <script src="assets/item-upgrade.js?v=13.9.4.90-battle-fix"></script>
+  <script>
+    (() => {
+      const stamp=Date.now();
+      const load=(src)=>new Promise((resolve,reject)=>{
+        const s=document.createElement("script");
+        s.src=src;
+        s.onload=resolve;
+        s.onerror=()=>reject(new Error("Failed to load "+src));
+        document.body.appendChild(s);
+      });
+      (async()=>{
+        try{
+          await load(`assets/item-upgrade-data.js?ts=${stamp}`);
+          await load(`assets/item-upgrade.js?ts=${stamp}`);
+        }catch(error){
+          console.error(error);
+          const root=document.getElementById("upgrade-tab-content");
+          if(root) root.innerHTML='<div class="upgrade-render-error"><strong>Tracker failed to load.</strong><span>Please refresh once. The page is configured to bypass cached Item Upgrade files.</span></div>';
+        }
+      })();
+    })();
+  </script>
 </body>
 </html>

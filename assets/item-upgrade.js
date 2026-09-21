@@ -573,10 +573,7 @@
     const {group,entry,state:st}=sel;
     const item=upgradeItemFor(entry);
     const latest=group.id===latestSeriesId(slot);
-    if(item){
-      const target=ensureTargets(slot,key,item,entry);
-      st.target=target.max;
-    }
+    if(item)ensureTargets(slot,key,item,entry);
     const req=item?requirements(slot,key,item,entry):null;
     return `<article class="battle-item-card special-item-card ${st.maxed?"maxed":""}">
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
@@ -586,8 +583,9 @@
       ${item?.progressionType==="evolve"?`<div class="special-rule-note evolve-rule-note"><strong>Evolution progression</strong><span>This series evolves level-by-level rather than changing Battle tiers.</span><small>The tracker follows <code>stage_sequence</code> from +1 through the final evolution level.</small></div>`:""}
       ${!item?missingUpgradeCopy(latest):`
         ${item.progressionType==="evolve"?evolveProgressSummary(item,key,req):""}
-        <div class="special-current-stage">
+        <div class="battle-stage-pair special-stage-pair">
           <label class="battle-field"><span>${item.progressionType==="evolve"?"Current evolution":"Current stage"}</span>${stageSelect(item,entry,key,"current")}</label>
+          <label class="battle-field"><span>${item.progressionType==="evolve"?"Target evolution":"Target stage"}</span>${stageSelect(item,entry,key,"target")}</label>
         </div>
         <div class="battle-materials special-materials">${gemMaterialRows(key,req)}</div>
         ${item.syntheticRule==="badge6_copy_70"

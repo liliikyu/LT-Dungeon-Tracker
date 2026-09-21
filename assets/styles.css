@@ -3297,3 +3297,28 @@ body.conquest-modal-open{overflow:hidden}
   }
   .battle-material-row input{width:82px;}
 }
+
+
+/* v13.9.4.96 — Battle material sizing tweak */
+.battle-material-name{
+  font-size:11px;
+  font-weight:400;
+}
+.battle-materials{
+  grid-template-columns:minmax(0,1fr) 54px 138px;
+}
+.battle-material-row input{
+  width:54px;
+}
+@media(max-width:1180px){
+  .battle-materials{
+    grid-template-columns:minmax(0,1fr) 50px 124px;
+  }
+  .battle-material-row input{width:50px;}
+}
+@media(max-width:560px){
+  .battle-materials{
+    grid-template-columns:minmax(0,1fr) 48px;
+  }
+  .battle-material-row input{width:48px;}
+}

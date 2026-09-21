@@ -567,10 +567,12 @@
         </div>
         <small class="evolution-latest-note">Is latest: <strong>${targetLatest?"Yes":"No"}</strong></small>
       </div>
-      <div class="evolution-material-list">
-        <div class="evolution-material-head"><span>Upgrade Material</span><strong>${st.maxed?"0 matts total":(materialsComplete?totalMats.toLocaleString()+" matts total":totalMats.toLocaleString()+" known + TBC")}</strong></div>
-        ${materialRows}
-      </div>
+      <details class="evolution-material-details">
+        <summary class="evolution-material-head"><span>Upgrade Material</span><strong>${st.maxed?"0 matts total":(materialsComplete?totalMats.toLocaleString()+" matts total":totalMats.toLocaleString()+" known + TBC")}</strong></summary>
+        <div class="evolution-material-list">
+          ${materialRows}
+        </div>
+      </details>
       ${slot==="badge_5"?'<div class="evolution-assumption-note">Older Badge 5 phases without <code>item_upgrade</code> rows assume <strong>10 matts per enhancement</strong>.</div>':""}
       <div class="evolution-ely-total">
         <span><small>Ely</small><strong>Total for selected path</strong></span>

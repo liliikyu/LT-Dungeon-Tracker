@@ -3922,3 +3922,23 @@ body.conquest-modal-open{overflow:hidden}
     grid-column:1;
   }
 }
+
+
+/* v13.9.4.104 — Specials skeleton */
+.special-current-stage{
+  padding:9px 10px 0;
+}
+.special-current-stage .battle-field{
+  width:100%;
+}
+.special-current-stage .battle-field select{
+  width:100%;
+}
+.specials-card-grid .upgrade-calc-card.unavailable{
+  min-height:120px;
+}
+@media(max-width:760px){
+  .special-current-stage{
+    padding:10px 12px 0;
+  }
+}

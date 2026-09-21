@@ -394,6 +394,22 @@
     return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(stageMaterialEntries(s).length?stageMaterialEntries(s).map(m=>m.name+": "+m.cost.toLocaleString()).join(" · "):(s.materialCost||"—"))}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
   }
 
+  function specialDetailTable(item,entry){
+    const stages=stagesFor(item,entry);
+    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>{
+      const materials=stageMaterialEntries(s);
+      const qty=materials.length
+        ? materials.map(m=>{
+            const raw=Array.isArray(s.materials)
+              ? s.materials.find(x=>String(x.name||"").trim()===String(m.name||"").trim())?.cost
+              : null;
+            return String(raw??m.cost??"").trim()||"—";
+          }).join(" / ")
+        : (String(s.materialCost||"").trim()||"—");
+      return `<tr><td>${esc(stageName(item,s))}</td><td>${esc(qty)}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`;
+    }).join("")}</tbody></table></div>`;
+  }
+
   function gemCalculator(slot,key,title,mode){
     const sel=selectedEntry(slot,key);
     if(!sel)return `<article class="battle-item-card unavailable"><header class="battle-item-head"><strong>${esc(title)}</strong></header><div class="upgrade-unavailable-copy">No gem series found in dungeon_drop.</div></article>`;
@@ -707,7 +723,7 @@
         ${item.syntheticRule==="badge6_copy_70"
           ?`<div class="battle-estimate"><span>Expected attempts</span><strong>≈${Math.ceil(req.rawTotal)} attempts</strong><small>Based on 70% success; actual attempts may vary.</small></div>`
           :`<div class="battle-estimate"><span>${item.progressionType==="evolve"?"Estimated runs to max":"Estimated runs"}</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>`}
-        ${mode==="detailed"?gemDetailTable(item,entry):""}
+        ${mode==="detailed"?specialDetailTable(item,entry):""}
       `}
     </article>`;
   }

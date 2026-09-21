@@ -426,6 +426,116 @@
     </div>`;
   }
 
+  function evolutionGroups(slot){
+    return seriesGroups(slot).slice().sort((a,b)=>dungeonNum(a.id)-dungeonNum(b.id));
+  }
+  function evolutionPhaseMax(slot,entry){
+    const item=upgradeItemFor(entry);
+    if(item){
+      const stages=stagesFor(item,entry);
+      const max=Math.max(0,...stages.map(s=>Number(s.sequence)||0));
+      if(max>0)return max;
+    }
+    return slot==="badge_5"?30:slot==="totem"?50:0;
+  }
+  function evolutionDungeonSelect(slot,key,kind,selectedId,disabled){
+    const groups=evolutionGroups(slot);
+    return `<select class="evolution-${kind}-series" data-key="${esc(key)}" ${disabled?"disabled":""}>${groups.map(g=>`<option value="${esc(g.id)}" ${g.id===selectedId?"selected":""}>${esc(g.dungeonName||g.id)} · ${esc(g.entries[0]?.itemName||"")}</option>`).join("")}</select>`;
+  }
+  function evolutionLevelSelect(slot,key,kind,entry,value,disabled){
+    const max=evolutionPhaseMax(slot,entry);
+    const opts=Array.from({length:max+1},(_,i)=>`<option value="${i}" ${Number(value)===i?"selected":""}>+${i}</option>`).join("");
+    return `<select class="evolution-${kind}-level" data-key="${esc(key)}" ${disabled?"disabled":""}>${opts}</select>`;
+  }
+  function evolutionPlan(slot,key){
+    const groups=evolutionGroups(slot),st=getState(key);
+    if(!groups.length)return null;
+    if(!st.currentSeriesId||!groups.some(g=>g.id===st.currentSeriesId))st.currentSeriesId=groups[0].id;
+    if(!st.targetSeriesId||!groups.some(g=>g.id===st.targetSeriesId))st.targetSeriesId=groups[groups.length-1].id;
+    let ci=groups.findIndex(g=>g.id===st.currentSeriesId),ti=groups.findIndex(g=>g.id===st.targetSeriesId);
+    if(ci<0)ci=0;if(ti<ci){ti=ci;st.targetSeriesId=groups[ti].id;}
+    const currentGroup=groups[ci],targetGroup=groups[ti];
+    const currentEntry=currentGroup.entries[0],targetEntry=targetGroup.entries[0];
+    const currentMax=evolutionPhaseMax(slot,currentEntry),targetMax=evolutionPhaseMax(slot,targetEntry);
+    st.current=Math.max(0,Math.min(Number(st.current)||0,currentMax));
+    if(st.target===0&&ti===groups.length-1)st.target=targetMax;
+    st.target=Math.max(0,Math.min(Number(st.target)||0,targetMax));
+    if(ci===ti&&st.target<st.current)st.target=st.current;
+
+    const rows=[];let elyMillions=0,elyComplete=true,totalMats=0;
+    for(let i=ci;i<=ti;i++){
+      const group=groups[i],entry=group.entries[0],item=upgradeItemFor(entry);
+      const max=evolutionPhaseMax(slot,entry);
+      const from=i===ci?st.current:0;
+      const to=i===ti?st.target:max;
+      if(to<=from)continue;
+      let qty=0,phaseEly=0,phaseElyComplete=true,materials=[];
+      if(item){
+        const stages=stagesFor(item,entry).filter(s=>Number(s.sequence)>from&&Number(s.sequence)<=to);
+        for(const s of stages){
+          const cost=number(s.materialCost);
+          if(cost>0)qty+=cost/rate(s.successRate);
+          const names=splitMaterials(s);for(const n of names)if(!materials.includes(n))materials.push(n);
+          const ev=number(s.elyCostMillions);
+          if(ev>0)phaseEly+=ev/rate(s.successRate); else phaseElyComplete=false;
+        }
+        if(!stages.length){
+          const steps=to-from;qty=steps*10;phaseElyComplete=false;
+        }
+      }else{
+        qty=(to-from)*10;phaseElyComplete=false;
+      }
+      qty=Math.ceil(qty);totalMats+=qty;
+      if(phaseElyComplete)elyMillions+=phaseEly;else elyComplete=false;
+      rows.push({group,entry,from,to,qty,materials});
+    }
+    return {groups,st,ci,ti,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,elyMillions,elyComplete};
+  }
+  function evolutionChainCalculator(slot,key,title){
+    const plan=evolutionPlan(slot,key);
+    if(!plan)return unavailableCard(slot);
+    const {st,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,elyMillions,elyComplete}=plan;
+    const currentLatest=currentGroup.id===latestSeriesId(slot);
+    const targetLatest=targetGroup.id===latestSeriesId(slot);
+    const materialRows=rows.length?rows.map((r,index)=>{
+      const source=r.materials.length?r.materials.join(" + "):"Upgrade material";
+      return `<div class="evolution-material-row">
+        <span><small>${index+1}. ${esc(r.group.dungeonName||r.group.id)}</small><strong>${esc(r.entry.itemName)}</strong><em>${esc(source)}</em></span>
+        <b>${r.qty.toLocaleString()} matts</b>
+        <small>+${r.from} → +${r.to}</small>
+      </div>`;
+    }).join(""):'<div class="evolution-material-empty">No upgrades required for the selected range.</div>';
+    const elyText=st.maxed?"0":(rows.length&&elyComplete?formatElyMillions(elyMillions):"—");
+    return `<article class="battle-item-card special-item-card evolution-chain-card ${st.maxed?"maxed":""}">
+      <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
+      <div class="evolution-stage-block">
+        <span class="evolution-stage-title">Current stage</span>
+        <div class="evolution-stage-controls">
+          <label class="battle-field"><span>${esc(title)} Dungeon</span>${evolutionDungeonSelect(slot,key,"current",currentGroup.id,st.maxed)}</label>
+          <label class="battle-field"><span>Enhancement level</span>${evolutionLevelSelect(slot,key,"current",currentEntry,st.current,st.maxed)}</label>
+        </div>
+        <small class="evolution-latest-note">Is latest: <strong>${currentLatest?"Yes":"No"}</strong></small>
+      </div>
+      <div class="evolution-stage-block">
+        <span class="evolution-stage-title">Target stage</span>
+        <div class="evolution-stage-controls">
+          <label class="battle-field"><span>${esc(title)} Dungeon</span>${evolutionDungeonSelect(slot,key,"target",targetGroup.id,st.maxed)}</label>
+          <label class="battle-field"><span>Enhancement level</span>${evolutionLevelSelect(slot,key,"target",targetEntry,st.target,st.maxed)}</label>
+        </div>
+        <small class="evolution-latest-note">Is latest: <strong>${targetLatest?"Yes":"No"}</strong></small>
+      </div>
+      <div class="evolution-material-list">
+        <div class="evolution-material-head"><span>Upgrade Material</span><strong>${st.maxed?"0":totalMats.toLocaleString()} matts total</strong></div>
+        ${materialRows}
+      </div>
+      <div class="evolution-ely-total">
+        <span><small>Ely</small><strong>Total for selected path</strong></span>
+        <b>${esc(elyText)}</b>
+        ${!elyComplete&&rows.length?'<small>Ely data is not supplied for every selected evolution phase.</small>':""}
+      </div>
+    </article>`;
+  }
+
   function specialCalculator(slot,key,title,mode){
     const sel=selectedEntry(slot,key);
     if(!sel)return `<article class="battle-item-card unavailable"><header class="battle-item-head"><strong>${esc(title)}</strong></header><div class="upgrade-unavailable-copy">No item series found in dungeon_drop.</div></article>`;
@@ -462,6 +572,7 @@
     return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="battle-three-grid specials-card-grid">${slots.map(slot=>{
       if(slot==="pendant") return unavailableCard(slot);
       const title=labels[slot]||slot;
+      if(slot==="totem"||slot==="badge_5")return seriesGroups(slot).length?evolutionChainCalculator(slot,"special:"+slot,title):unavailableCard(slot);
       return seriesGroups(slot).length?specialCalculator(slot,"special:"+slot,title,mode):unavailableCard(slot);
     }).join("")}</div></section>`;
   }
@@ -516,6 +627,20 @@
     const el=event.target;
     if(el.id==="battle-second-weapon-toggle"){state["battle:weapon2Enabled"]=el.checked;saveState();render();return;}
     const key=el.dataset?.key;if(!key)return;const st=getState(key);
+    if(el.classList.contains("evolution-current-series")){
+      st.currentSeriesId=el.value;st.current=0;st.mats={};
+      const groups=evolutionGroups(key.endsWith("totem")?"totem":"badge_5");
+      const ci=groups.findIndex(g=>g.id===st.currentSeriesId),ti=groups.findIndex(g=>g.id===st.targetSeriesId);
+      if(ti<ci){st.targetSeriesId=st.currentSeriesId;st.target=0;}
+    }
+    if(el.classList.contains("evolution-target-series")){
+      st.targetSeriesId=el.value;st.target=0;st.mats={};
+      const groups=evolutionGroups(key.endsWith("totem")?"totem":"badge_5");
+      const ci=groups.findIndex(g=>g.id===st.currentSeriesId),ti=groups.findIndex(g=>g.id===st.targetSeriesId);
+      if(ti<ci){st.currentSeriesId=st.targetSeriesId;st.current=0;}
+    }
+    if(el.classList.contains("evolution-current-level"))st.current=Number(el.value)||0;
+    if(el.classList.contains("evolution-target-level"))st.target=Number(el.value)||0;
     if(el.classList.contains("battle-series-select")){
       st.seriesId=el.value;st.typeIndex=0;st.current=0;st.target=0;st.mats={};
       if(key==="gems:red"){

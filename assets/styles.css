@@ -3149,3 +3149,39 @@ body.conquest-modal-open{overflow:hidden}
   color:var(--muted);
   font-size:10px;
 }
+
+
+/* v13.9.4.92 — Gems calculator refinement */
+.gem-material-row .battle-material-name{
+  display:grid;
+  gap:1px;
+}
+.gem-material-row .battle-material-name small{
+  color:var(--muted);
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.gem-ely-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:2px 8px;
+  align-items:center;
+  padding-top:5px;
+  border-top:1px dashed var(--line-soft);
+}
+.gem-ely-row span{
+  color:var(--muted);
+  font-size:9.5px;
+  font-weight:750;
+}
+.gem-ely-row strong{
+  color:var(--text);
+  font-size:10.5px;
+}
+.gem-ely-row small{
+  grid-column:1/-1;
+  color:var(--muted);
+  font-size:8.5px;
+}

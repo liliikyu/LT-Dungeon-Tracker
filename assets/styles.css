@@ -4192,3 +4192,14 @@ body.conquest-modal-open{overflow:hidden}
 @media(max-width:760px){
   .evolution-assumption-note{margin:8px 12px 0;}
 }
+
+
+/* v13.9.4.115 — tighten Totem and Badge 5 card width */
+.evolution-chain-card{
+  grid-column:span 1;
+}
+@media(max-width:1050px){
+  .evolution-chain-card{
+    grid-column:span 1;
+  }
+}

@@ -3823,3 +3823,102 @@ body.conquest-modal-open{overflow:hidden}
     grid-template-columns:1fr;
   }
 }
+
+
+/* v13.9.4.103 — standardize Specials/Gems and maxed state */
+/* Specials now share the same card/body language as Gems. */
+.special-source-line{
+  padding:7px 10px 0;
+  color:var(--muted);
+  font-size:10px;
+}
+.special-materials,
+.gem-materials{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+}
+.specials-card-grid{
+  align-items:start;
+}
+
+/* MAXED behaves like a completed tracker row: everything remains visible but subdued. */
+.battle-item-card.maxed{
+  background:color-mix(in srgb,var(--panel) 92%,var(--line) 8%);
+}
+.battle-item-card.maxed .battle-item-head{
+  background:color-mix(in srgb,var(--panel-2) 90%,var(--line) 10%);
+}
+.battle-item-card.maxed .battle-field,
+.battle-item-card.maxed .battle-latest-line,
+.battle-item-card.maxed .battle-type-row,
+.battle-item-card.maxed .battle-materials,
+.battle-item-card.maxed .battle-estimate,
+.battle-item-card.maxed .special-source-line,
+.battle-item-card.maxed .upgrade-detail-table-wrap{
+  opacity:.55;
+}
+.battle-item-card.maxed input:disabled,
+.battle-item-card.maxed select:disabled{
+  cursor:not-allowed;
+}
+.battle-item-card.maxed .battle-maxed{
+  opacity:1;
+}
+
+/* Gem rows use the exact same material structure as Battle/Specials. */
+.gem-material-row .battle-material-name{
+  display:grid;
+  gap:1px;
+}
+.gem-material-row .battle-material-name small{
+  color:var(--muted);
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.gem-ely-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 96px 138px;
+  gap:8px;
+  align-items:center;
+  padding:8px 0;
+  border-top:0;
+}
+.gem-ely-row .battle-material-name{
+  display:grid;
+  gap:1px;
+}
+.gem-ely-row .battle-material-name small{
+  color:var(--muted);
+  font-size:8px;
+  font-weight:800;
+  text-transform:none;
+  letter-spacing:0;
+}
+.gem-ely-row strong{
+  font-size:var(--upgrade-body-size);
+  font-weight:400;
+}
+.gem-ely-row .battle-material-total{
+  grid-column:auto;
+}
+
+@media(max-width:1180px){
+  .gem-ely-row{
+    grid-template-columns:minmax(0,1fr) 88px 124px;
+  }
+}
+@media(max-width:760px){
+  .gem-ely-row{
+    grid-template-columns:minmax(0,1fr) 88px auto;
+    gap:6px 10px;
+  }
+  .gem-ely-row .battle-material-name{
+    grid-column:1/-1;
+  }
+  .gem-ely-row strong{
+    grid-column:1;
+  }
+}

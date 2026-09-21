@@ -3386,3 +3386,215 @@ body.conquest-modal-open{overflow:hidden}
   }
   .battle-material-row input{width:52px;}
 }
+
+
+/* v13.9.4.98 — responsive Item Upgrade layout */
+/* Desktop/tablet keeps the current dense layout; narrow screens switch to a deliberate stacked mobile layout. */
+@media(max-width:760px){
+  .extra-tools-page .topbar-inner{
+    height:auto;
+    min-height:54px;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    padding-block:6px;
+  }
+  .extra-tools-page .brand{
+    flex:1 1 auto;
+    min-width:0;
+  }
+  .extra-tools-page .brand small{
+    display:none;
+  }
+  .extra-tools-page .extra-tools-nav{
+    order:2;
+    margin-left:0;
+    flex:1 1 auto;
+  }
+  .extra-tools-page .extra-back-link{
+    white-space:nowrap;
+  }
+  .extra-tools-page .topbar-actions{
+    order:3;
+    flex:0 0 auto;
+    margin-left:auto;
+  }
+  .extra-tools-page .topbar-actions .result-count{
+    display:none;
+  }
+
+  .upgrade-page{
+    padding-top:10px;
+  }
+  .upgrade-hero{
+    gap:10px;
+    padding:12px;
+  }
+  .upgrade-hero h1{
+    font-size:18px;
+  }
+  .upgrade-hero p{
+    font-size:11px;
+  }
+  .upgrade-mode-switch{
+    align-self:flex-start;
+  }
+
+  .upgrade-game-tabs{
+    width:100%;
+  }
+  .upgrade-game-tab{
+    min-width:0;
+    flex:1 1 0;
+    padding-inline:8px;
+  }
+  .upgrade-info-strip{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:5px;
+  }
+
+  .battle-section>summary{
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:8px;
+    align-items:start;
+  }
+  .battle-section-title{
+    white-space:normal;
+  }
+  .battle-preview{
+    grid-column:1 / -1;
+    order:3;
+    width:100%;
+    align-items:flex-start;
+    flex-direction:column;
+    gap:5px;
+  }
+  .battle-preview-items{
+    gap:4px 10px;
+  }
+  .battle-preview-overall{
+    margin-left:0;
+    gap:12px;
+  }
+
+  .battle-two-grid,
+  .battle-three-grid{
+    grid-template-columns:1fr;
+  }
+  .battle-armor-second-row{
+    margin-top:10px;
+  }
+
+  .battle-item-card{
+    width:100%;
+  }
+  .battle-item-head{
+    padding:10px 12px;
+  }
+  .battle-item-head strong{
+    font-size:12.5px;
+  }
+  .battle-field.full{
+    padding:10px 12px 0;
+  }
+  .battle-latest-line{
+    padding:6px 12px 0;
+  }
+  .battle-stage-pair{
+    grid-template-columns:1fr;
+    gap:8px;
+    padding:10px 12px 0;
+  }
+  .battle-field select,
+  .battle-field input{
+    height:36px;
+    font-size:11.5px;
+  }
+  .battle-field>span{
+    font-size:11px;
+  }
+
+  .battle-materials,
+  .battle-two-grid .battle-materials{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    padding:12px;
+  }
+  .battle-material-row,
+  .battle-ely-row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:6px 10px;
+    align-items:center;
+  }
+  .battle-material-name{
+    grid-column:1 / -1;
+    font-size:10.5px;
+    line-height:1.35;
+  }
+  .battle-material-row input{
+    grid-column:1;
+    width:88px;
+    height:32px;
+    justify-self:start;
+  }
+  .battle-material-total{
+    grid-column:2;
+    justify-self:start;
+    font-size:10px;
+    white-space:normal;
+  }
+  .battle-ely-row strong{
+    grid-column:1;
+    justify-self:start;
+  }
+  .battle-ely-row .battle-material-total{
+    grid-column:2;
+  }
+  .battle-material-row.ascension{
+    padding-top:0;
+    border-top:0;
+  }
+
+  .battle-estimate{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:4px;
+    padding:0 12px 12px;
+  }
+  .battle-estimate strong{
+    min-height:34px;
+    width:100%;
+  }
+
+  .upgrade-detail-table-wrap{
+    -webkit-overflow-scrolling:touch;
+  }
+  .upgrade-detail-table{
+    min-width:520px;
+  }
+
+  .upgrade-note{
+    font-size:10px;
+  }
+}
+
+@media(min-width:761px) and (max-width:1180px){
+  .battle-two-grid{
+    grid-template-columns:1fr;
+  }
+  .battle-three-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(min-width:1181px){
+  .battle-two-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .battle-three-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}

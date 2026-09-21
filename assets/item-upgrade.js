@@ -154,20 +154,21 @@
   }
   function detailTable(item,entry){
     const stages=stagesFor(item,entry);
-    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material(s)</th><th>Each</th><th>Ascension Stone</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(splitMaterials(s).join(" + ")||"—")}</td><td>${esc(s.materialCost||"—")}</td><td>${esc(s.ascensionStoneCost&&number(s.ascensionStoneCost)>0?(s.ascensionStoneName||"Ascension Stone")+" × "+s.ascensionStoneCost:"—")}</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ascension Stone</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(s.materialCost||"—")}</td><td>${s.ascensionStoneCost&&number(s.ascensionStoneCost)>0?esc(s.ascensionStoneCost):"—"}</td><td>—</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
   }
   function materialRows(key,req){
     const st=getState(key),rows=[];
     for(const [name,requiredRaw] of Object.entries(req.mats)){
       const required=Math.ceil(requiredRaw),owned=Math.max(0,Number(st.mats?.[name])||0),remaining=Math.max(0,required-owned);
-      rows.push(`<div class="battle-material-row"><span class="battle-material-name">${esc(name)}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}"><span class="battle-material-total">/ ${required.toLocaleString()} <small>${remaining.toLocaleString()} remaining</small></span></div>`);
+      rows.push(`<div class="battle-material-row"><span class="battle-material-name">${esc(name)}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}"><span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span></div>`);
     }
     if(req.stoneName||req.stoneRequired>0){
       const owned=Math.max(0,Number(st.mats?.["__stone"])||0),remaining=Math.max(0,req.stoneRequired-owned);
-      rows.push(`<div class="battle-material-row ascension"><span class="battle-material-name">${esc(req.stoneName||"Ascension Stone")}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="__stone" value="${esc(owned)}"><span class="battle-material-total">/ ${req.stoneRequired.toLocaleString()} <small>${remaining.toLocaleString()} remaining</small></span></div>`);
+      rows.push(`<div class="battle-material-row ascension"><span class="battle-material-name">${esc(req.stoneName||"Ascension Stone")}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="__stone" value="${esc(owned)}"><span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span></div>`);
     }else{
-      rows.push(`<div class="battle-material-row ascension muted"><span class="battle-material-name">Ascension Stone</span><input type="number" value="0" disabled><span class="battle-material-total">/ 0</span></div>`);
+      rows.push(`<div class="battle-material-row ascension muted"><span class="battle-material-name">Ascension Stone</span><input type="number" value="0" disabled><span class="battle-material-total">/ 0 remaining</span></div>`);
     }
+    rows.push('<div class="battle-ely-row"><span class="battle-material-name">Ely</span><strong>—</strong><span class="battle-material-total">Not supplied in item_upgrade</span></div>');
     return rows.join("");
   }
   function battleCalculator(slot,key,title,mode,opts={}){
@@ -180,7 +181,7 @@
     return `<article class="battle-item-card ${maxed?"maxed":""}">
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select ${esc(opts.seriesLabel||title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
-      <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong>${entry.dungeonName?` · ${esc(entry.dungeonName)}`:""}</div>
+      <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
       ${opts.showTypes?typeChoices(group,key,st):""}
       ${!item?`<div class="upgrade-unavailable-copy"><strong>Upgrade stage data not available for this series.</strong><br>The series comes from <code>dungeon_drop</code>, but no matching rows are currently available in <code>item_upgrade</code>.</div>`:`
         <div class="battle-stage-pair">

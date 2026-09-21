@@ -610,7 +610,7 @@
   }
 
   function renderSpecials(mode){
-    const slots=["charm","relic","watch","necklace","textbook","sticker","belt","brooch","pendant","badge_1","badge_2","badge_3","badge_4","badge_6","totem","badge_5"];
+    const slots=["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","pendant","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"];
     return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="battle-three-grid specials-card-grid">${slots.map(slot=>{
       if(slot==="pendant") return unavailableCard(slot);
       const title=labels[slot]||slot;

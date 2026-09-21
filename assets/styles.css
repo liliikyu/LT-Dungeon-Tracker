@@ -4203,3 +4203,9 @@ body.conquest-modal-open{overflow:hidden}
     grid-column:span 1;
   }
 }
+
+
+/* v13.9.4.121 — expand Totem and Badge 5 evolution cards */
+.specials-card-grid .evolution-chain-card{
+  grid-column:1 / -1;
+}

@@ -4349,3 +4349,45 @@ body.conquest-modal-open{overflow:hidden}
     white-space:normal;
   }
 }
+
+
+/* v13.9.4.129 — selected-path material total */
+.evolution-material-total{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:3px 10px;
+  align-items:center;
+  margin:8px 10px 0;
+  padding:9px 10px;
+  border:1px solid var(--line-soft);
+  border-radius:7px;
+  background:var(--panel-2);
+}
+.evolution-material-total>span{
+  display:grid;
+  gap:1px;
+}
+.evolution-material-total>span small{
+  color:var(--muted);
+  font-size:8.5px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.evolution-material-total>span strong,
+.evolution-material-total>b{
+  color:var(--text);
+  font-size:10.5px;
+}
+.evolution-material-total>small{
+  grid-column:1/-1;
+  color:var(--muted);
+  font-size:8.5px;
+}
+.battle-item-card.maxed .evolution-material-total{
+  opacity:.55;
+}
+@media(max-width:760px){
+  .evolution-material-total{
+    margin:8px 12px 0;
+  }
+}

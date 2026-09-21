@@ -4225,3 +4225,50 @@ body.conquest-modal-open{overflow:hidden}
 .evolution-material-details .evolution-material-list{
   padding:0 10px;
 }
+
+
+/* v13.9.4.127 — evolution material rows match standard material controls */
+.evolution-material-row{
+  display:block;
+  padding:9px 0;
+}
+.evolution-material-copy{
+  display:grid;
+  gap:6px;
+}
+.evolution-material-copy>strong{
+  color:var(--text);
+  font-size:10px;
+}
+.evolution-phase-material{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 88px auto;
+  gap:8px;
+  align-items:center;
+}
+.evolution-phase-material-name{
+  color:var(--muted);
+  font-size:9px;
+  overflow-wrap:anywhere;
+}
+.evolution-material-input{
+  width:88px;
+  min-width:0;
+}
+.evolution-phase-remaining{
+  color:var(--muted);
+  font-size:9px;
+  white-space:nowrap;
+}
+.evolution-range-detail{
+  color:var(--muted);
+  font-size:8.5px;
+}
+@media(max-width:760px){
+  .evolution-phase-material{
+    grid-template-columns:minmax(0,1fr) 82px;
+  }
+  .evolution-phase-remaining{
+    grid-column:1/-1;
+  }
+}

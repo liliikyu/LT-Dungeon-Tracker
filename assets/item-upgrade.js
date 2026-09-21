@@ -159,13 +159,26 @@
   function splitMaterials(stage){return String(stage?.materialName||"").split(",").map(x=>x.trim()).filter(Boolean);}
   function stageMaterialEntries(stage){
     if(Array.isArray(stage?.materials)&&stage.materials.length){
-      return stage.materials
-        .map((m,i)=>({
-          sequence:Number(m.sequence)||i+1,
-          name:String(m.name||"").trim()||("Material "+(Number(m.sequence)||i+1)),
-          cost:number(m.cost)
-        }))
-        .sort((a,b)=>a.sequence-b.sequence);
+      const expanded=[];
+      stage.materials.forEach((m,i)=>{
+        const seq=Number(m.sequence)||i+1;
+        const rawName=String(m.name||"").trim();
+        const names=rawName.split(",").map(v=>v.trim()).filter(Boolean);
+        if(names.length>1){
+          names.forEach(name=>expanded.push({
+            sequence:expanded.length+1,
+            name,
+            cost:number(m.cost)
+          }));
+        }else{
+          expanded.push({
+            sequence:seq,
+            name:rawName||("Material "+seq),
+            cost:number(m.cost)
+          });
+        }
+      });
+      return expanded.sort((a,b)=>a.sequence-b.sequence);
     }
     const names=splitMaterials(stage),cost=number(stage?.materialCost);
     if(names.length)return names.map((name,i)=>({sequence:i+1,name,cost}));

@@ -6,9 +6,9 @@
   <meta name="color-scheme" content="dark light">
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=13.9.4.31">
   <title>LaTale Extra Tools · Item Upgrade Tracker</title>
-  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.85-soft-ex">
+  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.87-upgrade-tracker">
 </head>
-<body class="extra-tools-page">
+<body class="extra-tools-page item-upgrade-page">
   <header class="topbar">
     <div class="shell topbar-inner">
       <a class="brand" href="item-upgrade.html" aria-label="LaTale Extra Tools">
@@ -19,43 +19,45 @@
         <a class="extra-back-link" href="fields.html">← Illustration Book</a>
       </nav>
       <div class="topbar-actions">
-        <span class="result-count">Draft</span>
+        <span class="result-count">Item Upgrade</span>
         <button id="theme-toggle" class="icon-button" type="button" aria-label="Theme: System. Click to switch theme." title="Theme: System">◐</button>
       </div>
     </div>
   </header>
 
-  <main class="shell upgrade-draft-page">
+  <main class="shell upgrade-page">
     <section class="upgrade-hero">
       <div>
         <h1>Item Upgrade Tracker</h1>
-        <p>First draft focused on <strong>Weapons</strong> and <strong>Accessories</strong>. The final tracker will sync from the <code>item_upgrade</code> tab in LT Boss Matts Tracker.</p>
+        <p>Tracks the latest dungeon upgrade paths by equipment slot using the <strong>item_upgrade</strong> tab from LT Boss Matts Tracker.</p>
       </div>
-      <span class="upgrade-draft-badge">Draft · Weapons + Accessories</span>
+      <div class="upgrade-mode-switch" role="group" aria-label="Display mode">
+        <button id="upgrade-mode-simple" class="active" type="button" aria-pressed="true">Simplified</button>
+        <button id="upgrade-mode-detailed" type="button" aria-pressed="false">Detailed</button>
+      </div>
     </section>
 
-    <section class="upgrade-toolbar" aria-label="Item upgrade filters">
-      <input id="upgrade-search" type="search" placeholder="Search item or material…" autocomplete="off">
-      <select id="upgrade-category" aria-label="Category">
-        <option value="all">Weapons + Accessories</option>
-        <option value="weapon">Weapons</option>
-        <option value="accessory">Accessories</option>
-      </select>
-      <select id="upgrade-progression" aria-label="Progression type">
-        <option value="all">All progression</option>
-        <option value="tier">Tier upgrades</option>
-        <option value="enhancement">Enhancement</option>
-      </select>
+    <nav class="upgrade-game-tabs" role="tablist" aria-label="Upgrade category">
+      <button class="upgrade-game-tab active" data-upgrade-tab="battle" role="tab" aria-selected="true">Battle</button>
+      <button class="upgrade-game-tab" data-upgrade-tab="specials" role="tab" aria-selected="false">Specials</button>
+      <button class="upgrade-game-tab" data-upgrade-tab="gems" role="tab" aria-selected="false">Gems</button>
+    </nav>
+
+    <section class="upgrade-info-strip">
+      <span><strong>Tier:</strong> Eminent → Radiant → Immortal → Mythic → Ethereal → Lucent <span class="muted-inline">(Ascended where available)</span></span>
+      <span><strong>Enhancement:</strong> +0 → max</span>
+      <span><strong>Run estimate:</strong> assumes 90–150 materials per run</span>
     </section>
 
-    <section id="upgrade-grid" class="upgrade-grid" aria-live="polite"></section>
+    <div id="upgrade-tab-content" class="upgrade-tab-content" aria-live="polite"></div>
 
     <div class="upgrade-note">
-      <strong>Draft behavior:</strong> cards are laid out around the Google Sheet fields <code>item_name</code>, <code>progression_type</code>, <code>stage_sequence</code>, <code>stage_name</code>, <code>material_cost_per_piece</code>, <code>material_name</code>, <code>ascension_stone_per_piece</code>, and <code>ascension_stone_name</code>. Next step is wiring the page to generated data from the <code>item_upgrade</code> tab rather than keeping sample rows in the page script.
+      Current sheet coverage is limited to the latest dungeon data available for each slot, up to SL8000-era entries. <strong>Totem, Pendant, and Badge 5 are shown as Data not available</strong> until their upgrade rows are added. Badge 6 uses the sheet's 70% success rate, so its calculator shows an expected material/run estimate rather than a guaranteed total.
     </div>
   </main>
 
   <script src="assets/global-header.js?v=13.9.4.85-soft-ex"></script>
-  <script src="assets/item-upgrade.js?v=13.9.4.84-draft"></script>
+  <script src="assets/item-upgrade-data.js?v=13.9.4.87"></script>
+  <script src="assets/item-upgrade.js?v=13.9.4.87-calculator"></script>
 </body>
 </html>

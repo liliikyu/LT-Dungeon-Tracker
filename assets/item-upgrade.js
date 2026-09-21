@@ -54,6 +54,21 @@
     if(type==="red_gem")return"red_gem";
     if(type==="yellow_gem")return"yellow_gem";
     if(type==="blue_gem")return"blue_gem";
+    if(type==="charm")return"charm";
+    if(type==="totem")return"totem";
+    if(type==="relic")return"relic";
+    if(type==="watch")return"watch";
+    if(type==="necklace")return"necklace";
+    if(type==="textbook")return"textbook";
+    if(type==="sticker")return"sticker";
+    if(type==="belt")return"belt";
+    if(type==="brooch")return"brooch";
+    if(type==="badge_1")return"badge_1";
+    if(type==="badge_2")return"badge_2";
+    if(type==="badge_3")return"badge_3";
+    if(type==="badge_4")return"badge_4";
+    if(type==="badge_5")return"badge_5";
+    if(type==="badge_6")return"badge_6";
     return"other";
   }
   const catalogBySlot={};
@@ -336,6 +351,41 @@
     return section("GEMS",sectionPreview(parts,refs),`<div class="battle-three-grid">${cards}</div>`);
   }
 
+  function specialCalculator(slot,key,title,mode){
+    const sel=selectedEntry(slot,key);
+    if(!sel)return `<article class="battle-item-card unavailable"><header class="battle-item-head"><strong>${esc(title)}</strong></header><div class="upgrade-unavailable-copy">No item series found in dungeon_drop.</div></article>`;
+    const {group,entry,state:st}=sel;
+    const item=upgradeItemFor(entry);
+    const latest=group.id===latestSeriesId(slot);
+    if(item){
+      const target=ensureTargets(slot,key,item,entry);
+      st.target=target.max;
+    }
+    const req=item?requirements(slot,key,item,entry):null;
+    return `<article class="battle-item-card special-item-card ${st.maxed?"maxed":""}">
+      <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
+      <label class="battle-field full"><span>Select ${esc(title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
+      <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
+      ${!item?`<div class="upgrade-unavailable-copy"><strong>Upgrade data not available for this series.</strong><br>The item exists in <code>dungeon_drop</code>, but there are no matching upgrade rows in <code>item_upgrade</code>.</div>`:`
+        <div class="special-current-stage">
+          <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
+        </div>
+        <div class="battle-materials special-materials">${gemMaterialRows(key,req)}</div>
+        <div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>
+        ${mode==="detailed"?gemDetailTable(item,entry):""}
+      `}
+    </article>`;
+  }
+
+  function renderSpecials(mode){
+    const slots=["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","pendant","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"];
+    return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="battle-three-grid specials-card-grid">${slots.map(slot=>{
+      if(slot==="pendant") return unavailableCard(slot);
+      const title=labels[slot]||slot;
+      return seriesGroups(slot).length?specialCalculator(slot,"special:"+slot,title,mode):unavailableCard(slot);
+    }).join("")}</div></section>`;
+  }
+
   // Existing compact calculators remain for Specials and Gems while Battle is refined.
   const itemBySlot={};for(const item of D.items||[]){const slot=itemSlot(item);(itemBySlot[slot]||(itemBySlot[slot]=[])).push(item);}
   function latestItems(slot){const list=itemBySlot[slot]||[];if(!list.length)return[];const max=Math.max(...list.map(x=>dungeonNum(x.dungeonId)));return list.filter(x=>dungeonNum(x.dungeonId)===max);}
@@ -362,7 +412,6 @@
   const unavailable=new Set(["totem","pendant","badge_5"]);
   const labels={charm:"Charm",totem:"Totem",relic:"Relic",watch:"Watch",necklace:"Necklace",textbook:"Textbook",sticker:"Sticker",belt:"Belt",brooch:"Brooch",pendant:"Pendant",badge_1:"Badge 1",badge_2:"Badge 2",badge_3:"Badge 3",badge_4:"Badge 4",badge_5:"Badge 5",badge_6:"Badge 6"};
   function unavailableCard(slot){return `<article class="upgrade-calc-card unavailable"><header class="upgrade-calc-head"><div><strong>${esc(labels[slot]||slot)}</strong><small>Upgrade data not yet available</small></div></header><div class="upgrade-unavailable-copy">Data not available in <code>item_upgrade</code>.</div></article>`;}
-  function renderSpecials(mode){const slots=["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","pendant","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"];return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="battle-three-grid specials-card-grid">${slots.map(s=>unavailable.has(s)?unavailableCard(s):(latestItems(s).map(x=>compactCard(x,mode)).join("")||unavailableCard(s))).join("")}</div></section>`;}
   function renderGems(mode){return renderGemSection(mode);}
 
   let mode=localStorage.getItem(MODE_KEY)==="detailed"?"detailed":"simple";

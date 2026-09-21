@@ -592,7 +592,9 @@
 
       rows.push({
         group,entry,from,to,materials,stages:selectedStages,
-        materialsComplete:phaseMaterialsComplete&&materials.every(m=>m.complete)
+        materialsComplete:phaseMaterialsComplete&&materials.every(m=>m.complete),
+        elyMillions:phaseEly,
+        elyComplete:phaseElyComplete
       });
     }
 
@@ -600,36 +602,30 @@
   }
 
   function evolutionDetailedTable(rows,totalMats,materialsComplete,elyMillions,elyComplete){
-    const body=[];
-    for(const r of rows){
-      for(const s of r.stages||[]){
-        let materialText="—";
-        if(Array.isArray(s.materials)&&s.materials.length){
-          materialText=s.materials.map((m,i)=>{
-            const name=String(m.name||"").trim()||("Material "+(Number(m.sequence)||i+1));
-            const raw=String(m.cost??"").trim();
-            return name+": "+(raw||"—");
-          }).join(" · ");
-        }else if(String(s.materialCost||"").trim()){
-          materialText=String(s.materialCost).trim();
-        }
-        body.push(`<tr>
-          <td>${esc(r.entry.itemName+" "+(s.name||("+"+s.sequence)))}</td>
-          <td>${esc(r.group.dungeonName||r.group.id)}</td>
-          <td>${esc(materialText)}</td>
-          <td>${esc(formatElyMillions(s.elyCostMillions))}</td>
-          <td>${esc(s.successRate||"100%")}</td>
-        </tr>`);
-      }
-    }
-    if(!body.length)return "";
+    if(!rows.length)return "";
+    const body=rows.map(r=>{
+      const materialText=r.materials.length
+        ? r.materials.map(m=>{
+            const qty=m.complete?m.required.toLocaleString():"TBC";
+            return m.name+": "+qty;
+          }).join(" · ")
+        : "—";
+      const range=r.from===0&&r.to===0?"Evolution → +0":("+"+r.from+" → +"+r.to);
+      const phaseEly=r.elyComplete?formatElyMillions(r.elyMillions):"—";
+      return `<tr>
+        <td>${esc(r.entry.itemName)}</td>
+        <td>${esc(range)}</td>
+        <td>${esc(materialText)}</td>
+        <td>${esc(phaseEly)}</td>
+      </tr>`;
+    }).join("");
     const totalMaterial=materialsComplete?totalMats.toLocaleString()+" matts":totalMats.toLocaleString()+" known + TBC";
     const totalEly=elyComplete?formatElyMillions(elyMillions):"—";
     return `<div class="upgrade-detail-table-wrap evolution-detail-table-wrap">
       <table class="upgrade-detail-table">
-        <thead><tr><th>Stage</th><th>Dungeon</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead>
-        <tbody>${body.join("")}</tbody>
-        <tfoot><tr><th colspan="2">Selected path total</th><th>${esc(totalMaterial)}</th><th>${esc(totalEly)}</th><th>—</th></tr></tfoot>
+        <thead><tr><th>Evolution</th><th>Range</th><th>Material Qty</th><th>Ely</th></tr></thead>
+        <tbody>${body}</tbody>
+        <tfoot><tr><th colspan="2">Selected path total</th><th>${esc(totalMaterial)}</th><th>${esc(totalEly)}</th></tr></tfoot>
       </table>
     </div>`;
   }
@@ -684,7 +680,7 @@
         <small class="evolution-latest-note">Is latest: <strong>${targetLatest?"Yes":"No"}</strong></small>
       </div>
       <details class="evolution-material-details">
-        <summary class="evolution-material-head"><span>Upgrade Material</span><strong>${st.maxed?"0 matts total":(materialsComplete?totalMats.toLocaleString()+" matts total":totalMats.toLocaleString()+" known + TBC")}</strong></summary>
+        <summary class="evolution-material-head"><span>Upgrade Material</span></summary>
         <div class="evolution-material-list">
           ${materialRows}
         </div>

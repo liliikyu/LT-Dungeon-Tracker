@@ -3942,3 +3942,38 @@ body.conquest-modal-open{overflow:hidden}
     padding:10px 12px 0;
   }
 }
+
+
+/* v13.9.4.107 — Badge 6 70% upgrade explanation */
+.special-rule-note{
+  display:grid;
+  gap:3px;
+  margin:8px 10px 0;
+  padding:8px 9px;
+  border:1px solid var(--line-soft);
+  border-radius:7px;
+  background:var(--panel-2);
+  color:var(--muted);
+  font-size:9.5px;
+  line-height:1.35;
+}
+.special-rule-note strong{
+  color:var(--text);
+  font-size:10px;
+}
+.special-rule-note b{
+  color:var(--text);
+  font-weight:600;
+}
+.special-rule-note small{
+  color:var(--muted);
+  font-size:8.5px;
+}
+.battle-item-card.maxed .special-rule-note{
+  opacity:.55;
+}
+@media(max-width:760px){
+  .special-rule-note{
+    margin:8px 12px 0;
+  }
+}

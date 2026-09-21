@@ -3124,3 +3124,28 @@ body.conquest-modal-open{overflow:hidden}
   .battle-stage-pair,.battle-type-row{grid-template-columns:1fr;}
   .battle-material-row{grid-template-columns:1fr 80px auto;}
 }
+
+
+/* v13.9.4.90 — Battle render recovery */
+.battle-section-error,
+.upgrade-render-error{
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:var(--panel);
+}
+.battle-section-error-copy,
+.upgrade-render-error{
+  display:grid;
+  gap:4px;
+}
+.battle-section-error-copy strong,
+.upgrade-render-error strong{
+  color:var(--text);
+  font-size:11px;
+}
+.battle-section-error-copy span,
+.upgrade-render-error span{
+  color:var(--muted);
+  font-size:10px;
+}

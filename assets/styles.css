@@ -4196,3 +4196,32 @@ body.conquest-modal-open{overflow:hidden}
 
 
 
+
+
+/* v13.9.4.125 — collapsible Totem / Badge 5 material details */
+.evolution-material-details{
+  border-top:1px solid var(--line-soft);
+}
+.evolution-material-details .evolution-material-head{
+  cursor:pointer;
+  user-select:none;
+  list-style:none;
+  padding:10px;
+  margin:0;
+}
+.evolution-material-details .evolution-material-head::-webkit-details-marker{
+  display:none;
+}
+.evolution-material-details .evolution-material-head::after{
+  content:"▾";
+  margin-left:8px;
+  color:var(--muted);
+  font-size:10px;
+  transition:transform .15s ease;
+}
+.evolution-material-details[open] .evolution-material-head::after{
+  transform:rotate(180deg);
+}
+.evolution-material-details .evolution-material-list{
+  padding:0 10px;
+}

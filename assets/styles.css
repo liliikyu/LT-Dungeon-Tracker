@@ -4391,3 +4391,23 @@ body.conquest-modal-open{overflow:hidden}
     margin:8px 12px 0;
   }
 }
+
+
+/* v13.9.4.134 — evolution detail summary + softer expand control */
+.evolution-material-details .evolution-material-head{
+  justify-content:flex-start;
+}
+.evolution-material-details .evolution-material-head::after{
+  content:"▾";
+  margin-left:auto;
+  font-size:14px;
+  line-height:1;
+  opacity:.55;
+  transform-origin:center;
+}
+.evolution-material-details[open] .evolution-material-head::after{
+  transform:rotate(180deg);
+}
+.evolution-detail-table-wrap .upgrade-detail-table td:nth-child(3){
+  white-space:normal;
+}

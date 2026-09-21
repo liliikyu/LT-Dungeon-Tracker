@@ -43,7 +43,11 @@
     if(type==="weapon")return"weapon";if(type==="elemental_stone")return"elemental_stone";
     if(type==="bindi")return"bindi";if(type==="glasses")return"glasses";if(type==="stockings")return"stockings";
     if(type.startsWith("earrings"))return"earrings";if(type.startsWith("ring"))return"ring";if(type.startsWith("cloak"))return"cloak";
-    if(type.startsWith("armor_"))return"armor";return"other";
+    if(type.startsWith("armor_"))return"armor";
+    if(type==="red_gem")return"red_gem";
+    if(type==="yellow_gem")return"yellow_gem";
+    if(type==="blue_gem")return"blue_gem";
+    return"other";
   }
   const catalogBySlot={};
   for(const entry of D.battleCatalog||[]){const slot=catalogSlot(entry);if(slot==="other")continue;(catalogBySlot[slot]||(catalogBySlot[slot]=[])).push(entry);}
@@ -232,6 +236,28 @@
       +armorSection(mode);
   }
 
+
+  function syncGemSeriesDefaults(){
+    const red=getState("gems:red");
+    const redGroups=seriesGroups("red_gem");
+    if(!red.seriesId&&redGroups.length)red.seriesId=redGroups[0].id;
+    for(const key of ["gems:yellow","gems:blue"]){
+      const st=getState(key);
+      if(!st.seriesId&&!st.customSeries)st.seriesId=red.seriesId;
+    }
+  }
+
+  function renderGemSection(mode){
+    syncGemSeriesDefaults();
+    const slots=["red_gem","yellow_gem","blue_gem"];
+    const keys=["gems:red","gems:yellow","gems:blue"];
+    const labels=["Red First Gem","Yellow First Gem","Blue First Gem"];
+    const parts=keys.map((key,i)=>({label:labels[i],pct:percentFor(slots[i],key)}));
+    const refs=keys.map((key,i)=>({slot:slots[i],key}));
+    const cards=keys.map((key,i)=>battleCalculator(slots[i],key,labels[i],mode,{seriesLabel:"gem"})).join("");
+    return section("GEMS",sectionPreview(parts,refs),`<div class="battle-three-grid">${cards}</div>`);
+  }
+
   // Existing compact calculators remain for Specials and Gems while Battle is refined.
   const itemBySlot={};for(const item of D.items||[]){const slot=itemSlot(item);(itemBySlot[slot]||(itemBySlot[slot]=[])).push(item);}
   function latestItems(slot){const list=itemBySlot[slot]||[];if(!list.length)return[];const max=Math.max(...list.map(x=>dungeonNum(x.dungeonId)));return list.filter(x=>dungeonNum(x.dungeonId)===max);}
@@ -245,7 +271,7 @@
   const labels={charm:"Charm",totem:"Totem",relic:"Relic",watch:"Watch",necklace:"Necklace",textbook:"Textbook",sticker:"Sticker",belt:"Belt",brooch:"Brooch",pendant:"Pendant",badge_1:"Badge 1",badge_2:"Badge 2",badge_3:"Badge 3",badge_4:"Badge 4",badge_5:"Badge 5",badge_6:"Badge 6"};
   function unavailableCard(slot){return `<article class="upgrade-calc-card unavailable"><header class="upgrade-calc-head"><div><strong>${esc(labels[slot]||slot)}</strong><small>Upgrade data not yet available</small></div></header><div class="upgrade-unavailable-copy">Data not available in <code>item_upgrade</code>.</div></article>`;}
   function renderSpecials(mode){const slots=["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","pendant","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"];return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="upgrade-card-grid">${slots.map(s=>unavailable.has(s)?unavailableCard(s):(latestItems(s).map(x=>compactCard(x,mode)).join("")||unavailableCard(s))).join("")}</div></section>`;}
-  function renderGems(mode){const slots=["red_gem","yellow_gem","blue_gem"];return `<section class="upgrade-section-block"><h2>Gems</h2><div class="upgrade-card-grid">${slots.flatMap(s=>latestItems(s)).map(x=>compactCard(x,mode)).join("")}</div></section>`;}
+  function renderGems(mode){return renderGemSection(mode);}
 
   let mode=localStorage.getItem(MODE_KEY)==="detailed"?"detailed":"simple";
   let tab=["battle","specials","gems"].includes(localStorage.getItem(TAB_KEY))?localStorage.getItem(TAB_KEY):"battle";
@@ -260,7 +286,17 @@
     const el=event.target;
     if(el.id==="battle-second-weapon-toggle"){state["battle:weapon2Enabled"]=el.checked;saveState();render();return;}
     const key=el.dataset?.key;if(!key)return;const st=getState(key);
-    if(el.classList.contains("battle-series-select")){st.seriesId=el.value;st.typeIndex=0;st.current=0;st.target=0;st.mats={};}
+    if(el.classList.contains("battle-series-select")){
+      st.seriesId=el.value;st.typeIndex=0;st.current=0;st.target=0;st.mats={};
+      if(key==="gems:red"){
+        for(const otherKey of ["gems:yellow","gems:blue"]){
+          const other=getState(otherKey);
+          if(!other.customSeries){other.seriesId=el.value;other.typeIndex=0;other.current=0;other.target=0;other.mats={};}
+        }
+      }else if(key==="gems:yellow"||key==="gems:blue"){
+        st.customSeries=true;
+      }
+    }
     if(el.classList.contains("battle-type-choice")){st.typeIndex=Number(el.value)||0;st.current=0;st.target=0;st.mats={};}
     if(el.classList.contains("battle-current-select"))st.current=Number(el.value)||0;
     if(el.classList.contains("battle-target-select"))st.target=Number(el.value)||0;

@@ -3322,3 +3322,67 @@ body.conquest-modal-open{overflow:hidden}
   }
   .battle-material-row input{width:48px;}
 }
+
+
+/* v13.9.4.97 — Battle label and input spacing polish */
+.battle-material-name{
+  font-size:10.5px;
+}
+.battle-materials{
+  grid-template-columns:minmax(0,1fr) 64px 138px;
+}
+.battle-material-row input{
+  width:64px;
+}
+.battle-field>span{
+  font-size:11px;
+}
+.battle-latest-line{
+  font-size:12.5px;
+}
+.battle-estimate{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:4px;
+  padding:9px 10px 10px;
+}
+.battle-estimate>span{
+  color:var(--muted);
+  font-size:11.5px;
+  font-weight:750;
+}
+.battle-estimate strong{
+  display:flex;
+  align-items:center;
+  min-height:30px;
+  width:100%;
+  padding:0 8px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:var(--panel-2);
+  color:var(--text);
+  font-size:11px;
+  font-weight:600;
+}
+.battle-estimate small{
+  margin-left:0;
+}
+.battle-two-grid .battle-materials{
+  grid-template-columns:minmax(180px,0.72fr) 64px 138px;
+}
+@media(max-width:1180px){
+  .battle-materials{
+    grid-template-columns:minmax(0,1fr) 60px 124px;
+  }
+  .battle-material-row input{width:60px;}
+  .battle-two-grid .battle-materials{
+    grid-template-columns:minmax(160px,0.68fr) 60px 124px;
+  }
+}
+@media(max-width:560px){
+  .battle-materials,
+  .battle-two-grid .battle-materials{
+    grid-template-columns:minmax(0,1fr) 52px;
+  }
+  .battle-material-row input{width:52px;}
+}

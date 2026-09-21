@@ -1,12 +1,12 @@
 (()=>{
-  const D=window.LT_ITEM_UPGRADE_DATA||{items:[]};
+  const D=window.LT_ITEM_UPGRADE_DATA||{items:[],battleCatalog:[]};
   const $=(id)=>document.getElementById(id);
   const esc=(s)=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const THEME_KEY="lt-theme";
-  const STATE_KEY="lt-item-upgrade-progress-v1";
+  const STATE_KEY="lt-item-upgrade-progress-v2";
   const MODE_KEY="lt-item-upgrade-mode-v1";
   const TAB_KEY="lt-item-upgrade-tab-v1";
-  const RUN_MIN=90, RUN_MAX=150;
+  const RUN_MIN=90,RUN_MAX=150;
 
   function preferredTheme(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
   function savedTheme(){const x=localStorage.getItem(THEME_KEY);return ["system","light","dark"].includes(x)?x:"system";}
@@ -14,7 +14,7 @@
     const resolved=mode==="system"?preferredTheme():mode;
     document.documentElement.dataset.theme=resolved;
     document.documentElement.style.colorScheme=resolved;
-    const b=$("theme-toggle"); if(!b)return;
+    const b=$("theme-toggle");if(!b)return;
     b.textContent=mode==="light"?"☀":mode==="dark"?"☾":"◐";
     const label=mode.charAt(0).toUpperCase()+mode.slice(1);
     b.title="Theme: "+label;b.setAttribute("aria-label","Theme: "+label+". Click to switch theme.");
@@ -24,207 +24,252 @@
 
   function loadState(){try{return JSON.parse(localStorage.getItem(STATE_KEY)||"{}")||{};}catch{return {};}}
   const state=loadState();
-  const saveState=()=>localStorage.setItem(STATE_KEY,JSON.stringify(state));
-  const itemState=(id)=>state[id]||(state[id]={stage:0,mats:0,maxed:false,secondHand:false,secondStage:0});
+  const saveState=()=>{try{localStorage.setItem(STATE_KEY,JSON.stringify(state));}catch{}};
+  const getState=(key)=>state[key]||(state[key]={seriesId:"",typeIndex:0,current:0,target:0,maxed:false,mats:{}});
+  const normId=(id)=>String(id||"").toLowerCase().replace(/bellial/g,"belial").replace(/textxbook/g,"textbook");
+  const upgradeById=new Map((D.items||[]).map(item=>[normId(item.itemId),item]));
 
-  function slotOf(item){
-    const id=String(item.itemId||"").toLowerCase();
-    const tests=[
-      ["weapon",/weapon/],["elemental_stone",/elemental_stone/],["bindi",/bindi/],["glasses",/glasses/],["stockings",/stockings/],
-      ["earrings",/earring/],["ring",/_ring/],["cloak",/cloak/],["charm",/charm/],["totem",/totem/],["relic",/relic/],
-      ["watch",/watch/],["necklace",/necklace/],["textbook",/textxbook|textbook/],["sticker",/sticker/],["belt",/belt/],
-      ["brooch",/brooch/],["pendant",/pendant/],["badge_1",/badge_1/],["badge_2",/badge_2/],["badge_3",/badge_3/],
-      ["badge_4",/badge_4/],["badge_5",/badge_5/],["badge_6",/badge_6/],["red_gem",/red_gem/],["yellow_gem",/yellow_gem/],["blue_gem",/blue_gem/]
-    ];
+  function itemSlot(item){
+    const id=normId(item.itemId);
+    const tests=[["weapon",/weapon/],["elemental_stone",/elemental_stone/],["bindi",/bindi/],["glasses",/glasses/],["stockings",/stockings/],
+      ["earrings",/earring/],["ring",/_ring/],["cloak",/cloak/],["charm",/charm/],["totem",/totem/],["relic",/relic/],["watch",/watch/],
+      ["necklace",/necklace/],["textbook",/textbook/],["sticker",/sticker/],["belt",/belt/],["brooch",/brooch/],["pendant",/pendant/],
+      ["badge_1",/badge_1/],["badge_2",/badge_2/],["badge_3",/badge_3/],["badge_4",/badge_4/],["badge_5",/badge_5/],["badge_6",/badge_6/],
+      ["red_gem",/red_gem/],["yellow_gem",/yellow_gem/],["blue_gem",/blue_gem/],["armor",/armor_/]];
     return tests.find(([,re])=>re.test(id))?.[0]||"other";
   }
-  const itemBySlot={};
-  for(const item of D.items||[]){
-    const slot=slotOf(item);
-    (itemBySlot[slot]||(itemBySlot[slot]=[])).push(item);
+  function catalogSlot(entry){
+    const type=String(entry.itemType||"").toLowerCase();
+    if(type==="weapon")return"weapon";if(type==="elemental_stone")return"elemental_stone";
+    if(type==="bindi")return"bindi";if(type==="glasses")return"glasses";if(type==="stockings")return"stockings";
+    if(type.startsWith("earrings"))return"earrings";if(type.startsWith("ring"))return"ring";if(type.startsWith("cloak"))return"cloak";
+    if(type.startsWith("armor_"))return"armor";return"other";
   }
-  const dungeonNum=(item)=>Number(String(item.dungeonId||"").match(/(\d+)/)?.[1]||0);
-  function latestItems(slot){
-    const list=itemBySlot[slot]||[];
-    if(!list.length)return [];
-    const max=Math.max(...list.map(dungeonNum));
-    return list.filter(x=>dungeonNum(x)===max);
-  }
-  function isLatest(item){
-    const slot=slotOf(item),list=itemBySlot[slot]||[];
-    if(!list.length)return false;
-    return dungeonNum(item)===Math.max(...list.map(dungeonNum));
-  }
+  const catalogBySlot={};
+  for(const entry of D.battleCatalog||[]){const slot=catalogSlot(entry);if(slot==="other")continue;(catalogBySlot[slot]||(catalogBySlot[slot]=[])).push(entry);}
+  const dungeonNum=(id)=>Number(String(id||"").match(/(\d+)/)?.[1]||0);
 
-  const SLOT_LABELS={
-    weapon:"Weapon",elemental_stone:"Elemental Stone",bindi:"Bindi",glasses:"Glasses",stockings:"Stockings",earrings:"Earrings",ring:"Ring",cloak:"Cloak",
-    charm:"Charm",totem:"Totem",relic:"Relic",watch:"Watch",necklace:"Necklace",textbook:"Textbook",sticker:"Sticker",belt:"Belt",brooch:"Brooch",pendant:"Pendant",
-    badge_1:"Badge 1",badge_2:"Badge 2",badge_3:"Badge 3",badge_4:"Badge 4",badge_5:"Badge 5",badge_6:"Badge 6",
-    red_gem:"Red Gem",yellow_gem:"Yellow Gem",blue_gem:"Blue Gem"
-  };
-
-  const unavailable=new Set(["totem","pendant","badge_5"]);
-  function parseNum(v){const n=Number(String(v??"").replace(/,/g,""));return Number.isFinite(n)?n:null;}
-  function parseRate(v){const n=Number(String(v||"").replace(/%/g,""));return Number.isFinite(n)&&n>0?Math.min(n/100,1):1;}
-  function stageLabel(item,stage){
-    if(item.progressionType==="enhancement") return stage.name||("+"+(stage.enhancementLevel??stage.sequence));
-    return stage.name||("Stage "+stage.sequence);
-  }
-  function remainingFor(item,stageIndex){
-    const st=itemState(item.itemId);
-    if(st.maxed)return {raw:0,expected:0,stone:0,rateAdjusted:false};
-    let raw=0,expected=0,stone=0,rateAdjusted=false;
-    for(const stage of item.stages||[]){
-      if((stage.sequence||0)<=stageIndex)continue;
-      const c=parseNum(stage.materialCost);
-      const rate=parseRate(stage.successRate);
-      if(c!==null){raw+=c;expected+=c/rate;if(rate<1)rateAdjusted=true;}
-      const s=parseNum(stage.ascensionStoneCost); if(s!==null)stone+=s;
+  function seriesGroups(slot){
+    const map=new Map();
+    for(const e of catalogBySlot[slot]||[]){
+      if(!map.has(e.dungeonId))map.set(e.dungeonId,{id:e.dungeonId,dungeonName:e.dungeonName||e.dungeonId,entries:[]});
+      map.get(e.dungeonId).entries.push(e);
     }
-    return {raw,expected,stone,rateAdjusted};
+    const out=[...map.values()];
+    out.forEach(g=>g.entries.sort((a,b)=>a.itemName.localeCompare(b.itemName)));
+    out.sort((a,b)=>dungeonNum(b.id)-dungeonNum(a.id));
+    return out;
   }
-  function totalRemaining(item){
-    const st=itemState(item.itemId);
-    let primary=remainingFor(item,Number(st.stage)||0);
-    let totalExpected=primary.expected;
-    let totalRaw=primary.raw;
-    let totalStone=primary.stone;
-    let rateAdjusted=primary.rateAdjusted;
-    if(slotOf(item)==="weapon"&&st.secondHand){
-      const second=remainingFor(item,Number(st.secondStage)||0);
-      totalExpected+=second.expected;totalRaw+=second.raw;totalStone+=second.stone;rateAdjusted=rateAdjusted||second.rateAdjusted;
+  function latestSeriesId(slot){return seriesGroups(slot)[0]?.id||"";}
+  function groupLabel(group,slot){
+    const names=group.entries.map(e=>e.itemName.replace(new RegExp("\\s+(Weapon|Elemental Stone|Bindi|Glasses|Stockings|Earrings?|Ring|Cloak|Armor)$","i"),"")).filter(Boolean);
+    const unique=[...new Set(names)];
+    const series=unique.length<=2?unique.join(" / "):(group.dungeonName||group.id);
+    return series+(group.dungeonName&&series!==group.dungeonName?" · "+group.dungeonName:"");
+  }
+  function selectedEntry(slot,key){
+    const groups=seriesGroups(slot);if(!groups.length)return null;
+    const st=getState(key);
+    if(!st.seriesId||!groups.some(g=>g.id===st.seriesId))st.seriesId=groups[0].id;
+    const group=groups.find(g=>g.id===st.seriesId)||groups[0];
+    st.typeIndex=Math.max(0,Math.min(Number(st.typeIndex)||0,group.entries.length-1));
+    return {group,entry:group.entries[st.typeIndex],state:st};
+  }
+  function upgradeItemFor(entry){return entry?upgradeById.get(normId(entry.itemId))||null:null;}
+  function prefixOf(name){return String(name||"").split(/\s+/)[0].toLowerCase();}
+  function stagesFor(item,entry){
+    if(!item)return[];
+    const stages=[...(item.stages||[])].sort((a,b)=>(a.sequence||0)-(b.sequence||0));
+    const hasAsc=stages.some(s=>String(s.name||"").toLowerCase()==="ascended"||String(s.key||"").toLowerCase()==="ascended");
+    if(item.progressionType==="tier"&&!hasAsc){
+      const prefix=prefixOf(entry?.itemName||item.itemName);
+      const sibling=(D.items||[]).find(x=>x!==item&&x.dungeonId===item.dungeonId&&prefixOf(x.itemName)===prefix&&(x.stages||[]).some(s=>String(s.name||"").toLowerCase()==="ascended"));
+      const asc=sibling?.stages?.find(s=>String(s.name||"").toLowerCase()==="ascended");
+      if(asc)stages.push({...asc,sequence:Math.max(...stages.map(s=>Number(s.sequence)||0))+1});
     }
-    const owned=Math.max(0,Number(st.mats)||0);
-    const need=Math.max(0,Math.ceil(totalExpected-owned));
-    return {need,raw:Math.ceil(totalRaw),stone:Math.ceil(totalStone),owned,rateAdjusted};
+    return stages;
   }
-  function runsText(need){
-    if(need<=0)return "0 runs";
-    const best=Math.ceil(need/RUN_MAX),worst=Math.ceil(need/RUN_MIN);
-    return best===worst?best+" runs":best+"–"+worst+" runs";
+  function stageName(item,s){return item?.progressionType==="enhancement"?(s.name||("+"+(s.enhancementLevel??s.sequence))):(s.name||("Stage "+s.sequence));}
+  function splitMaterials(stage){return String(stage?.materialName||"").split(",").map(x=>x.trim()).filter(Boolean);}
+  function number(v){const n=Number(String(v??"").replace(/,/g,""));return Number.isFinite(n)?n:0;}
+  function rate(v){const n=Number(String(v||"").replace(/%/g,""));return Number.isFinite(n)&&n>0?Math.min(n/100,1):1;}
+
+  function ensureTargets(slot,key,item,entry){
+    const st=getState(key),stages=stagesFor(item,entry);
+    const max=Math.max(0,...stages.map(s=>Number(s.sequence)||0));
+    if(!st.target||st.target>max)st.target=max;
+    if(st.current>st.target)st.current=st.target;
+    return {st,stages,max};
   }
-
-  function stageOptions(item,current){
-    const opts=[`<option value="0">${item.progressionType==="tier"?"Base / before Eminent":"+0"}</option>`];
-    for(const s of item.stages||[]) opts.push(`<option value="${s.sequence}" ${Number(current)===Number(s.sequence)?"selected":""}>${esc(stageLabel(item,s))}</option>`);
-    return opts.join("");
+  function requirements(slot,key,item,entry){
+    const {st,stages}=ensureTargets(slot,key,item,entry);
+    if(st.maxed)return {mats:{},stoneName:"",stoneRequired:0,remainingTotal:0,rawTotal:0,completion:100,expected:false};
+    const mats={};let stoneRequired=0,stoneName="",expected=false;
+    for(const s of stages){
+      const seq=Number(s.sequence)||0;if(seq<=Number(st.current)||seq>Number(st.target))continue;
+      const cost=number(s.materialCost),success=rate(s.successRate),effective=cost/success;
+      if(success<1)expected=true;
+      for(const name of splitMaterials(s))mats[name]=(mats[name]||0)+effective;
+      const stone=number(s.ascensionStoneCost);if(stone>0){stoneRequired+=stone;s.ascensionStoneName&&(stoneName=s.ascensionStoneName);}
+    }
+    let remainingTotal=0,rawTotal=0;
+    for(const [name,required] of Object.entries(mats)){
+      const owned=Math.max(0,Number(st.mats?.[name])||0);
+      const rounded=Math.ceil(required);rawTotal+=rounded;remainingTotal+=Math.max(0,rounded-owned);
+    }
+    const stoneOwned=Math.max(0,Number(st.mats?.["__stone"])||0);
+    const stoneRemaining=Math.max(0,Math.ceil(stoneRequired)-stoneOwned);
+    const target=Math.max(1,Number(st.target)||1),completion=Math.min(100,Math.round((Number(st.current)||0)/target*100));
+    return {mats,stoneName,stoneRequired:Math.ceil(stoneRequired),stoneRemaining,remainingTotal,rawTotal,completion,expected};
   }
+  function runsText(remaining){if(remaining<=0)return"0 runs";const best=Math.ceil(remaining/RUN_MAX),worst=Math.ceil(remaining/RUN_MIN);return best===worst?best+" runs":best+"–"+worst+" runs";}
 
-  function detailedTable(item){
-    const rows=(item.stages||[]).map(s=>{
-      const cost=s.materialCost||"—";
-      const stone=s.ascensionStoneCost||"—";
-      const rate=s.successRate||"100%";
-      return `<tr><td>${esc(stageLabel(item,s))}</td><td>${esc(cost)}</td><td>${esc(stone)}</td><td>${esc(rate)}</td></tr>`;
-    }).join("");
-    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Materials</th><th>Ascension Stone</th><th>Success</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  function seriesSelect(slot,key){
+    const groups=seriesGroups(slot),st=getState(key);
+    if(!st.seriesId&&groups.length)st.seriesId=groups[0].id;
+    return `<select class="battle-series-select" data-key="${esc(key)}" data-slot="${esc(slot)}">${groups.map(g=>`<option value="${esc(g.id)}" ${g.id===st.seriesId?"selected":""}>${esc(groupLabel(g,slot))}</option>`).join("")}</select>`;
   }
-
-  function materialName(item){return item.stages?.find(s=>s.materialName)?.materialName||"Material";}
-  function stoneName(item){return item.stages?.find(s=>s.ascensionStoneName)?.ascensionStoneName||"Ascension Stone";}
-
-  function itemCard(item,mode){
-    const slot=slotOf(item),st=itemState(item.itemId),calc=totalRemaining(item);
-    const latest=isLatest(item);
-    const maxStage=Math.max(0,...(item.stages||[]).map(s=>Number(s.sequence)||0));
-    const secondHand=slot==="weapon"?`
-      <label class="upgrade-inline-check"><input class="upgrade-second-hand" type="checkbox" data-id="${esc(item.itemId)}" ${st.secondHand?"checked":""}> Track second-handed weapon</label>
-      <label class="upgrade-field upgrade-second-stage ${st.secondHand?"":"hidden"}"><span>Second weapon stage</span><select data-id="${esc(item.itemId)}" class="upgrade-second-stage-select">${stageOptions(item,st.secondStage)}</select></label>`:"";
-    const rateNote=calc.rateAdjusted?'<span class="upgrade-estimate-note">Expected value uses the sheet success rate.</span>':"";
-    return `<article class="upgrade-calc-card" data-item-card="${esc(item.itemId)}">
-      <header class="upgrade-calc-head">
-        <div><strong>${esc(item.itemName)}</strong><small>${esc(item.dungeonName||item.dungeonId||"Dungeon not specified")} · ${esc(SLOT_LABELS[slot]||slot)}</small></div>
-        <div class="upgrade-card-badges">${latest?'<span class="upgrade-latest-badge">Latest slot data</span>':""}<span class="upgrade-card-type">${esc(item.progressionType||"upgrade")}</span></div>
-      </header>
-      <div class="upgrade-calc-controls">
-        <label class="upgrade-field"><span>Current stage</span><select class="upgrade-stage-select" data-id="${esc(item.itemId)}">${stageOptions(item,st.stage)}</select></label>
-        <label class="upgrade-field"><span>Materials owned</span><input class="upgrade-mats-input" data-id="${esc(item.itemId)}" type="number" min="0" step="1" value="${esc(st.mats||0)}"></label>
-        <label class="upgrade-inline-check upgrade-max-check"><input class="upgrade-maxed-check" data-id="${esc(item.itemId)}" type="checkbox" ${st.maxed?"checked":""}> Maxed</label>
-        ${secondHand}
-      </div>
-      <div class="upgrade-calc-summary">
-        <div><span>Material</span><strong>${esc(materialName(item))}</strong></div>
-        <div><span>Remaining to max</span><strong>${calc.need.toLocaleString()}</strong></div>
-        <div><span>Estimated runs</span><strong>${runsText(calc.need)}</strong></div>
-        ${calc.stone>0?`<div><span>${esc(stoneName(item))}</span><strong>${calc.stone.toLocaleString()}</strong></div>`:""}
-      </div>
-      ${rateNote}
-      ${mode==="detailed"?detailedTable(item):""}
+  function typeChoices(group,key,st){
+    const enabled=group.entries.length>1;
+    const labels=group.entries.slice(0,2).map((e,i)=>`<label class="${enabled?"":"disabled"}"><input class="battle-type-choice" type="radio" name="${esc(key)}-type" data-key="${esc(key)}" value="${i}" ${Number(st.typeIndex)===i?"checked":""} ${enabled?"":"disabled"}> Type ${i+1}<small>${esc(e.itemName)}</small></label>`).join("");
+    if(group.entries.length===1)return `<div class="battle-type-row"><label class="disabled"><input type="radio" checked disabled> Type 1<small>${esc(group.entries[0].itemName)}</small></label><label class="disabled"><input type="radio" disabled> Type 2</label></div>`;
+    return `<div class="battle-type-row">${labels}</div>`;
+  }
+  function stageSelect(item,entry,key,kind){
+    const {st,stages}=ensureTargets("",key,item,entry),value=kind==="current"?st.current:st.target;
+    const baseLabel=item?.progressionType==="tier"?"Base":"+0";
+    const opts=[`<option value="0" ${Number(value)===0?"selected":""}>${baseLabel}</option>`].concat(stages.map(s=>`<option value="${s.sequence}" ${Number(value)===Number(s.sequence)?"selected":""}>${esc(stageName(item,s))}</option>`));
+    return `<select class="battle-${kind}-select" data-key="${esc(key)}">${opts.join("")}</select>`;
+  }
+  function detailTable(item,entry){
+    const stages=stagesFor(item,entry);
+    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material(s)</th><th>Each</th><th>Ascension Stone</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(splitMaterials(s).join(" + ")||"—")}</td><td>${esc(s.materialCost||"—")}</td><td>${esc(s.ascensionStoneCost&&number(s.ascensionStoneCost)>0?(s.ascensionStoneName||"Ascension Stone")+" × "+s.ascensionStoneCost:"—")}</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
+  }
+  function materialRows(key,req){
+    const st=getState(key),rows=[];
+    for(const [name,requiredRaw] of Object.entries(req.mats)){
+      const required=Math.ceil(requiredRaw),owned=Math.max(0,Number(st.mats?.[name])||0),remaining=Math.max(0,required-owned);
+      rows.push(`<div class="battle-material-row"><span class="battle-material-name">${esc(name)}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}"><span class="battle-material-total">/ ${required.toLocaleString()} <small>${remaining.toLocaleString()} remaining</small></span></div>`);
+    }
+    if(req.stoneName||req.stoneRequired>0){
+      const owned=Math.max(0,Number(st.mats?.["__stone"])||0),remaining=Math.max(0,req.stoneRequired-owned);
+      rows.push(`<div class="battle-material-row ascension"><span class="battle-material-name">${esc(req.stoneName||"Ascension Stone")}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="__stone" value="${esc(owned)}"><span class="battle-material-total">/ ${req.stoneRequired.toLocaleString()} <small>${remaining.toLocaleString()} remaining</small></span></div>`);
+    }else{
+      rows.push(`<div class="battle-material-row ascension muted"><span class="battle-material-name">Ascension Stone</span><input type="number" value="0" disabled><span class="battle-material-total">/ 0</span></div>`);
+    }
+    return rows.join("");
+  }
+  function battleCalculator(slot,key,title,mode,opts={}){
+    const sel=selectedEntry(slot,key);
+    if(!sel)return `<article class="battle-item-card unavailable"><header><strong>${esc(title)}</strong></header><p>No series found in dungeon_drop.</p></article>`;
+    const {group,entry,st}=sel,item=upgradeItemFor(entry),latest=group.id===latestSeriesId(slot);
+    if(item)ensureTargets(slot,key,item,entry);
+    const req=item?requirements(slot,key,item,entry):null;
+    const maxed=st.maxed;
+    return `<article class="battle-item-card ${maxed?"maxed":""}">
+      <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${maxed?"checked":""}> MAXED</label></header>
+      <label class="battle-field full"><span>Select ${esc(opts.seriesLabel||title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
+      <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong>${entry.dungeonName?` · ${esc(entry.dungeonName)}`:""}</div>
+      ${opts.showTypes?typeChoices(group,key,st):""}
+      ${!item?`<div class="upgrade-unavailable-copy"><strong>Upgrade stage data not available for this series.</strong><br>The series comes from <code>dungeon_drop</code>, but no matching rows are currently available in <code>item_upgrade</code>.</div>`:`
+        <div class="battle-stage-pair">
+          <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
+          <label class="battle-field"><span>Target stage</span>${stageSelect(item,entry,key,"target")}</label>
+        </div>
+        <div class="battle-materials">${materialRows(key,req)}</div>
+        <div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>
+        ${mode==="detailed"?detailTable(item,entry):""}
+      `}
     </article>`;
   }
-
-  function unavailableCard(slot){
-    return `<article class="upgrade-calc-card unavailable"><header class="upgrade-calc-head"><div><strong>${esc(SLOT_LABELS[slot])}</strong><small>Upgrade data not yet available</small></div><span class="upgrade-unavailable-badge">Data not available</span></header><div class="upgrade-unavailable-copy">This slot is reserved in the tracker and will activate when rows are added to the <code>item_upgrade</code> sheet.</div></article>`;
+  function percentFor(slot,key){
+    const sel=selectedEntry(slot,key);if(!sel)return 0;const item=upgradeItemFor(sel.entry);if(!item)return 0;return requirements(slot,key,item,sel.entry).completion;
+  }
+  function remainingForKey(slot,key){
+    const sel=selectedEntry(slot,key);if(!sel)return 0;const item=upgradeItemFor(sel.entry);if(!item)return 0;return requirements(slot,key,item,sel.entry).remainingTotal;
+  }
+  function sectionPreview(parts,keys){
+    const totalPct=Math.round(keys.reduce((s,x)=>s+percentFor(x.slot,x.key),0)/Math.max(1,keys.length));
+    const remaining=keys.reduce((s,x)=>s+remainingForKey(x.slot,x.key),0);
+    return `<div class="battle-preview"><div class="battle-preview-items">${parts.map(p=>`<span>${esc(p.label)} <strong>${p.pct}%</strong></span>`).join("")}</div><div class="battle-preview-overall"><span>Overall <strong>${totalPct}%</strong></span><span>${runsText(remaining)} left</span></div></div>`;
+  }
+  function section(title,preview,body,open=true){
+    return `<details class="battle-section" ${open?"open":""}><summary><span class="battle-section-title">${esc(title)}</span>${preview}<span class="battle-section-chevron">▾</span></summary><div class="battle-section-body">${body}</div></details>`;
   }
 
-  function groupSummary(title,slots){
-    const items=slots.flatMap(s=>latestItems(s));
-    if(!items.length)return "";
-    let need=0;
-    const checks=items.map(item=>{
-      need+=totalRemaining(item).need;
-      const st=itemState(item.itemId);
-      return `<label><input class="upgrade-group-max" data-id="${esc(item.itemId)}" type="checkbox" ${st.maxed?"checked":""}> ${esc(item.itemName)}</label>`;
-    }).join("");
-    return `<section class="upgrade-group-summary"><div><strong>${esc(title)}</strong><small>Set remaining materials</small></div><div class="upgrade-group-checks">${checks}</div><div class="upgrade-group-total"><span>Remaining</span><strong>${need.toLocaleString()}</strong></div></section>`;
+  function weaponStoneSection(mode){
+    const enabled=Boolean(state["battle:weapon2Enabled"]);
+    const keys=[{slot:"weapon",key:"battle:weapon1"}];if(enabled)keys.push({slot:"weapon",key:"battle:weapon2"});keys.push({slot:"elemental_stone",key:"battle:stone"});
+    const parts=[{label:"Weapon",pct:percentFor("weapon","battle:weapon1")}];
+    if(enabled)parts.push({label:"Weapon 2",pct:percentFor("weapon","battle:weapon2")});
+    parts.push({label:"Stone",pct:percentFor("elemental_stone","battle:stone")});
+    const weapon1=battleCalculator("weapon","battle:weapon1","Weapon",mode,{seriesLabel:"weapon"});
+    const weapon2=enabled?`<div class="battle-second-weapon">${battleCalculator("weapon","battle:weapon2","Second Weapon",mode,{seriesLabel:"weapon"})}</div>`:"";
+    const body=`<div class="battle-two-grid"><div><div class="battle-primary-card">${weapon1}</div><label class="battle-add-second"><input id="battle-second-weapon-toggle" type="checkbox" ${enabled?"checked":""}> Add second-handed weapon</label>${weapon2}</div><div>${battleCalculator("elemental_stone","battle:stone","Elemental Stone",mode,{seriesLabel:"elemental stone"})}</div></div>`;
+    return section("WEAPON & ELEMENTAL STONE",sectionPreview(parts,keys),body);
+  }
+
+  function tripleSection(title,slots,keys,labels,mode,showTypes=false){
+    const parts=keys.map((key,i)=>({label:labels[i],pct:percentFor(slots[i],key)}));
+    const refs=keys.map((key,i)=>({slot:slots[i],key}));
+    const body=`<div class="battle-three-grid">${keys.map((key,i)=>battleCalculator(slots[i],key,labels[i],mode,{seriesLabel:labels[i].toLowerCase(),showTypes})).join("")}</div>`;
+    return section(title,sectionPreview(parts,refs),body);
+  }
+
+  function armorSection(mode){
+    const pieces=["Helmet","Top","Bottom","Gloves","Boots"],keys=pieces.map(x=>"battle:armor:"+x.toLowerCase());
+    const refs=keys.map(key=>({slot:"armor",key}));
+    const parts=keys.map((key,i)=>({label:pieces[i],pct:percentFor("armor",key)}));
+    const cards=keys.map((key,i)=>battleCalculator("armor",key,pieces[i],mode,{seriesLabel:"armor",showTypes:true}));
+    const body=`<div class="battle-three-grid">${cards.slice(0,3).join("")}</div><div class="battle-three-grid battle-armor-second-row">${cards.slice(3).join("")}</div>`;
+    return section("ARMOR",sectionPreview(parts,refs),body);
   }
 
   function renderBattle(mode){
-    const weapon=latestItems("weapon"),stone=latestItems("elemental_stone");
-    const g1=["bindi","glasses","stockings"],g2=["earrings","ring","cloak"];
-    return `
-      <section class="upgrade-section-block"><h2>Weapon & Elemental Stone</h2><div class="upgrade-card-grid">${weapon.map(x=>itemCard(x,mode)).join("")}${stone.map(x=>itemCard(x,mode)).join("")}</div></section>
-      <section class="upgrade-section-block"><h2>Accessories · Bindi / Glasses / Stockings</h2>${groupSummary("Accessory Set A",g1)}<div class="upgrade-card-grid">${g1.flatMap(s=>latestItems(s)).map(x=>itemCard(x,mode)).join("")}</div></section>
-      <section class="upgrade-section-block"><h2>Accessories · Earrings / Ring / Cloak</h2>${groupSummary("Accessory Set B",g2)}<div class="upgrade-card-grid">${g2.flatMap(s=>latestItems(s)).map(x=>itemCard(x,mode)).join("")}</div></section>`;
+    return weaponStoneSection(mode)
+      +tripleSection("ACCESSORIES · BINDI / GLASSES / STOCKINGS",["bindi","glasses","stockings"],["battle:bindi","battle:glasses","battle:stockings"],["Bindi","Glasses","Stockings"],mode,false)
+      +tripleSection("ACCESSORIES · EARRINGS / RING / CLOAK",["earrings","ring","cloak"],["battle:earrings","battle:ring","battle:cloak"],["Earrings","Ring","Cloak"],mode,true)
+      +armorSection(mode);
   }
 
-  function renderSpecials(mode){
-    const slots=["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","pendant","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"];
-    return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="upgrade-card-grid">${slots.map(slot=>unavailable.has(slot)?unavailableCard(slot):((latestItems(slot).map(x=>itemCard(x,mode)).join(""))||unavailableCard(slot))).join("")}</div></section>`;
+  // Existing compact calculators remain for Specials and Gems while Battle is refined.
+  const itemBySlot={};for(const item of D.items||[]){const slot=itemSlot(item);(itemBySlot[slot]||(itemBySlot[slot]=[])).push(item);}
+  function latestItems(slot){const list=itemBySlot[slot]||[];if(!list.length)return[];const max=Math.max(...list.map(x=>dungeonNum(x.dungeonId)));return list.filter(x=>dungeonNum(x.dungeonId)===max);}
+  function simpleStageOptions(item,current){const stages=item.stages||[];return ['<option value="0">Base</option>'].concat(stages.map(s=>`<option value="${s.sequence}" ${Number(current)===Number(s.sequence)?"selected":""}>${esc(stageName(item,s))}</option>`)).join("");}
+  function compactCard(item,mode){
+    const key="compact:"+item.itemId,st=getState(key),stages=item.stages||[],max=Math.max(0,...stages.map(s=>Number(s.sequence)||0));if(!st.target)st.target=max;
+    const req=requirements(itemSlot(item),key,item,{itemName:item.itemName});
+    return `<article class="upgrade-calc-card"><header class="upgrade-calc-head"><div><strong>${esc(item.itemName)}</strong><small>${esc(item.dungeonName||item.dungeonId||"Dungeon not specified")}</small></div></header><div class="upgrade-calc-controls"><label class="upgrade-field"><span>Current stage</span><select class="battle-current-select" data-key="${esc(key)}">${simpleStageOptions(item,st.current)}</select></label><label class="upgrade-field"><span>Materials owned</span><input class="compact-mats" data-key="${esc(key)}" data-material="${esc(Object.keys(req.mats)[0]||"Material")}" type="number" min="0" value="${esc(st.mats?.[Object.keys(req.mats)[0]]||0)}"></label></div><div class="upgrade-calc-summary"><div><span>Remaining to max</span><strong>${req.remainingTotal.toLocaleString()}</strong></div><div><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong></div></div>${mode==="detailed"?detailTable(item,{itemName:item.itemName}):""}</article>`;
   }
-
-  function renderGems(mode){
-    const slots=["red_gem","yellow_gem","blue_gem"];
-    return `<section class="upgrade-section-block"><h2>Gems</h2>${groupSummary("Gem Set",slots)}<div class="upgrade-card-grid">${slots.flatMap(s=>latestItems(s)).map(x=>itemCard(x,mode)).join("")}</div></section>`;
-  }
+  const unavailable=new Set(["totem","pendant","badge_5"]);
+  const labels={charm:"Charm",totem:"Totem",relic:"Relic",watch:"Watch",necklace:"Necklace",textbook:"Textbook",sticker:"Sticker",belt:"Belt",brooch:"Brooch",pendant:"Pendant",badge_1:"Badge 1",badge_2:"Badge 2",badge_3:"Badge 3",badge_4:"Badge 4",badge_5:"Badge 5",badge_6:"Badge 6"};
+  function unavailableCard(slot){return `<article class="upgrade-calc-card unavailable"><header class="upgrade-calc-head"><div><strong>${esc(labels[slot]||slot)}</strong><small>Upgrade data not yet available</small></div></header><div class="upgrade-unavailable-copy">Data not available in <code>item_upgrade</code>.</div></article>`;}
+  function renderSpecials(mode){const slots=["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","pendant","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"];return `<section class="upgrade-section-block"><h2>Special Equipment</h2><div class="upgrade-card-grid">${slots.map(s=>unavailable.has(s)?unavailableCard(s):(latestItems(s).map(x=>compactCard(x,mode)).join("")||unavailableCard(s))).join("")}</div></section>`;}
+  function renderGems(mode){const slots=["red_gem","yellow_gem","blue_gem"];return `<section class="upgrade-section-block"><h2>Gems</h2><div class="upgrade-card-grid">${slots.flatMap(s=>latestItems(s)).map(x=>compactCard(x,mode)).join("")}</div></section>`;}
 
   let mode=localStorage.getItem(MODE_KEY)==="detailed"?"detailed":"simple";
   let tab=["battle","specials","gems"].includes(localStorage.getItem(TAB_KEY))?localStorage.getItem(TAB_KEY):"battle";
-
-  function syncMode(){
-    $("upgrade-mode-simple")?.classList.toggle("active",mode==="simple");
-    $("upgrade-mode-detailed")?.classList.toggle("active",mode==="detailed");
-    $("upgrade-mode-simple")?.setAttribute("aria-pressed",String(mode==="simple"));
-    $("upgrade-mode-detailed")?.setAttribute("aria-pressed",String(mode==="detailed"));
-  }
-  function syncTabs(){
-    document.querySelectorAll(".upgrade-game-tab").forEach(b=>{
-      const active=b.dataset.upgradeTab===tab;
-      b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));
-    });
-  }
-  function render(){
-    syncMode();syncTabs();
-    const root=$("upgrade-tab-content"); if(!root)return;
-    root.innerHTML=tab==="battle"?renderBattle(mode):tab==="specials"?renderSpecials(mode):renderGems(mode);
-  }
-
+  function syncMode(){$("upgrade-mode-simple")?.classList.toggle("active",mode==="simple");$("upgrade-mode-detailed")?.classList.toggle("active",mode==="detailed");$("upgrade-mode-simple")?.setAttribute("aria-pressed",String(mode==="simple"));$("upgrade-mode-detailed")?.setAttribute("aria-pressed",String(mode==="detailed"));}
+  function syncTabs(){document.querySelectorAll(".upgrade-game-tab").forEach(b=>{const active=b.dataset.upgradeTab===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});}
+  function render(){syncMode();syncTabs();const root=$("upgrade-tab-content");if(!root)return;root.innerHTML=tab==="battle"?renderBattle(mode):tab==="specials"?renderSpecials(mode):renderGems(mode);}
   $("upgrade-mode-simple")?.addEventListener("click",()=>{mode="simple";localStorage.setItem(MODE_KEY,mode);render();});
   $("upgrade-mode-detailed")?.addEventListener("click",()=>{mode="detailed";localStorage.setItem(MODE_KEY,mode);render();});
   document.querySelectorAll(".upgrade-game-tab").forEach(b=>b.addEventListener("click",()=>{tab=b.dataset.upgradeTab;localStorage.setItem(TAB_KEY,tab);render();}));
 
   $("upgrade-tab-content")?.addEventListener("change",(event)=>{
-    const el=event.target,id=el.dataset?.id;if(!id)return;
-    const st=itemState(id);
-    if(el.classList.contains("upgrade-stage-select"))st.stage=Number(el.value)||0;
-    if(el.classList.contains("upgrade-second-stage-select"))st.secondStage=Number(el.value)||0;
-    if(el.classList.contains("upgrade-second-hand"))st.secondHand=el.checked;
-    if(el.classList.contains("upgrade-maxed-check")||el.classList.contains("upgrade-group-max"))st.maxed=el.checked;
+    const el=event.target;
+    if(el.id==="battle-second-weapon-toggle"){state["battle:weapon2Enabled"]=el.checked;saveState();render();return;}
+    const key=el.dataset?.key;if(!key)return;const st=getState(key);
+    if(el.classList.contains("battle-series-select")){st.seriesId=el.value;st.typeIndex=0;st.current=0;st.target=0;st.mats={};}
+    if(el.classList.contains("battle-type-choice")){st.typeIndex=Number(el.value)||0;st.current=0;st.target=0;st.mats={};}
+    if(el.classList.contains("battle-current-select"))st.current=Number(el.value)||0;
+    if(el.classList.contains("battle-target-select"))st.target=Number(el.value)||0;
+    if(el.classList.contains("battle-maxed-check"))st.maxed=el.checked;
     saveState();render();
   });
   $("upgrade-tab-content")?.addEventListener("input",(event)=>{
-    const el=event.target,id=el.dataset?.id;if(!id||!el.classList.contains("upgrade-mats-input"))return;
-    itemState(id).mats=Math.max(0,Number(el.value)||0);saveState();render();
+    const el=event.target,key=el.dataset?.key;if(!key)return;
+    if(el.classList.contains("battle-material-input")||el.classList.contains("compact-mats")){const st=getState(key);st.mats=st.mats||{};st.mats[el.dataset.material]=Math.max(0,Number(el.value)||0);saveState();render();}
   });
 
   render();

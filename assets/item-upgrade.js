@@ -173,7 +173,7 @@
   function battleCalculator(slot,key,title,mode,opts={}){
     const sel=selectedEntry(slot,key);
     if(!sel)return `<article class="battle-item-card unavailable"><header><strong>${esc(title)}</strong></header><p>No series found in dungeon_drop.</p></article>`;
-    const {group,entry,st}=sel,item=upgradeItemFor(entry),latest=group.id===latestSeriesId(slot);
+    const {group,entry,state:st}=sel,item=upgradeItemFor(entry),latest=group.id===latestSeriesId(slot);
     if(item)ensureTargets(slot,key,item,entry);
     const req=item?requirements(slot,key,item,entry):null;
     const maxed=st.maxed;
@@ -275,7 +275,7 @@
   function gemCalculator(slot,key,title,mode){
     const sel=selectedEntry(slot,key);
     if(!sel)return `<article class="battle-item-card unavailable"><header class="battle-item-head"><strong>${esc(title)}</strong></header><div class="upgrade-unavailable-copy">No gem series found in dungeon_drop.</div></article>`;
-    const {group,entry,st}=sel;
+    const {group,entry,state:st}=sel;
     const item=upgradeItemFor(entry);
     const latest=group.id===latestSeriesId(slot);
     if(item)ensureTargets(slot,key,item,entry);

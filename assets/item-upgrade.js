@@ -82,7 +82,13 @@
       map.get(e.dungeonId).entries.push(e);
     }
     const out=[...map.values()];
-    out.forEach(g=>g.entries.sort((a,b)=>a.itemName.localeCompare(b.itemName)));
+    out.forEach(g=>g.entries.sort((a,b)=>{
+      const ao=Number(a.typeOrder),bo=Number(b.typeOrder);
+      const ah=Number.isFinite(ao)&&ao>0,bh=Number.isFinite(bo)&&bo>0;
+      if(ah&&bh&&ao!==bo)return ao-bo;
+      if(ah!==bh)return ah?-1:1;
+      return a.itemName.localeCompare(b.itemName);
+    }));
     out.sort((a,b)=>dungeonNum(b.id)-dungeonNum(a.id));
     return out;
   }
@@ -93,6 +99,12 @@
     const series=unique.length<=2?unique.join(" / "):(group.dungeonName||group.id);
     return series+(group.dungeonName&&series!==group.dungeonName?" · "+group.dungeonName:"");
   }
+  function missingUpgradeCopy(latest){
+    return latest
+      ? '<div class="upgrade-unavailable-copy"><strong>Upgrade data not available for this series.</strong><br>The item exists in <code>dungeon_drop</code>, but there are no matching upgrade rows in <code>item_upgrade</code>.</div>'
+      : '<div class="upgrade-unavailable-copy"><strong>Upgrade data not available for this series.</strong><br>Assumes it costs 10 matts per upgrade for older equipment.</div>';
+  }
+
   function selectedEntry(slot,key){
     const groups=seriesGroups(slot);if(!groups.length)return null;
     const st=getState(key);
@@ -212,7 +224,7 @@
       <label class="battle-field full"><span>Select ${esc(opts.seriesLabel||title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
       ${opts.showTypes?typeChoices(group,key,st):""}
-      ${!item?`<div class="upgrade-unavailable-copy"><strong>Upgrade stage data not available for this series.</strong><br>The series comes from <code>dungeon_drop</code>, but no matching rows are currently available in <code>item_upgrade</code>.</div>`:`
+      ${!item?missingUpgradeCopy(latest):`
         <div class="battle-stage-pair">
           <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
           <label class="battle-field"><span>Target stage</span>${stageSelect(item,entry,key,"target")}</label>
@@ -318,7 +330,7 @@
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select gem series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
-      ${!item?`<div class="upgrade-unavailable-copy"><strong>Upgrade stage data not available for this series.</strong><br>The series is listed in <code>dungeon_drop</code>, but no matching upgrade rows are currently available in <code>item_upgrade</code>.</div>`:`
+      ${!item?missingUpgradeCopy(latest):`
         <div class="battle-stage-pair">
           <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
           <label class="battle-field"><span>Target stage</span>${stageSelect(item,entry,key,"target")}</label>
@@ -366,7 +378,7 @@
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select ${esc(title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
-      ${!item?`<div class="upgrade-unavailable-copy"><strong>Upgrade data not available for this series.</strong><br>The item exists in <code>dungeon_drop</code>, but there are no matching upgrade rows in <code>item_upgrade</code>.</div>`:`
+      ${!item?missingUpgradeCopy(latest):`
         <div class="special-current-stage">
           <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
         </div>

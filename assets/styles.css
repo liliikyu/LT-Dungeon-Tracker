@@ -3792,3 +3792,34 @@ body.conquest-modal-open{overflow:hidden}
     grid-column:1;
   }
 }
+
+
+/* v13.9.4.102 — fix Weapon/Stone material wrapping */
+/* Weapon/Stone had an older higher-specificity desktop grid rule that squeezed each
+   stacked material block into a single narrow parent column. Force the new Gem-style
+   material blocks to span the full card width. */
+.battle-two-grid .battle-materials{
+  grid-template-columns:1fr;
+}
+.battle-two-grid .battle-stacked-material,
+.battle-two-grid .battle-stacked-ely{
+  grid-column:1 / -1;
+  width:100%;
+  min-width:0;
+}
+.battle-two-grid .battle-stacked-material .battle-material-name,
+.battle-two-grid .battle-stacked-ely .battle-material-name{
+  min-width:0;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+@media(max-width:1180px){
+  .battle-two-grid .battle-materials{
+    grid-template-columns:1fr;
+  }
+}
+@media(max-width:760px){
+  .battle-two-grid .battle-materials{
+    grid-template-columns:1fr;
+  }
+}

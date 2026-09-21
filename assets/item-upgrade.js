@@ -280,7 +280,12 @@
         <span class="battle-material-total">/ 0 remaining</span>
       </div>`);
     }
-    rows.push('<div class="battle-ely-row battle-stacked-ely"><span class="battle-material-name"><small>Ely</small><span>Not supplied in item_upgrade</span></span><strong>—</strong><span class="battle-material-total"></span></div>');
+    if(req.elyMillions>0){
+      const ely=formatElyMillions(req.elyMillions);
+      rows.push(`<div class="battle-ely-row battle-stacked-ely"><span class="battle-material-name"><small>Ely</small><span>${req.expected?"Expected cost at current success rate":"Required Ely"}</span></span><strong>${esc(ely)}</strong><span class="battle-material-total"></span></div>`);
+    }else{
+      rows.push('<div class="battle-ely-row battle-stacked-ely"><span class="battle-material-name"><small>Ely</small><span>Not supplied in item_upgrade</span></span><strong>—</strong><span class="battle-material-total"></span></div>');
+    }
     return rows.join("");
   }
   function battleCalculator(slot,key,title,mode,opts={}){

@@ -481,10 +481,15 @@
       const max=evolutionPhaseMax(slot,entry);
       const from=i===ci?st.current:0;
       const to=i===ti?st.target:max;
-      if(to<=from)continue;
+      const enteringLaterSeries=i>ci;
+      if(to<=from&&!enteringLaterSeries)continue;
       let qty=0,phaseEly=0,phaseElyComplete=true,phaseMaterialsComplete=true,materials=[];
       if(item){
-        const stages=stagesFor(item,entry).filter(s=>Number(s.sequence)>from&&Number(s.sequence)<=to);
+        const stages=stagesFor(item,entry).filter(s=>{
+          const seq=Number(s.sequence)||0;
+          if(enteringLaterSeries&&seq===0)return true;
+          return seq>from&&seq<=to;
+        });
         for(const s of stages){
           const materialEntries=stageMaterialEntries(s);
           if(materialEntries.length){
@@ -524,7 +529,7 @@
       return `<div class="evolution-material-row">
         <span><small>${index+1}. ${esc(r.group.dungeonName||r.group.id)}</small><strong>${esc(r.entry.itemName)}</strong><em>${esc(source)}</em></span>
         <b>${r.materialsComplete?r.qty.toLocaleString()+" matts":"TBC"}</b>
-        <small>+${r.from} → +${r.to}</small>
+        <small>${r.from===0&&r.to===0?"Evolution → +0":("+"+r.from+" → +"+r.to)}</small>
       </div>`;
     }).join(""):'<div class="evolution-material-empty">No upgrades required for the selected range.</div>';
     const elyText=st.maxed?"0":(rows.length&&elyComplete?formatElyMillions(elyMillions):"—");

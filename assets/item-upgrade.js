@@ -251,6 +251,51 @@
   }
 
 
+  function gemMaterialRows(key,req){
+    const st=getState(key),rows=[];
+    const materials=Object.entries(req.mats).slice(0,3);
+    materials.forEach(([name,requiredRaw],index)=>{
+      const required=Math.ceil(requiredRaw);
+      const owned=Math.max(0,Number(st.mats?.[name])||0);
+      const remaining=Math.max(0,required-owned);
+      rows.push(`<div class="battle-material-row gem-material-row"><span class="battle-material-name"><small>Material ${index+1}</small>${esc(name)}</span><input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}"><span class="battle-material-total">/ ${required.toLocaleString()} <small>${remaining.toLocaleString()} remaining</small></span></div>`);
+    });
+    if(!materials.length){
+      rows.push('<div class="battle-material-row gem-material-row muted"><span class="battle-material-name"><small>Material</small>Not available</span><input type="number" value="0" disabled><span class="battle-material-total">/ 0</span></div>');
+    }
+    rows.push('<div class="gem-ely-row"><span>Ely</span><strong>—</strong><small>Not supplied in item_upgrade</small></div>');
+    return rows.join("");
+  }
+
+  function gemDetailTable(item,entry){
+    const stages=stagesFor(item,entry);
+    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material(s)</th><th>Each</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(splitMaterials(s).join(" + ")||"—")}</td><td>${esc(s.materialCost||"—")}</td><td>—</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
+  }
+
+  function gemCalculator(slot,key,title,mode){
+    const sel=selectedEntry(slot,key);
+    if(!sel)return `<article class="battle-item-card unavailable"><header class="battle-item-head"><strong>${esc(title)}</strong></header><div class="upgrade-unavailable-copy">No gem series found in dungeon_drop.</div></article>`;
+    const {group,entry,st}=sel;
+    const item=upgradeItemFor(entry);
+    const latest=group.id===latestSeriesId(slot);
+    if(item)ensureTargets(slot,key,item,entry);
+    const req=item?requirements(slot,key,item,entry):null;
+    return `<article class="battle-item-card ${st.maxed?"maxed":""}">
+      <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
+      <label class="battle-field full"><span>Select gem series</span>${seriesSelect(slot,key)}</label>
+      <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong>${entry.dungeonName?` · ${esc(entry.dungeonName)}`:""}</div>
+      ${!item?`<div class="upgrade-unavailable-copy"><strong>Upgrade stage data not available for this series.</strong><br>The series is listed in <code>dungeon_drop</code>, but no matching upgrade rows are currently available in <code>item_upgrade</code>.</div>`:`
+        <div class="battle-stage-pair">
+          <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
+          <label class="battle-field"><span>Target stage</span>${stageSelect(item,entry,key,"target")}</label>
+        </div>
+        <div class="battle-materials gem-materials">${gemMaterialRows(key,req)}</div>
+        <div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>
+        ${mode==="detailed"?gemDetailTable(item,entry):""}
+      `}
+    </article>`;
+  }
+
   function syncGemSeriesDefaults(){
     const red=getState("gems:red");
     const redGroups=seriesGroups("red_gem");
@@ -268,7 +313,7 @@
     const labels=["Red First Gem","Yellow First Gem","Blue First Gem"];
     const parts=keys.map((key,i)=>({label:labels[i],pct:percentFor(slots[i],key)}));
     const refs=keys.map((key,i)=>({slot:slots[i],key}));
-    const cards=keys.map((key,i)=>battleCalculator(slots[i],key,labels[i],mode,{seriesLabel:"gem"})).join("");
+    const cards=keys.map((key,i)=>gemCalculator(slots[i],key,labels[i],mode)).join("");
     return section("GEMS",sectionPreview(parts,refs),`<div class="battle-three-grid">${cards}</div>`);
   }
 

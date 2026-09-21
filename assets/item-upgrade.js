@@ -157,6 +157,20 @@
   }
   function stageName(item,s){return item?.progressionType==="enhancement"?(s.name||("+"+(s.enhancementLevel??s.sequence))):(s.name||("Stage "+s.sequence));}
   function splitMaterials(stage){return String(stage?.materialName||"").split(",").map(x=>x.trim()).filter(Boolean);}
+  function stageMaterialEntries(stage){
+    if(Array.isArray(stage?.materials)&&stage.materials.length){
+      return stage.materials
+        .map((m,i)=>({
+          sequence:Number(m.sequence)||i+1,
+          name:String(m.name||"").trim()||("Material "+(Number(m.sequence)||i+1)),
+          cost:number(m.cost)
+        }))
+        .sort((a,b)=>a.sequence-b.sequence);
+    }
+    const names=splitMaterials(stage),cost=number(stage?.materialCost);
+    if(names.length)return names.map((name,i)=>({sequence:i+1,name,cost}));
+    return cost>0?[{sequence:1,name:"Evolution material",cost}]:[];
+  }
   function number(v){const n=Number(String(v??"").replace(/,/g,""));return Number.isFinite(n)?n:0;}
   function rate(v){const n=Number(String(v||"").replace(/%/g,""));return Number.isFinite(n)&&n>0?Math.min(n/100,1):1;}
   function formatElyMillions(v){
@@ -182,15 +196,14 @@
     const mats={};let stoneRequired=0,stoneName="",expected=false,elyMillions=0;
     for(const s of stages){
       const seq=Number(s.sequence)||0;if(seq<=Number(st.current)||seq>Number(st.target))continue;
-      const cost=number(s.materialCost),success=rate(s.successRate),effective=cost/success;
+      const success=rate(s.successRate);
       const ely=number(s.elyCostMillions);
       if(success<1)expected=true;
       if(ely>0)elyMillions+=ely/success;
-      const materialNames=splitMaterials(s);
-      if(materialNames.length){
-        for(const name of materialNames)mats[name]=(mats[name]||0)+effective;
-      }else if(item?.progressionType==="evolve"&&cost>0){
-        mats["Evolution material"]=(mats["Evolution material"]||0)+effective;
+      const materials=stageMaterialEntries(s);
+      for(const material of materials){
+        const effective=material.cost/success;
+        mats[material.name]=(mats[material.name]||0)+effective;
       }
       const stone=number(s.ascensionStoneCost);if(stone>0){stoneRequired+=stone;s.ascensionStoneName&&(stoneName=s.ascensionStoneName);}
     }
@@ -365,7 +378,7 @@
 
   function gemDetailTable(item,entry){
     const stages=stagesFor(item,entry);
-    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(s.materialCost||"—")}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(stageMaterialEntries(s).length?stageMaterialEntries(s).map(m=>m.name+": "+m.cost.toLocaleString()).join(" · "):(s.materialCost||"—"))}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
   }
 
   function gemCalculator(slot,key,title,mode){
@@ -473,10 +486,17 @@
       if(item){
         const stages=stagesFor(item,entry).filter(s=>Number(s.sequence)>from&&Number(s.sequence)<=to);
         for(const s of stages){
-          const costRaw=String(s.materialCost??"").trim(),cost=number(s.materialCost);
-          if(cost>0)qty+=cost/rate(s.successRate);
-          else if(costRaw&&costRaw!=="0")phaseMaterialsComplete=false;
-          const names=splitMaterials(s);for(const n of names)if(!materials.includes(n))materials.push(n);
+          const materialEntries=stageMaterialEntries(s);
+          if(materialEntries.length){
+            for(const material of materialEntries){
+              if(material.cost>0)qty+=material.cost/rate(s.successRate);
+              else phaseMaterialsComplete=false;
+              if(!materials.includes(material.name))materials.push(material.name);
+            }
+          }else{
+            const costRaw=String(s.materialCost??"").trim();
+            if(costRaw&&costRaw!=="0")phaseMaterialsComplete=false;
+          }
           const ev=number(s.elyCostMillions);
           if(ev>0)phaseEly+=ev/rate(s.successRate); else phaseElyComplete=false;
         }

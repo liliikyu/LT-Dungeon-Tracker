@@ -506,12 +506,14 @@
       let phaseEly=0,phaseElyComplete=true,phaseMaterialsComplete=true;
       const materialTotals=new Map();
 
+      let selectedStages=[];
       if(item){
         const stages=stagesFor(item,entry).filter(s=>{
           const seq=Number(s.sequence)||0;
           if(enteringLaterSeries&&seq===0)return true;
           return seq>from&&seq<=to;
         });
+        selectedStages=stages;
 
         for(const s of stages){
           const materialEntries=stageMaterialEntries(s);
@@ -568,12 +570,47 @@
       else elyComplete=false;
 
       rows.push({
-        group,entry,from,to,materials,
+        group,entry,from,to,materials,stages:selectedStages,
         materialsComplete:phaseMaterialsComplete&&materials.every(m=>m.complete)
       });
     }
 
     return {groups,st,ci,ti,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,totalRemainingMats,materialsComplete,elyMillions,elyComplete};
+  }
+
+  function evolutionDetailedTable(rows,totalMats,materialsComplete,elyMillions,elyComplete){
+    const body=[];
+    for(const r of rows){
+      for(const s of r.stages||[]){
+        let materialText="—";
+        if(Array.isArray(s.materials)&&s.materials.length){
+          materialText=s.materials.map((m,i)=>{
+            const name=String(m.name||"").trim()||("Material "+(Number(m.sequence)||i+1));
+            const raw=String(m.cost??"").trim();
+            return name+": "+(raw||"—");
+          }).join(" · ");
+        }else if(String(s.materialCost||"").trim()){
+          materialText=String(s.materialCost).trim();
+        }
+        body.push(`<tr>
+          <td>${esc(r.entry.itemName+" "+(s.name||("+"+s.sequence)))}</td>
+          <td>${esc(r.group.dungeonName||r.group.id)}</td>
+          <td>${esc(materialText)}</td>
+          <td>${esc(formatElyMillions(s.elyCostMillions))}</td>
+          <td>${esc(s.successRate||"100%")}</td>
+        </tr>`);
+      }
+    }
+    if(!body.length)return "";
+    const totalMaterial=materialsComplete?totalMats.toLocaleString()+" matts":totalMats.toLocaleString()+" known + TBC";
+    const totalEly=elyComplete?formatElyMillions(elyMillions):"—";
+    return `<div class="upgrade-detail-table-wrap evolution-detail-table-wrap">
+      <table class="upgrade-detail-table">
+        <thead><tr><th>Stage</th><th>Dungeon</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead>
+        <tbody>${body.join("")}</tbody>
+        <tfoot><tr><th colspan="2">Selected path total</th><th>${esc(totalMaterial)}</th><th>${esc(totalEly)}</th><th>—</th></tr></tfoot>
+      </table>
+    </div>`;
   }
 
   function evolutionChainCalculator(slot,key,title,mode){
@@ -642,6 +679,7 @@
         <b>${esc(elyText)}</b>
         ${!elyComplete&&rows.length?'<small>Ely data is not supplied for every selected evolution phase.</small>':""}
       </div>
+      ${mode==="detailed"?evolutionDetailedTable(rows,totalMats,materialsComplete,elyMillions,elyComplete):""}
     </article>`;
   }
 

@@ -25,7 +25,14 @@
   function loadState(){try{return JSON.parse(localStorage.getItem(STATE_KEY)||"{}")||{};}catch{return {};}}
   const state=loadState();
   const saveState=()=>{try{localStorage.setItem(STATE_KEY,JSON.stringify(state));}catch{}};
-  const getState=(key)=>state[key]||(state[key]={seriesId:"",typeIndex:0,current:0,target:0,maxed:false,mats:{}});
+  const getState=(key)=>{
+    const existing=state[key];
+    if(!existing || typeof existing!=="object" || Array.isArray(existing)){
+      state[key]={seriesId:"",typeIndex:0,current:0,target:0,maxed:false,mats:{}};
+    }
+    state[key].mats = (state[key].mats && typeof state[key].mats==="object" && !Array.isArray(state[key].mats)) ? state[key].mats : {};
+    return state[key];
+  };
   const normId=(id)=>String(id||"").toLowerCase().replace(/bellial/g,"belial").replace(/textxbook/g,"textbook");
   const upgradeById=new Map((D.items||[]).map(item=>[normId(item.itemId),item]));
 
@@ -229,11 +236,18 @@
     return section("ARMOR",sectionPreview(parts,refs),body);
   }
 
+  function safeBattleBlock(label,fn){
+    try{return fn();}
+    catch(err){
+      console.error("Item Upgrade Battle section failed:",label,err);
+      return `<section class="battle-section battle-section-error"><div class="battle-section-error-copy"><strong>${esc(label)}</strong><span>This section could not load. Refresh once; if it persists, the source data for this section needs checking.</span></div></section>`;
+    }
+  }
   function renderBattle(mode){
-    return weaponStoneSection(mode)
-      +tripleSection("ACCESSORIES · BINDI / GLASSES / STOCKINGS",["bindi","glasses","stockings"],["battle:bindi","battle:glasses","battle:stockings"],["Bindi","Glasses","Stockings"],mode,false)
-      +tripleSection("ACCESSORIES · EARRINGS / RING / CLOAK",["earrings","ring","cloak"],["battle:earrings","battle:ring","battle:cloak"],["Earrings","Ring","Cloak"],mode,true)
-      +armorSection(mode);
+    return safeBattleBlock("Weapon & Elemental Stone",()=>weaponStoneSection(mode))
+      +safeBattleBlock("Accessories · Bindi / Glasses / Stockings",()=>tripleSection("ACCESSORIES · BINDI / GLASSES / STOCKINGS",["bindi","glasses","stockings"],["battle:bindi","battle:glasses","battle:stockings"],["Bindi","Glasses","Stockings"],mode,false))
+      +safeBattleBlock("Accessories · Earrings / Ring / Cloak",()=>tripleSection("ACCESSORIES · EARRINGS / RING / CLOAK",["earrings","ring","cloak"],["battle:earrings","battle:ring","battle:cloak"],["Earrings","Ring","Cloak"],mode,true))
+      +safeBattleBlock("Armor",()=>armorSection(mode));
   }
 
 
@@ -277,7 +291,16 @@
   let tab=["battle","specials","gems"].includes(localStorage.getItem(TAB_KEY))?localStorage.getItem(TAB_KEY):"battle";
   function syncMode(){$("upgrade-mode-simple")?.classList.toggle("active",mode==="simple");$("upgrade-mode-detailed")?.classList.toggle("active",mode==="detailed");$("upgrade-mode-simple")?.setAttribute("aria-pressed",String(mode==="simple"));$("upgrade-mode-detailed")?.setAttribute("aria-pressed",String(mode==="detailed"));}
   function syncTabs(){document.querySelectorAll(".upgrade-game-tab").forEach(b=>{const active=b.dataset.upgradeTab===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});}
-  function render(){syncMode();syncTabs();const root=$("upgrade-tab-content");if(!root)return;root.innerHTML=tab==="battle"?renderBattle(mode):tab==="specials"?renderSpecials(mode):renderGems(mode);}
+  function render(){
+    syncMode();syncTabs();
+    const root=$("upgrade-tab-content");if(!root)return;
+    try{
+      root.innerHTML=tab==="battle"?renderBattle(mode):tab==="specials"?renderSpecials(mode):renderGems(mode);
+    }catch(err){
+      console.error("Item Upgrade tab render failed:",tab,err);
+      root.innerHTML='<div class="upgrade-render-error"><strong>Unable to render this tab.</strong><span>Please refresh the page. The tracker will preserve your saved inputs.</span></div>';
+    }
+  }
   $("upgrade-mode-simple")?.addEventListener("click",()=>{mode="simple";localStorage.setItem(MODE_KEY,mode);render();});
   $("upgrade-mode-detailed")?.addEventListener("click",()=>{mode="detailed";localStorage.setItem(MODE_KEY,mode);render();});
   document.querySelectorAll(".upgrade-game-tab").forEach(b=>b.addEventListener("click",()=>{tab=b.dataset.upgradeTab;localStorage.setItem(TAB_KEY,tab);render();}));

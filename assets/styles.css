@@ -3185,3 +3185,66 @@ body.conquest-modal-open{overflow:hidden}
   color:var(--muted);
   font-size:8.5px;
 }
+
+
+/* v13.9.4.94 — Battle box alignment and detail cleanup */
+.battle-materials{
+  gap:6px;
+}
+.battle-material-row,
+.battle-ely-row{
+  display:grid;
+  grid-template-columns:minmax(210px,1fr) 96px 150px;
+  gap:8px;
+  align-items:center;
+}
+.battle-material-name{
+  font-size:11px;
+  line-height:1.3;
+}
+.battle-material-row input{
+  width:96px;
+  justify-self:start;
+}
+.battle-material-total{
+  font-size:10px;
+  white-space:nowrap;
+}
+.battle-material-total small{
+  display:inline;
+  margin:0;
+  font-size:inherit;
+}
+.battle-material-row.ascension{
+  padding-top:0;
+  border-top:0;
+}
+.battle-ely-row{
+  min-height:28px;
+}
+.battle-ely-row strong{
+  justify-self:start;
+  color:var(--text);
+  font-size:10.5px;
+}
+.battle-ely-row .battle-material-total{
+  color:var(--muted);
+}
+@media(max-width:1180px){
+  .battle-material-row,
+  .battle-ely-row{
+    grid-template-columns:minmax(180px,1fr) 88px 130px;
+  }
+  .battle-material-row input{width:88px;}
+}
+@media(max-width:560px){
+  .battle-material-row,
+  .battle-ely-row{
+    grid-template-columns:minmax(0,1fr) 82px;
+  }
+  .battle-material-row input{width:82px;}
+  .battle-material-total,
+  .battle-ely-row .battle-material-total{
+    grid-column:2;
+  }
+}

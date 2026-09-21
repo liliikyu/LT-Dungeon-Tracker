@@ -4411,3 +4411,15 @@ body.conquest-modal-open{overflow:hidden}
 .evolution-detail-table-wrap .upgrade-detail-table td:nth-child(3){
   white-space:normal;
 }
+
+
+/* v13.9.4.135 — larger evolution expand indicator */
+.evolution-material-details .evolution-material-head::after{
+  font-size:18px;
+  font-weight:700;
+  opacity:.7;
+  transform:translateY(-1px);
+}
+.evolution-material-details[open] .evolution-material-head::after{
+  transform:translateY(-1px) rotate(180deg);
+}

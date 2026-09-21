@@ -3598,3 +3598,87 @@ body.conquest-modal-open{overflow:hidden}
     grid-template-columns:repeat(3,minmax(0,1fr));
   }
 }
+
+
+/* v13.9.4.99 — standardize Battle card typography */
+:root{
+  --upgrade-heading-size:11.5px;
+  --upgrade-body-size:10.5px;
+}
+.battle-field>span,
+.battle-latest-line,
+.battle-estimate>span{
+  color:var(--muted);
+  font-size:var(--upgrade-heading-size);
+  font-weight:750;
+}
+.battle-latest-line strong{
+  color:var(--text);
+  font-size:inherit;
+  font-weight:750;
+}
+.battle-material-name,
+.battle-material-row input,
+.battle-material-total,
+.battle-ely-row strong,
+.battle-ely-row .battle-material-total{
+  font-size:var(--upgrade-body-size);
+  font-weight:400;
+}
+.battle-material-name{
+  color:var(--text);
+}
+.battle-material-row input{
+  color:var(--text);
+}
+.battle-ely-row strong{
+  color:var(--text);
+}
+.battle-estimate{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  padding:9px 10px 10px;
+}
+.battle-estimate strong{
+  display:inline;
+  width:auto;
+  min-height:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--text);
+  font-size:var(--upgrade-heading-size);
+  font-weight:750;
+}
+.battle-estimate small{
+  margin-left:auto;
+}
+@media(max-width:760px){
+  .battle-field>span,
+  .battle-latest-line,
+  .battle-estimate>span{
+    font-size:var(--upgrade-heading-size);
+  }
+  .battle-material-name,
+  .battle-material-row input,
+  .battle-material-total,
+  .battle-ely-row strong,
+  .battle-ely-row .battle-material-total{
+    font-size:var(--upgrade-body-size);
+  }
+  .battle-estimate{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    padding:0 12px 12px;
+  }
+  .battle-estimate strong{
+    width:auto;
+    min-height:0;
+    padding:0;
+    border:0;
+    background:transparent;
+  }
+}

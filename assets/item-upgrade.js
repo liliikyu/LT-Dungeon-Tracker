@@ -440,7 +440,10 @@
   }
 
   function evolutionGroups(slot){
-    return seriesGroups(slot).slice().sort((a,b)=>dungeonNum(a.id)-dungeonNum(b.id));
+    return seriesGroups(slot)
+      .filter(group=>group.entries.some(entry=>upgradeItemFor(entry)))
+      .slice()
+      .sort((a,b)=>dungeonNum(a.id)-dungeonNum(b.id));
   }
   function evolutionPhaseMax(slot,entry){
     const item=upgradeItemFor(entry);

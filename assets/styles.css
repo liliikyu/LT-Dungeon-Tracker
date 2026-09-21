@@ -4017,7 +4017,7 @@ body.conquest-modal-open{overflow:hidden}
 
 /* v13.9.4.110 — Totem and Badge 5 evolution path layout */
 .evolution-chain-card{
-  grid-column:span 2;
+  grid-column:span 1;
 }
 .evolution-stage-block{
   display:grid;
@@ -4150,7 +4150,7 @@ body.conquest-modal-open{overflow:hidden}
   opacity:.55;
 }
 @media(max-width:1050px){
-  .evolution-chain-card{grid-column:1/-1;}
+  .evolution-chain-card{grid-column:span 1;}
 }
 @media(max-width:760px){
   .evolution-stage-controls{
@@ -4194,14 +4194,5 @@ body.conquest-modal-open{overflow:hidden}
 }
 
 
-/* v13.9.4.115 — tighten Totem and Badge 5 card width */
-.evolution-chain-card{
-  grid-column:span 1;
-}
-@media(max-width:1050px){
-  .evolution-chain-card{
-    grid-column:span 1;
-  }
-}
 
 

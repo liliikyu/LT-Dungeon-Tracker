@@ -40,3 +40,5 @@ jobs:
           git add assets/data.js assets/upcoming-item-data.js
           git commit -m "Sync dungeon and title data from normalized Google Sheet tabs"
           git push
+
+# Manual resync trigger: 2026-09-22

@@ -479,7 +479,11 @@
 
   function gemDetailTable(item,entry){
     const stages=stagesFor(item,entry);
-    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(stageMaterialEntries(s).length?stageMaterialEntries(s).map(m=>m.cost.toLocaleString()).join(" / "):(s.materialCost||"—"))}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>{
+      const materials=stageMaterialEntries(s);
+      const qty=materials.length?materials[0].cost.toLocaleString():(s.materialCost||"—");
+      return `<tr><td>${esc(stageName(item,s))}</td><td>${esc(qty)}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`;
+    }).join("")}</tbody></table></div>`;
   }
 
   function specialDetailTable(item,entry){

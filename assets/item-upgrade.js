@@ -113,13 +113,17 @@
   // Armor can be represented in item_upgrade even when dungeon_drop does not expose
   // a matching battleCatalog row. Prefer real upgradeable armor paths so drop-only
   // armor (for example non-upgradeable sets) is not treated as a selectable type.
+  const ARMOR_NAME_OVERRIDES={
+    dng_99_armor_prosperity:"Prosperity Armor",
+    dng_86_armor_1:"Dream Oneiro Armor"
+  };
   const upgradeArmorEntries=(D.items||[])
     .filter(item=>itemSlot(item)==="armor"&&String(item.progressionType||"").trim())
     .map(item=>({
       itemId:item.itemId,
       itemType:"armor_upgrade",
       typeOrder:null,
-      itemName:item.itemName||"",
+      itemName:ARMOR_NAME_OVERRIDES[normId(item.itemId)]||item.itemName||"",
       dungeonId:item.dungeonId,
       dungeonName:item.dungeonName||item.dungeonId
     }));

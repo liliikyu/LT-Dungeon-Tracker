@@ -164,12 +164,21 @@
       : '<div class="upgrade-unavailable-copy"><strong>Upgrade data not available for this series.</strong><br>Assumes it costs 10 matts per upgrade for older equipment.</div>';
   }
 
+  function dungeonAllowsTypeChoice(dungeonId){
+    const dungeon=(window.LT_DATA?.dungeons||[]).find(d=>d.id===dungeonId||d.dungeonId===dungeonId);
+    if(!dungeon)return true;
+    if(dungeon.levelType==="SLv")return true;
+    if(dungeon.levelType==="ULv")return Number(dungeon.numericLevel)>=9998;
+    return false;
+  }
   function selectedEntry(slot,key){
     const groups=seriesGroups(slot);if(!groups.length)return null;
     const st=getState(key);
     if(!st.seriesId||!groups.some(g=>g.id===st.seriesId))st.seriesId=groups[0].id;
     const group=groups.find(g=>g.id===st.seriesId)||groups[0];
-    st.typeIndex=Math.max(0,Math.min(Number(st.typeIndex)||0,group.entries.length-1));
+    st.typeIndex=dungeonAllowsTypeChoice(group.id)
+      ? Math.max(0,Math.min(Number(st.typeIndex)||0,group.entries.length-1))
+      : 0;
     return {group,entry:group.entries[st.typeIndex],state:st};
   }
   function upgradeItemFor(entry){
@@ -342,9 +351,12 @@
     return `<select class="battle-series-select" data-key="${esc(key)}" data-slot="${esc(slot)}" ${st.maxed?"disabled":""}>${groups.map(g=>`<option value="${esc(g.id)}" ${g.id===st.seriesId?"selected":""}>${esc(groupLabel(g,slot)+upcomingLabel(g.entries[0]))}</option>`).join("")}</select>`;
   }
   function typeChoices(group,key,st){
-    const enabled=group.entries.length>1;
-    const labels=group.entries.slice(0,2).map((e,i)=>`<label class="${enabled?"":"disabled"}"><input class="battle-type-choice" type="radio" name="${esc(key)}-type" data-key="${esc(key)}" value="${i}" ${Number(st.typeIndex)===i?"checked":""} ${enabled?"":"disabled"}> Type ${i+1}<small>${esc(e.itemName)}</small></label>`).join("");
-    if(group.entries.length===1)return `<div class="battle-type-row"><label class="disabled"><input type="radio" checked disabled> Type 1<small>${esc(group.entries[0].itemName)}</small></label><label class="disabled"><input type="radio" disabled> Type 2</label></div>`;
+    const selectable=dungeonAllowsTypeChoice(group.id)&&group.entries.length>1;
+    if(!selectable){
+      const names=[...new Set(group.entries.slice(0,2).map(e=>e.itemName).filter(Boolean))].join(" / ");
+      return `<div class="battle-type-row"><label class="disabled"><input type="radio" checked disabled> Type 1<small>${esc(names||group.entries[0]?.itemName||"")}</small></label><label class="disabled"><input type="radio" disabled> Type 2</label></div>`;
+    }
+    const labels=group.entries.slice(0,2).map((e,i)=>`<label><input class="battle-type-choice" type="radio" name="${esc(key)}-type" data-key="${esc(key)}" value="${i}" ${Number(st.typeIndex)===i?"checked":""}> Type ${i+1}<small>${esc(e.itemName)}</small></label>`).join("");
     return `<div class="battle-type-row">${labels}</div>`;
   }
   function stageSelect(item,entry,key,kind){

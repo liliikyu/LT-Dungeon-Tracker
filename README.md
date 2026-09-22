@@ -1,4 +1,4 @@
-# LaTale Dungeon Tracker — v13.9.4.69
+# Latale Fanmade Illustration Book
 
 
 ## v13.9.4.69 — normalized dungeon data sync

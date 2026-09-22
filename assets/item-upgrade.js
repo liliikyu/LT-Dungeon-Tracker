@@ -391,7 +391,7 @@
 
   function gemMaterialRows(key,req){
     const st=getState(key),rows=[];
-    const materials=Object.entries(req.mats).slice(0,3);
+    const materials=Object.entries(req.mats);
     materials.forEach(([name,requiredRaw],index)=>{
       const required=Math.ceil(requiredRaw);
       const owned=Math.max(0,Number(st.mats?.[name])||0);

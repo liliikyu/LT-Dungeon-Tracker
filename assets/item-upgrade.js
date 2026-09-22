@@ -365,9 +365,22 @@
     const opts=[`<option value="0" ${Number(value)===0?"selected":""}>${baseLabel}</option>`].concat(stages.map(s=>`<option value="${s.sequence}" ${Number(value)===Number(s.sequence)?"selected":""}>${esc(stageName(item,s))}</option>`));
     return `<select class="battle-${kind}-select" data-key="${esc(key)}" ${st.maxed?"disabled":""}>${opts.join("")}</select>`;
   }
+  function detailedMaterialQty(item,stage){
+    const materials=stageMaterialEntries(stage);
+    if(!materials.length)return String(stage?.materialCost||"").trim()||"—";
+    const quantities=materials.map(m=>{
+      const raw=Array.isArray(stage?.materials)
+        ? stage.materials.find(x=>String(x.name||"").trim()===String(m.name||"").trim())?.cost
+        : null;
+      return String(raw??m.cost??"").trim()||"—";
+    });
+    const isRelic=String(item?.itemId||"").toLowerCase().includes("_relic");
+    return isRelic?quantities.join(" / "):quantities[0];
+  }
+
   function detailTable(item,entry){
     const stages=stagesFor(item,entry);
-    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ascension Stone</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(s.materialCost||"—")}</td><td>${s.ascensionStoneCost&&number(s.ascensionStoneCost)>0?esc(s.ascensionStoneCost):"—"}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ascension Stone</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>`<tr><td>${esc(stageName(item,s))}</td><td>${esc(detailedMaterialQty(item,s))}</td><td>${s.ascensionStoneCost&&number(s.ascensionStoneCost)>0?esc(s.ascensionStoneCost):"—"}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`).join("")}</tbody></table></div>`;
   }
   function materialRows(key,req){
     const st=getState(key),rows=[];
@@ -512,8 +525,7 @@
   function gemDetailTable(item,entry){
     const stages=stagesFor(item,entry);
     return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>{
-      const materials=stageMaterialEntries(s);
-      const qty=materials.length?materials[0].cost.toLocaleString():(s.materialCost||"—");
+      const qty=detailedMaterialQty(item,s);
       return `<tr><td>${esc(stageName(item,s))}</td><td>${esc(qty)}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`;
     }).join("")}</tbody></table></div>`;
   }
@@ -521,15 +533,7 @@
   function specialDetailTable(item,entry){
     const stages=stagesFor(item,entry);
     return `<div class="upgrade-detail-table-wrap"><table class="upgrade-detail-table"><thead><tr><th>Stage</th><th>Material Qty</th><th>Ely</th><th>Success</th></tr></thead><tbody>${stages.map(s=>{
-      const materials=stageMaterialEntries(s);
-      const qty=materials.length
-        ? materials.map(m=>{
-            const raw=Array.isArray(s.materials)
-              ? s.materials.find(x=>String(x.name||"").trim()===String(m.name||"").trim())?.cost
-              : null;
-            return String(raw??m.cost??"").trim()||"—";
-          }).join(" / ")
-        : (String(s.materialCost||"").trim()||"—");
+      const qty=detailedMaterialQty(item,s);
       return `<tr><td>${esc(stageName(item,s))}</td><td>${esc(qty)}</td><td>${esc(formatElyMillions(s.elyCostMillions))}</td><td>${esc(s.successRate||"100%")}</td></tr>`;
     }).join("")}</tbody></table></div>`;
   }

@@ -677,11 +677,9 @@
             return [...byQty.entries()].map(([qty,names])=>qty+" · "+names.join(", ")).join(" · ");
           })()
         : "—");
-      const range=r.from===0&&r.to===0?"Evolution → +0":("+"+r.from+" → +"+r.to);
       const phaseEly=r.elyComplete?formatElyMillions(r.elyMillions):"—";
       return `<tr>
         <td>${esc(r.entry.itemName)}</td>
-        <td>${esc(range)}</td>
         <td>${esc(materialText)}</td>
         <td>${esc(phaseEly)}</td>
       </tr>`;
@@ -690,9 +688,9 @@
     const totalEly=elyComplete?formatElyMillions(elyMillions):"—";
     return `<div class="upgrade-detail-table-wrap evolution-detail-table-wrap">
       <table class="upgrade-detail-table">
-        <thead><tr><th>Evolution</th><th>Range</th><th>Material Qty</th><th>Ely</th></tr></thead>
+        <thead><tr><th>Evolution</th><th>Material Qty</th><th>Ely</th></tr></thead>
         <tbody>${body}</tbody>
-        <tfoot><tr><th colspan="2">Selected path total</th><th>${esc(totalMaterial)}</th><th>${esc(totalEly)}</th></tr></tfoot>
+        <tfoot><tr><th>Selected path total</th><th>${esc(totalMaterial)}</th><th>${esc(totalEly)}</th></tr></tfoot>
       </table>
     </div>`;
   }

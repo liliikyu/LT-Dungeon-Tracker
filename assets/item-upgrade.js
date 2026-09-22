@@ -621,9 +621,11 @@
     return {groups,st,ci,ti,currentGroup,targetGroup,currentEntry,targetEntry,rows,totalMats,totalRemainingMats,materialsComplete,elyMillions,elyComplete};
   }
 
-  function evolutionDetailedTable(rows,totalMats,materialsComplete,elyMillions,elyComplete){
+  function evolutionDetailedTable(slot,rows,totalMats,materialsComplete,elyMillions,elyComplete){
     if(!rows.length)return "";
+    const latestEvolutionId=evolutionGroups(slot).at(-1)?.id||"";
     const variableMaterialSummary=(r)=>{
+      if(r.group.id!==latestEvolutionId)return "";
       const item=upgradeItemFor(r.entry);
       const allStages=item?stagesFor(item,r.entry).sort((a,b)=>(Number(a.sequence)||0)-(Number(b.sequence)||0)):[];
       if(allStages.length<2)return "";
@@ -714,12 +716,10 @@
         </div>`;
       }).join(""):'<div class="evolution-phase-material muted"><span>Upgrade material not specified</span></div>';
 
-      const rangeLabel=r.from===0&&r.to===0?"Evolution → +0":("+"+r.from+" → +"+r.to);
       return `<div class="evolution-material-row">
         <div class="evolution-material-copy">
           <strong>${index+1}. ${esc(r.entry.itemName)}</strong>
           ${phaseMaterials}
-          ${mode==="detailed"?`<small class="evolution-range-detail">${esc(rangeLabel)}</small>`:""}
         </div>
       </div>`;
     }).join(""):'<div class="evolution-material-empty">No upgrades required for the selected range.</div>';
@@ -761,7 +761,7 @@
         <b>${esc(elyText)}</b>
         ${!elyComplete&&rows.length?'<small>Ely data is not supplied for every selected evolution phase.</small>':""}
       </div>
-      ${mode==="detailed"?evolutionDetailedTable(rows,totalMats,materialsComplete,elyMillions,elyComplete):""}
+      ${mode==="detailed"?evolutionDetailedTable(slot,rows,totalMats,materialsComplete,elyMillions,elyComplete):""}
     </article>`;
   }
 

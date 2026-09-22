@@ -4448,3 +4448,39 @@ body.conquest-modal-open{overflow:hidden}
   color:var(--muted);
   font-size:9px;
 }
+
+
+/* v13.9.4.146 — keep Detailed Battle mode identical to Simplified on mobile */
+@media(max-width:760px){
+  .item-upgrade-page .battle-section-body,
+  .item-upgrade-page .battle-two-grid,
+  .item-upgrade-page .battle-three-grid,
+  .item-upgrade-page .battle-primary-card,
+  .item-upgrade-page .battle-second-weapon,
+  .item-upgrade-page .battle-item-card{
+    min-width:0;
+    max-width:100%;
+  }
+
+  .item-upgrade-page .upgrade-detail-table-wrap{
+    display:block;
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .item-upgrade-page .upgrade-detail-table{
+    width:max-content;
+    min-width:520px;
+    max-width:none;
+  }
+
+  .item-upgrade-page .battle-item-card,
+  .item-upgrade-page .battle-item-card *{
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
+  }
+}

@@ -67,6 +67,7 @@
       });
       (async()=>{
         try{
+          await load(`assets/data.js?ts=${stamp}`);
           await load(`assets/upcoming-item-data.js?ts=${stamp}`);
           await load(`assets/item-upgrade-data.js?ts=${stamp}`);
           await load(`assets/item-upgrade.js?ts=${stamp}`);

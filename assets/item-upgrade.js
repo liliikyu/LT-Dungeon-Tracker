@@ -7,6 +7,42 @@
   const MODE_KEY="lt-item-upgrade-mode-v1";
   const TAB_KEY="lt-item-upgrade-tab-v1";
   const RUN_MIN=90,RUN_MAX=150;
+  const upcomingByItemId=new Map((window.LT_UPCOMING_ITEMS||[]).map(item=>[normId(item.itemId),item]));
+
+  function upcomingForEntry(entry){
+    return entry?upcomingByItemId.get(normId(entry.itemId))||null:null;
+  }
+  function upcomingLabel(entry){
+    return upcomingForEntry(entry)?" — Upcoming change":"";
+  }
+  function upcomingWarning(entry){
+    const change=upcomingForEntry(entry);
+    if(!change)return "";
+    const type=String(change.changeType||"").toLowerCase();
+    const cost=Number(change.newMaterialCost);
+    const hasCost=Number.isFinite(cost)&&cost>0;
+    let title="Upcoming item change";
+    let message="";
+    if(type==="evolution_chain_ends"){
+      title="Evolution chain ends next update";
+      message="This is the final item in the current evolution chain. The next "+(change.replacementItem||"Totem")+" will be obtained as an independent special-equipment drop rather than evolving from this item.";
+    }else if(type==="replacement_and_nerf"||(type==="replacement"&&hasCost)){
+      title="Upcoming replacement & upgrade cost change";
+      message="This item is expected to be replaced in the next update"+(change.replacementItem?" by "+change.replacementItem:"")+".";
+    }else if(type==="replacement"){
+      title="Being replaced next update";
+      message="A newer item is expected to replace this equipment"+(change.replacementItem?" ("+change.replacementItem+")":"")+".";
+    }else if(type==="material_nerf"){
+      title="Upgrade cost reduction next update";
+      message="Upgrade material requirements are expected to be reduced in the next update.";
+    }else{
+      message="This item has a documented change coming in the next update.";
+    }
+    if(hasCost)message+=" Upgrade requirements are expected to become "+cost.toLocaleString()+" of each material per enhancement.";
+    if(change.note)message+=" "+change.note+".";
+    const when=change.whenUpdate?'<small>Expected update: '+esc(change.whenUpdate)+'</small>':"";
+    return '<div class="upcoming-item-warning"><strong>'+esc(title)+'</strong><span>'+esc(message)+'</span>'+when+'</div>';
+  }
 
   function preferredTheme(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
   function savedTheme(){const x=localStorage.getItem(THEME_KEY);return ["system","light","dark"].includes(x)?x:"system";}
@@ -284,7 +320,7 @@
   function seriesSelect(slot,key){
     const groups=seriesGroups(slot),st=getState(key);
     if(!st.seriesId&&groups.length)st.seriesId=groups[0].id;
-    return `<select class="battle-series-select" data-key="${esc(key)}" data-slot="${esc(slot)}" ${st.maxed?"disabled":""}>${groups.map(g=>`<option value="${esc(g.id)}" ${g.id===st.seriesId?"selected":""}>${esc(groupLabel(g,slot))}</option>`).join("")}</select>`;
+    return `<select class="battle-series-select" data-key="${esc(key)}" data-slot="${esc(slot)}" ${st.maxed?"disabled":""}>${groups.map(g=>`<option value="${esc(g.id)}" ${g.id===st.seriesId?"selected":""}>${esc(groupLabel(g,slot)+upcomingLabel(g.entries[0]))}</option>`).join("")}</select>`;
   }
   function typeChoices(group,key,st){
     const enabled=group.entries.length>1;
@@ -345,6 +381,7 @@
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select ${esc(opts.seriesLabel||title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
+      ${upcomingWarning(entry)}
       ${opts.showTypes?typeChoices(group,key,st):""}
       ${!item?missingUpgradeCopy(latest):`
         <div class="battle-stage-pair">
@@ -536,7 +573,7 @@
   }
   function evolutionDungeonSelect(slot,key,kind,selectedId,disabled){
     const groups=evolutionGroups(slot);
-    return `<select class="evolution-${kind}-series" data-key="${esc(key)}" ${disabled?"disabled":""}>${groups.map(g=>`<option value="${esc(g.id)}" ${g.id===selectedId?"selected":""}>${esc(g.dungeonName||g.id)} · ${esc(g.entries[0]?.itemName||"")}</option>`).join("")}</select>`;
+    return `<select class="evolution-${kind}-series" data-key="${esc(key)}" ${disabled?"disabled":""}>${groups.map(g=>`<option value="${esc(g.id)}" ${g.id===selectedId?"selected":""}>${esc(g.dungeonName||g.id)} · ${esc((g.entries[0]?.itemName||"")+upcomingLabel(g.entries[0]))}</option>`).join("")}</select>`;
   }
   function evolutionLevelSelect(slot,key,kind,entry,value,disabled){
     const max=evolutionPhaseMax(slot,entry);
@@ -768,6 +805,7 @@
         </div>
         <small class="evolution-latest-note">Is latest: <strong>${targetLatest?"Yes":"No"}</strong></small>
       </div>
+      ${[currentEntry,targetEntry].filter((entry,index,arr)=>entry&&upcomingForEntry(entry)&&arr.findIndex(x=>normId(x?.itemId)===normId(entry.itemId))===index).map(upcomingWarning).join("")}
       <details class="evolution-material-details">
         <summary class="evolution-material-head"><span>Upgrade Material</span></summary>
         <div class="evolution-material-list">
@@ -801,6 +839,7 @@
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select ${esc(title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
+      ${upcomingWarning(entry)}
       ${item?.syntheticRule==="badge6_copy_70"?`<div class="special-rule-note"><strong>Upgrade rule</strong><span>Each attempt consumes <b>1 × ${esc(entry.itemName)}</b> + <b>100M Ely</b> with a <b>70% success rate</b>.</span><small>Expected-cost calculation uses 1 ÷ 70% ≈ 1.43 attempts per successful enhancement.</small></div>`:""}
       ${item?.syntheticRule==="badge6_copy_100_two_per_run"?`<div class="special-rule-note"><strong>Upgrade rule</strong><span>Each enhancement consumes <b>1 × ${esc(entry.itemName)}</b>, costs <b>0 Ely</b>, and succeeds at <b>100%</b>.</span><small>This badge drops <b>2 per dungeon run</b>, so +0 → +30 requires 30 copies = 15 runs.</small></div>`:""}
       ${item?.progressionType==="evolve"?`<div class="special-rule-note evolve-rule-note"><strong>Evolution progression</strong><span>This series evolves level-by-level rather than changing Battle tiers.</span><small>The tracker follows <code>stage_sequence</code> from +1 through the final evolution level.</small></div>`:""}

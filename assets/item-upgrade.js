@@ -110,6 +110,25 @@
   const catalogBySlot={};
   for(const entry of D.battleCatalog||[]){const slot=catalogSlot(entry);if(slot==="other")continue;(catalogBySlot[slot]||(catalogBySlot[slot]=[])).push(entry);}
   const dungeonNum=(id)=>Number(String(id||"").match(/(\d+)/)?.[1]||0);
+  const SPECIAL_SLOTS=new Set(["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"]);
+  function specialsForDungeon(dungeonId){
+    const seen=new Set(),out=[];
+    for(const entry of D.battleCatalog||[]){
+      if(entry.dungeonId!==dungeonId)continue;
+      const slot=catalogSlot(entry);
+      if(!SPECIAL_SLOTS.has(slot))continue;
+      const name=String(entry.itemName||"").trim();
+      if(!name||seen.has(name))continue;
+      seen.add(name);
+      out.push(name);
+    }
+    return out;
+  }
+  function relatedSpecialDropsHtml(dungeonId){
+    const items=specialsForDungeon(dungeonId);
+    if(!items.length)return"";
+    return `<div class="battle-related-specials"><strong>Also drops</strong><span>${items.map(esc).join(" · ")}</span></div>`;
+  }
 
   function seriesGroups(slot){
     const map=new Map();
@@ -381,6 +400,7 @@
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select ${esc(opts.seriesLabel||title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
+      ${relatedSpecialDropsHtml(group.id)}
       ${upcomingWarning(entry)}
       ${opts.showTypes?typeChoices(group,key,st):""}
       ${!item?missingUpgradeCopy(latest):`

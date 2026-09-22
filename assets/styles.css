@@ -3687,7 +3687,7 @@ body.conquest-modal-open{overflow:hidden}
 /* v13.9.4.100 — soften Is latest line */
 .battle-latest-line{
   color:var(--muted);
-  font-size:var(--upgrade-heading-size);
+  font-size:calc(var(--upgrade-heading-size) - 2px);
   font-weight:400;
 }
 .battle-latest-line strong{

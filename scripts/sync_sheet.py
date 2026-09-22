@@ -29,6 +29,8 @@ DUNGEON_DROP_SHEET_NAME = "dungeon_drop"
 TITLE_SET_ID_SHEET_NAME = "title_set_id"
 TITLE_ID_SHEET_NAME = "title_id"
 OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "data.js"
+UPCOMING_OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "upcoming-item-data.js"
+UPCOMING_ITEM_SHEET_NAME = "upcoming_item"
 
 UPGRADE_COLUMNS = [f"upgrade_item_{n}_id" for n in range(1, 15)]
 
@@ -422,21 +424,49 @@ def build_data(
     }
 
 
+def build_upcoming_items(rows: list[list[str]]) -> list[dict]:
+    records = rows_as_dicts(
+        rows,
+        required=("item_id", "change_type", "replacement_item", "new_material_cost", "note", "when_update"),
+    )
+    items = []
+    for row in records:
+        item_id = clean_text(row.get("item_id"))
+        if not item_id:
+            continue
+        items.append({
+            "itemId": item_id,
+            "changeType": clean_text(row.get("change_type")),
+            "replacementItem": clean_text(row.get("replacement_item")),
+            "newMaterialCost": clean_number(row.get("new_material_cost")),
+            "note": clean_text(row.get("note")),
+            "whenUpdate": clean_text(row.get("when_update")),
+        })
+    return items
+
+
 def main() -> None:
     dungeon_rows = fetch_rows(DUNGEON_ID_SHEET_NAME)
     drop_rows = fetch_rows(DUNGEON_DROP_SHEET_NAME)
     title_set_rows = fetch_rows(TITLE_SET_ID_SHEET_NAME)
     title_rows = fetch_rows(TITLE_ID_SHEET_NAME)
+    upcoming_rows = fetch_rows(UPCOMING_ITEM_SHEET_NAME)
     data = build_data(dungeon_rows, drop_rows, title_set_rows, title_rows)
+    upcoming_items = build_upcoming_items(upcoming_rows)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(
         "window.LT_DATA=" + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n",
         encoding="utf-8",
     )
+    UPCOMING_OUTPUT.write_text(
+        "window.LT_UPCOMING_ITEMS=" + json.dumps(upcoming_items, ensure_ascii=False, separators=(",", ":")) + ";\n",
+        encoding="utf-8",
+    )
     print(
         f"Wrote {len(data['dungeons'])} dungeons and {len(data['titles'])} titles to {OUTPUT} "
         f"from {DUNGEON_ID_SHEET_NAME} + {DUNGEON_DROP_SHEET_NAME} + "
-        f"{TITLE_SET_ID_SHEET_NAME} + {TITLE_ID_SHEET_NAME}."
+        f"{TITLE_SET_ID_SHEET_NAME} + {TITLE_ID_SHEET_NAME}; "
+        f"wrote {len(upcoming_items)} upcoming-item warnings from {UPCOMING_ITEM_SHEET_NAME}."
     )
 
 

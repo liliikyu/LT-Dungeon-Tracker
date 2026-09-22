@@ -855,7 +855,7 @@
         </div>
         <div class="battle-materials special-materials">${gemMaterialRows(key,req)}</div>
         ${item.syntheticRule==="badge6_copy_60_70_two_per_run"
-          ?(()=>{const {st}=ensureTargets(slot,key,item,entry);const levels=Math.max(0,Number(st.target)-Number(st.current));const owned=Math.max(0,Number(st.mats?.[entry.itemName])||0);const lowCopies=Math.max(0,Math.ceil(levels/0.70)-owned);const highCopies=Math.max(0,Math.ceil(levels/0.60)-owned);const lowRuns=Math.ceil(lowCopies/2),highRuns=Math.ceil(highCopies/2);return `<div class="battle-estimate"><span>Estimated runs</span><strong>≈${lowRuns===highRuns?lowRuns:lowRuns+"–"+highRuns} runs</strong><small>Based on 60–70% success and 2 badge copies per successful Unknown Beach clear.</small></div>`;})()
+          ?(()=>{const {st}=ensureTargets(slot,key,item,entry);const levels=Math.max(0,Number(st.target)-Number(st.current));const lowAttempts=Math.ceil(levels/0.70),highAttempts=Math.ceil(levels/0.60);return `<div class="battle-estimate"><span>Estimated attempts</span><strong>≈${lowAttempts===highAttempts?lowAttempts:lowAttempts+"–"+highAttempts} attempts</strong><small>Based on a 60–70% success rate; actual attempts may vary.</small></div>`;})()
           :item.syntheticRule==="badge6_copy_100_two_per_run"
             ?`<div class="battle-estimate"><span>Estimated runs</span><strong>${Math.ceil(req.remainingTotal/2)} runs</strong><small>Based on 2 badge copies per dungeon run.</small></div>`
             :`<div class="battle-estimate"><span>${item.progressionType==="evolve"?"Estimated runs to max":"Estimated runs"}</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>`}

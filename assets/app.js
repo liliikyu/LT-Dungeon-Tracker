@@ -218,6 +218,14 @@
     return "accessories";
   }
 
+  const BATTLE_GEAR_CATEGORIES = new Set(["badge", "textbook", "necklace", "belt", "sticker", "brooch"]);
+
+  function battleGearFor(dungeonName) {
+    return uniqueLootFor(dungeonName)
+      .map((name) => ({ name, category: uniqueLootCategory(name) }))
+      .filter((item) => BATTLE_GEAR_CATEGORIES.has(item.category));
+  }
+
   function itemCompletionKey(dungeonName, itemName) {
     return `${normalize(dungeonName)}::${normalize(itemName)}`;
   }
@@ -600,6 +608,18 @@
         <div class="unique-loot-head"><strong>Unique Loot</strong><span class="unique-loot-items">${uniqueLoot.map(esc).join(" · ")}</span></div>
       </section>` : "";
 
+      const battleGear = battleGearFor(dungeon.name);
+      const battleGearSectionHtml = battleGear.length ? `<section class="battle-gear-section">
+        <div class="battle-gear-head">
+          <strong>Battle Gear</strong>
+          <span>Special gear drops in this dungeon</span>
+        </div>
+        <div class="battle-gear-list">${battleGear.map((item) => `<div class="battle-gear-box">
+          <span class="battle-gear-type">${esc(UNIQUE_LOOT_CATEGORY_LABELS[item.category] || item.category)}</span>
+          <span class="battle-gear-name">${esc(item.name)}</span>
+        </div>`).join("")}</div>
+      </section>` : "";
+
       const achievements = achievementsFor(dungeon.name);
       const achievementDone = achievements.filter((achievement) => achievementCompletionState[achievementCompletionKey(dungeon.name, achievement)] === true).length;
       const achievementSectionHtml = achievements.length ? `<section class="dungeon-achievement-section">
@@ -728,7 +748,7 @@
         ${overallHtml}
         ${monsterSummaryHtml}
         ${summaryHtml}
-        ${isExpandable ? `<div class="dungeon-body">${monsterSectionHtml}${uniqueLootSectionHtml}${achievementSectionHtml}${columnsHtml}${titleNote}${scenarioHtml}${conquestSectionHtml}</div>` : ""}
+        ${isExpandable ? `<div class="dungeon-body">${monsterSectionHtml}${uniqueLootSectionHtml}${battleGearSectionHtml}${achievementSectionHtml}${columnsHtml}${titleNote}${scenarioHtml}${conquestSectionHtml}</div>` : ""}
       `;
 
       return `<article class="dungeon-card${isExpanded ? " expanded" : ""}${isExpandable ? " expandable" : ""}${hasDrops ? " has-drops" : " no-drops"}${conquestMode ? " conquest-mode" : ""}" data-category="${categoryFor(dungeon.level)}" data-dungeon-key="${esc(dungeonKey)}">

@@ -186,12 +186,10 @@
   }
   function latestSeriesId(slot){return seriesGroups(slot)[0]?.id||"";}
   function groupLabel(group,slot){
-    const names=group.entries.map(e=>e.itemName.replace(new RegExp("\\s+(Weapon|Elemental Stone|Bindi|Glasses|Stockings|Earrings?|Ring|Cloak|Armor)$","i"),"").trim()).filter(Boolean);
+    const names=group.entries.map(e=>e.itemName.replace(new RegExp("\\s+(Weapon|Elemental Stone|Bindi|Glasses|Stockings|Earrings?|Ring|Cloak|Armor)$","i"),"")).filter(Boolean);
     const unique=[...new Set(names)];
     const series=unique.length<=2?unique.join(" / "):(group.dungeonName||group.id);
-    const dungeonName=String(group.dungeonName||"").trim();
-    const sameLabel=series.trim().toLowerCase()===dungeonName.toLowerCase();
-    return series+(dungeonName&&!sameLabel?" · "+dungeonName:"");
+    return series+(group.dungeonName&&series!==group.dungeonName?" · "+group.dungeonName:"");
   }
   function missingUpgradeCopy(latest){
     return latest

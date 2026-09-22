@@ -7,6 +7,32 @@
   const MODE_KEY="lt-item-upgrade-mode-v1";
   const TAB_KEY="lt-item-upgrade-tab-v1";
   const RUN_MIN=90,RUN_MAX=150;
+  function preferredTheme(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
+  function savedTheme(){const x=localStorage.getItem(THEME_KEY);return ["system","light","dark"].includes(x)?x:"system";}
+  function applyTheme(mode){
+    const resolved=mode==="system"?preferredTheme():mode;
+    document.documentElement.dataset.theme=resolved;
+    document.documentElement.style.colorScheme=resolved;
+    const b=$("theme-toggle");if(!b)return;
+    b.textContent=mode==="light"?"☀":mode==="dark"?"☾":"◐";
+    const label=mode.charAt(0).toUpperCase()+mode.slice(1);
+    b.title="Theme: "+label;b.setAttribute("aria-label","Theme: "+label+". Click to switch theme.");
+  }
+  $("theme-toggle")?.addEventListener("click",()=>{const c=savedTheme();const n=c==="system"?"light":c==="light"?"dark":"system";localStorage.setItem(THEME_KEY,n);applyTheme(n);});
+  applyTheme(savedTheme());
+
+  function loadState(){try{return JSON.parse(localStorage.getItem(STATE_KEY)||"{}")||{};}catch{return {};}}
+  const state=loadState();
+  const saveState=()=>{try{localStorage.setItem(STATE_KEY,JSON.stringify(state));}catch{}};
+  const getState=(key)=>{
+    const existing=state[key];
+    if(!existing || typeof existing!=="object" || Array.isArray(existing)){
+      state[key]={seriesId:"",typeIndex:0,current:0,target:0,maxed:false,mats:{}};
+    }
+    state[key].mats = (state[key].mats && typeof state[key].mats==="object" && !Array.isArray(state[key].mats)) ? state[key].mats : {};
+    return state[key];
+  };
+  const normId=(id)=>String(id||"").toLowerCase().replace(/bellial/g,"belial").replace(/textxbook/g,"textbook");
   const upcomingByItemId=new Map((window.LT_UPCOMING_ITEMS||[]).map(item=>[normId(item.itemId),item]));
 
   function upcomingForEntry(entry){
@@ -44,32 +70,6 @@
     return '<div class="upcoming-item-warning"><strong>'+esc(title)+'</strong><span>'+esc(message)+'</span>'+when+'</div>';
   }
 
-  function preferredTheme(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
-  function savedTheme(){const x=localStorage.getItem(THEME_KEY);return ["system","light","dark"].includes(x)?x:"system";}
-  function applyTheme(mode){
-    const resolved=mode==="system"?preferredTheme():mode;
-    document.documentElement.dataset.theme=resolved;
-    document.documentElement.style.colorScheme=resolved;
-    const b=$("theme-toggle");if(!b)return;
-    b.textContent=mode==="light"?"☀":mode==="dark"?"☾":"◐";
-    const label=mode.charAt(0).toUpperCase()+mode.slice(1);
-    b.title="Theme: "+label;b.setAttribute("aria-label","Theme: "+label+". Click to switch theme.");
-  }
-  $("theme-toggle")?.addEventListener("click",()=>{const c=savedTheme();const n=c==="system"?"light":c==="light"?"dark":"system";localStorage.setItem(THEME_KEY,n);applyTheme(n);});
-  applyTheme(savedTheme());
-
-  function loadState(){try{return JSON.parse(localStorage.getItem(STATE_KEY)||"{}")||{};}catch{return {};}}
-  const state=loadState();
-  const saveState=()=>{try{localStorage.setItem(STATE_KEY,JSON.stringify(state));}catch{}};
-  const getState=(key)=>{
-    const existing=state[key];
-    if(!existing || typeof existing!=="object" || Array.isArray(existing)){
-      state[key]={seriesId:"",typeIndex:0,current:0,target:0,maxed:false,mats:{}};
-    }
-    state[key].mats = (state[key].mats && typeof state[key].mats==="object" && !Array.isArray(state[key].mats)) ? state[key].mats : {};
-    return state[key];
-  };
-  const normId=(id)=>String(id||"").toLowerCase().replace(/bellial/g,"belial").replace(/textxbook/g,"textbook");
   const upgradeById=new Map((D.items||[]).map(item=>[normId(item.itemId),item]));
 
   function itemSlot(item){

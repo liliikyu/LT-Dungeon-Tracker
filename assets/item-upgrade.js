@@ -127,7 +127,7 @@
   function relatedSpecialDropsHtml(dungeonId){
     const items=specialsForDungeon(dungeonId);
     if(!items.length)return"";
-    return `<div class="battle-related-specials"><strong>Also drops</strong><span>${items.map(esc).join(" · ")}</span></div>`;
+    return `<div class="battle-latest-line">Also drops: <strong>${items.map(esc).join(" · ")}</strong></div>`;
   }
 
   function seriesGroups(slot){

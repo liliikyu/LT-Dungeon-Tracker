@@ -3697,6 +3697,36 @@ body.conquest-modal-open{overflow:hidden}
 }
 
 
+/* v13.9.4.142 — related Special Equipment note inside Battle Gear boxes */
+.battle-related-specials{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:start;
+  gap:8px;
+  padding:7px 8px;
+  border:1px solid var(--line-soft);
+  border-radius:8px;
+  background:var(--panel-3);
+  font-size:11px;
+  line-height:1.3;
+}
+.battle-related-specials strong{
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.battle-related-specials span{
+  min-width:0;
+  color:var(--text);
+  overflow-wrap:anywhere;
+}
+.battle-item-card.maxed .battle-related-specials{opacity:.6;}
+@media(max-width:620px){
+  .battle-related-specials{grid-template-columns:1fr;gap:2px;}
+}
+
 /* v13.9.4.101 — Battle materials match Gems style */
 .battle-materials{
   display:grid;

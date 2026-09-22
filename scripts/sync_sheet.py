@@ -8,6 +8,7 @@ unlock type, exchange path, title-set membership, reputation, Ely, and coupon da
 ``title_set_id`` resolves title-set IDs to display names.
 
 ``item_upgrade`` is intentionally NOT consumed by this website sync yet.
+``upcoming_item`` is consumed to generate Item Upgrade warning metadata.
 No third-party Python packages are required.
 """
 from __future__ import annotations

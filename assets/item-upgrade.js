@@ -78,6 +78,10 @@
   function seriesGroups(slot){
     const map=new Map();
     for(const e of catalogBySlot[slot]||[]){
+      // Legacy item drops before the UL era do not use the modern upgrade flow.
+      // Keep Totem and Badge 5 selectable because those slots still rely on their older progression chains.
+      const n=dungeonNum(e.dungeonId);
+      if(n>0&&n<79&&slot!=="totem"&&slot!=="badge_5")continue;
       if(!map.has(e.dungeonId))map.set(e.dungeonId,{id:e.dungeonId,dungeonName:e.dungeonName||e.dungeonId,entries:[]});
       map.get(e.dungeonId).entries.push(e);
     }

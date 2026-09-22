@@ -609,10 +609,15 @@
     if(!rows.length)return "";
     const body=rows.map(r=>{
       const materialText=r.materials.length
-        ? r.materials.map(m=>{
-            const qty=m.complete?m.required.toLocaleString():"TBC";
-            return m.name+": "+qty;
-          }).join(" · ")
+        ? (()=>{
+            const byQty=new Map();
+            r.materials.forEach(m=>{
+              const qty=m.complete?m.required.toLocaleString():"TBC";
+              if(!byQty.has(qty))byQty.set(qty,[]);
+              byQty.get(qty).push(m.name);
+            });
+            return [...byQty.entries()].map(([qty,names])=>qty+" · "+names.join(", ")).join(" · ");
+          })()
         : "—";
       const range=r.from===0&&r.to===0?"Evolution → +0":("+"+r.from+" → +"+r.to);
       const phaseEly=r.elyComplete?formatElyMillions(r.elyMillions):"—";

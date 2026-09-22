@@ -182,10 +182,26 @@
           });
         }
       });
-      return expanded.sort((a,b)=>a.sequence-b.sequence);
+      const deduped=[];
+      const seen=new Set();
+      for(const entry of expanded.sort((a,b)=>a.sequence-b.sequence)){
+        const key=String(entry.name||"").trim().toLowerCase();
+        if(seen.has(key))continue;
+        seen.add(key);
+        deduped.push(entry);
+      }
+      return deduped;
     }
     const names=splitMaterials(stage),cost=number(stage?.materialCost);
-    if(names.length)return names.map((name,i)=>({sequence:i+1,name,cost}));
+    if(names.length){
+      const seen=new Set();
+      return names.filter(name=>{
+        const key=String(name||"").trim().toLowerCase();
+        if(seen.has(key))return false;
+        seen.add(key);
+        return true;
+      }).map((name,i)=>({sequence:i+1,name,cost}));
+    }
     return cost>0?[{sequence:1,name:"Evolution material",cost}]:[];
   }
   function number(v){const n=Number(String(v??"").replace(/,/g,""));return Number.isFinite(n)?n:0;}

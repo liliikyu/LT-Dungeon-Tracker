@@ -4423,3 +4423,28 @@ body.conquest-modal-open{overflow:hidden}
 .evolution-material-details[open] .evolution-material-head::after{
   transform:translateY(-1px) rotate(180deg);
 }
+
+
+/* v13.9.4.141 — upcoming item upgrade warnings */
+.upcoming-item-warning{
+  display:grid;
+  gap:3px;
+  margin:8px 10px 0;
+  padding:9px 10px;
+  border:1px solid color-mix(in srgb,#d79a00 55%,var(--line));
+  border-radius:8px;
+  background:color-mix(in srgb,#d79a00 10%,var(--panel));
+  color:var(--text);
+}
+.upcoming-item-warning strong{
+  font-size:10.5px;
+  font-weight:800;
+}
+.upcoming-item-warning span{
+  font-size:10px;
+  line-height:1.4;
+}
+.upcoming-item-warning small{
+  color:var(--muted);
+  font-size:9px;
+}

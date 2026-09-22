@@ -190,7 +190,7 @@
         dungeonId:entry.dungeonId||"dng_138",
         dungeonName:entry.dungeonName||"",
         progressionType:"enhancement",
-        syntheticRule:"badge6_copy_70_two_per_run",
+        syntheticRule:"badge6_copy_60_70_two_per_run",
         stages:Array.from({length:30},(_,i)=>({
           sequence:i+1,
           key:"enh_"+(i+1),
@@ -201,7 +201,7 @@
           materialName:entry.itemName||"Unknown Star Badge",
           ascensionStoneName:"",
           elyCostMillions:"100",
-          successRate:"70%",
+          successRate:"60%",
           upgradeItemId:(entry.itemId||"dng_138_badge_6")+"_enh_"+(i+1)
         }))
       };
@@ -844,7 +844,7 @@
       <label class="battle-field full"><span>Select ${esc(title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
       ${upcomingWarning(entry)}
-      ${item?.syntheticRule==="badge6_copy_70_two_per_run"?`<div class="special-rule-note"><strong>Upgrade rule</strong><span>Each attempt consumes <b>1 × ${esc(entry.itemName)}</b> + <b>100M Ely</b> with a <b>70% success rate</b>.</span><small>Unknown Beach gives <b>2 badge copies per successful clear</b>. Expected-cost calculation uses 1 ÷ 70% ≈ 1.43 attempts per successful enhancement.</small></div>`:""}
+      ${item?.syntheticRule==="badge6_copy_60_70_two_per_run"?`<div class="special-rule-note"><strong>Upgrade rule</strong><span>Each attempt consumes <b>1 × ${esc(entry.itemName)}</b> + <b>100M Ely</b> with a <b>60–70% success rate</b>.</span><small>Unknown Beach gives <b>2 badge copies per successful clear</b>. Expected runs are shown as a range using 70% for the lower estimate and 60% for the upper estimate.</small></div>`:""}
       ${item?.syntheticRule==="badge6_copy_100_two_per_run"?`<div class="special-rule-note"><strong>Upgrade rule</strong><span>Each enhancement consumes <b>1 × ${esc(entry.itemName)}</b>, costs <b>0 Ely</b>, and succeeds at <b>100%</b>.</span><small>This badge drops <b>2 per dungeon run</b>, so +0 → +30 requires 30 copies = 15 runs.</small></div>`:""}
       ${item?.progressionType==="evolve"?`<div class="special-rule-note evolve-rule-note"><strong>Evolution progression</strong><span>This series evolves level-by-level rather than changing Battle tiers.</span><small>The tracker follows <code>stage_sequence</code> from +1 through the final evolution level.</small></div>`:""}
       ${!item?missingUpgradeCopy(latest):`
@@ -854,8 +854,8 @@
           <label class="battle-field"><span>${item.progressionType==="evolve"?"Target evolution":"Target stage"}</span>${stageSelect(item,entry,key,"target")}</label>
         </div>
         <div class="battle-materials special-materials">${gemMaterialRows(key,req)}</div>
-        ${item.syntheticRule==="badge6_copy_70_two_per_run"
-          ?`<div class="battle-estimate"><span>Estimated runs</span><strong>≈${Math.ceil(req.remainingTotal/2)} runs</strong><small>Based on 70% success and 2 badge copies per successful Unknown Beach clear.</small></div>`
+        ${item.syntheticRule==="badge6_copy_60_70_two_per_run"
+          ?(()=>{const {st}=ensureTargets(slot,key,item,entry);const levels=Math.max(0,Number(st.target)-Number(st.current));const owned=Math.max(0,Number(st.mats?.[entry.itemName])||0);const lowCopies=Math.max(0,Math.ceil(levels/0.70)-owned);const highCopies=Math.max(0,Math.ceil(levels/0.60)-owned);const lowRuns=Math.ceil(lowCopies/2),highRuns=Math.ceil(highCopies/2);return `<div class="battle-estimate"><span>Estimated runs</span><strong>≈${lowRuns===highRuns?lowRuns:lowRuns+"–"+highRuns} runs</strong><small>Based on 60–70% success and 2 badge copies per successful Unknown Beach clear.</small></div>`;})()
           :item.syntheticRule==="badge6_copy_100_two_per_run"
             ?`<div class="battle-estimate"><span>Estimated runs</span><strong>${Math.ceil(req.remainingTotal/2)} runs</strong><small>Based on 2 badge copies per dungeon run.</small></div>`
             :`<div class="battle-estimate"><span>${item.progressionType==="evolve"?"Estimated runs to max":"Estimated runs"}</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>`}

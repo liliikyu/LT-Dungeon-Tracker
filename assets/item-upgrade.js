@@ -734,7 +734,7 @@
           ? (st.maxed?0:material.remaining).toLocaleString()+" remaining"
           : "TBC remaining";
         return `<div class="evolution-phase-material">
-          <span class="evolution-phase-material-name">${esc(r.group.dungeonName||r.group.id)} · ${esc(material.name)}</span>
+          <span class="evolution-phase-material-name">${esc(material.name)}</span>
           <input class="battle-material-input evolution-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(material.stateKey)}" value="${esc(material.owned)}" ${st.maxed?"disabled":""}>
           <span class="evolution-phase-remaining">/ ${esc(remainingText)}</span>
         </div>`;
@@ -742,7 +742,7 @@
 
       return `<div class="evolution-material-row">
         <div class="evolution-material-copy">
-          <strong>${index+1}. ${esc(r.entry.itemName)}</strong>
+          <strong>${index+1}. ${esc(r.entry.itemName)} <span class="evolution-item-dungeon">· ${esc(r.group.dungeonName||r.group.id)}</span></strong>
           ${phaseMaterials}
         </div>
       </div>`;

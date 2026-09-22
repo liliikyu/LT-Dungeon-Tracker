@@ -109,6 +109,35 @@
   }
   const catalogBySlot={};
   for(const entry of D.battleCatalog||[]){const slot=catalogSlot(entry);if(slot==="other")continue;(catalogBySlot[slot]||(catalogBySlot[slot]=[])).push(entry);}
+
+  // Armor can be represented in item_upgrade even when dungeon_drop does not expose
+  // a matching battleCatalog row. Prefer real upgradeable armor paths so drop-only
+  // armor (for example non-upgradeable sets) is not treated as a selectable type.
+  const upgradeArmorEntries=(D.items||[])
+    .filter(item=>itemSlot(item)==="armor"&&String(item.progressionType||"").trim())
+    .map(item=>({
+      itemId:item.itemId,
+      itemType:"armor_upgrade",
+      typeOrder:null,
+      itemName:item.itemName||"",
+      dungeonId:item.dungeonId,
+      dungeonName:item.dungeonName||item.dungeonId
+    }));
+  if(upgradeArmorEntries.length){
+    const upgradeArmorIds=new Set(upgradeArmorEntries.map(e=>normId(e.itemId)));
+    const upgradeArmorDungeons=new Set(upgradeArmorEntries.map(e=>e.dungeonId));
+    const existingArmor=(catalogBySlot.armor||[]).filter(e=>
+      upgradeArmorIds.has(normId(e.itemId)) || !upgradeArmorDungeons.has(e.dungeonId)
+    );
+    const seen=new Set(existingArmor.map(e=>normId(e.itemId)));
+    for(const entry of upgradeArmorEntries){
+      if(seen.has(normId(entry.itemId)))continue;
+      existingArmor.push(entry);
+      seen.add(normId(entry.itemId));
+    }
+    catalogBySlot.armor=existingArmor;
+  }
+
   const dungeonNum=(id)=>Number(String(id||"").match(/(\d+)/)?.[1]||0);
   const SPECIAL_SLOTS=new Set(["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"]);
   function specialsForDungeon(dungeonId){

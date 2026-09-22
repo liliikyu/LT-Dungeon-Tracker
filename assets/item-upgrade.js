@@ -607,8 +607,48 @@
 
   function evolutionDetailedTable(rows,totalMats,materialsComplete,elyMillions,elyComplete){
     if(!rows.length)return "";
+    const variableMaterialSummary=(r)=>{
+      const item=upgradeItemFor(r.entry);
+      const allStages=item?stagesFor(item,r.entry).sort((a,b)=>(Number(a.sequence)||0)-(Number(b.sequence)||0)):[];
+      if(allStages.length<2)return "";
+      const perMaterial=new Map();
+      for(const stage of allStages){
+        const level=Number(stage.enhancementLevel??stage.sequence);
+        for(const material of stageMaterialEntries(stage)){
+          if(!(material.cost>0))continue;
+          if(!perMaterial.has(material.name))perMaterial.set(material.name,[]);
+          perMaterial.get(material.name).push({level,cost:material.cost});
+        }
+      }
+      if(!perMaterial.size)return "";
+      const summaries=[];
+      for(const [name,values] of perMaterial){
+        values.sort((a,b)=>a.level-b.level);
+        const zero=values.find(v=>v.level===0);
+        if(!zero||values.length<2)return "";
+        const deltas=[];
+        for(let i=1;i<values.length;i++){
+          const levelDiff=values[i].level-values[i-1].level;
+          if(levelDiff<=0)return "";
+          deltas.push((values[i].cost-values[i-1].cost)/levelDiff);
+        }
+        const increase=deltas[0];
+        if(!(increase>0)||!deltas.every(v=>Math.abs(v-increase)<1e-9))return "";
+        summaries.push({name,initial:zero.cost,increase});
+      }
+      const grouped=new Map();
+      summaries.forEach(s=>{
+        const key=s.initial+"::"+s.increase;
+        if(!grouped.has(key))grouped.set(key,{initial:s.initial,increase:s.increase,names:[]});
+        grouped.get(key).names.push(s.name);
+      });
+      return [...grouped.values()].map(g=>
+        g.initial.toLocaleString()+" at +0 · +"+g.increase.toLocaleString()+" per level · "+g.names.join(", ")
+      ).join(" · ");
+    };
     const body=rows.map(r=>{
-      const materialText=r.materials.length
+      const variableSummary=variableMaterialSummary(r);
+      const materialText=variableSummary || (r.materials.length
         ? (()=>{
             const byQty=new Map();
             r.materials.forEach(m=>{
@@ -618,7 +658,7 @@
             });
             return [...byQty.entries()].map(([qty,names])=>qty+" · "+names.join(", ")).join(" · ");
           })()
-        : "—";
+        : "—");
       const range=r.from===0&&r.to===0?"Evolution → +0":("+"+r.from+" → +"+r.to);
       const phaseEly=r.elyComplete?formatElyMillions(r.elyMillions):"—";
       return `<tr>

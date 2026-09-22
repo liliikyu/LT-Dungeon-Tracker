@@ -460,9 +460,9 @@
     const parts=[{label:"Weapon",pct:percentFor("weapon","battle:weapon1")}];
     if(enabled)parts.push({label:"Weapon 2",pct:percentFor("weapon","battle:weapon2")});
     parts.push({label:"Stone",pct:percentFor("elemental_stone","battle:stone")});
-    const weapon1=battleCalculator("weapon","battle:weapon1","Weapon",mode,{seriesLabel:"weapon"});
-    const weapon2=enabled?`<div class="battle-second-weapon">${battleCalculator("weapon","battle:weapon2","Second Weapon",mode,{seriesLabel:"weapon"})}</div>`:"";
-    const body=`<div class="battle-two-grid"><div><div class="battle-primary-card">${weapon1}</div><label class="battle-add-second"><input id="battle-second-weapon-toggle" type="checkbox" ${enabled?"checked":""}> Add second-handed weapon</label>${weapon2}</div><div>${battleCalculator("elemental_stone","battle:stone","Elemental Stone",mode,{seriesLabel:"elemental stone"})}</div></div>`;
+    const weapon1=battleCalculator("weapon","battle:weapon1","Weapon",mode,{seriesLabel:"weapon",showTypes:true});
+    const weapon2=enabled?`<div class="battle-second-weapon">${battleCalculator("weapon","battle:weapon2","Second Weapon",mode,{seriesLabel:"weapon",showTypes:true})}</div>`:"";
+    const body=`<div class="battle-two-grid"><div><div class="battle-primary-card">${weapon1}</div><label class="battle-add-second"><input id="battle-second-weapon-toggle" type="checkbox" ${enabled?"checked":""}> Add second-handed weapon</label>${weapon2}</div><div>${battleCalculator("elemental_stone","battle:stone","Elemental Stone",mode,{seriesLabel:"elemental stone",showTypes:true})}</div></div>`;
     return section("WEAPON & ELEMENTAL STONE",sectionPreview(parts,keys),body);
   }
 
@@ -491,7 +491,7 @@
   }
   function renderBattle(mode){
     return safeBattleBlock("Weapon & Elemental Stone",()=>weaponStoneSection(mode))
-      +safeBattleBlock("Accessories · Bindi / Glasses / Stockings",()=>tripleSection("ACCESSORIES · BINDI / GLASSES / STOCKINGS",["bindi","glasses","stockings"],["battle:bindi","battle:glasses","battle:stockings"],["Bindi","Glasses","Stockings"],mode,false))
+      +safeBattleBlock("Accessories · Bindi / Glasses / Stockings",()=>tripleSection("ACCESSORIES · BINDI / GLASSES / STOCKINGS",["bindi","glasses","stockings"],["battle:bindi","battle:glasses","battle:stockings"],["Bindi","Glasses","Stockings"],mode,true))
       +safeBattleBlock("Accessories · Earrings / Ring / Cloak",()=>tripleSection("ACCESSORIES · EARRINGS / RING / CLOAK",["earrings","ring","cloak"],["battle:earrings","battle:ring","battle:cloak"],["Earrings","Ring","Cloak"],mode,true))
       +safeBattleBlock("Armor",()=>armorSection(mode));
   }

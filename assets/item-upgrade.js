@@ -6,7 +6,7 @@
   const STATE_KEY="lt-item-upgrade-progress-v2";
   const MODE_KEY="lt-item-upgrade-mode-v1";
   const TAB_KEY="lt-item-upgrade-tab-v1";
-  const RUN_MIN=90,RUN_MAX=150;
+  const RUN_MIN=90,RUN_MAX=150,ASCENSION_STONES_PER_D5_RUN=36;
   function preferredTheme(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
   function savedTheme(){const x=localStorage.getItem(THEME_KEY);return ["system","light","dark"].includes(x)?x:"system";}
   function applyTheme(mode){
@@ -435,10 +435,11 @@
     });
     if(req.stoneName||req.stoneRequired>0){
       const owned=Math.max(0,Number(st.mats?.["__stone"])||0),remaining=st.maxed?0:Math.max(0,req.stoneRequired-owned);
+      const d5Runs=Math.ceil(remaining/ASCENSION_STONES_PER_D5_RUN);
       rows.push(`<div class="battle-material-row battle-stacked-material ascension">
         <span class="battle-material-name"><small>ASCENSION STONE</small><span>${esc(req.stoneName||"Ascension Stone")}</span></span>
         <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="__stone" value="${esc(owned)}" ${st.maxed?"disabled":""}>
-        <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
+        <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining<small>${d5Runs.toLocaleString()} Difficulty 5 ${d5Runs===1?"run":"runs"} · ${ASCENSION_STONES_PER_D5_RUN}/run</small></span>
       </div>`);
     }else{
       rows.push(`<div class="battle-material-row battle-stacked-material ascension muted">

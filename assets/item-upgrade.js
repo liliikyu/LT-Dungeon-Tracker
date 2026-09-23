@@ -477,8 +477,7 @@
           <label class="battle-field"><span>Target stage</span>${stageSelect(item,entry,key,"target")}</label>
         </div>
         <div class="battle-materials">${materialRows(key,req)}</div>
-        <div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>
-        ${req.stoneRequired>0?`<div class="battle-ascension-estimate"><span>Difficulty 5 runs</span><strong>${Math.ceil(req.stoneRemaining/ASCENSION_STONES_PER_D5_RUN).toLocaleString()} runs</strong></div>`:""}
+        <div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.stoneRequired>0?`<span class="battle-estimate-separator">,</span><span>Difficulty 5 runs</span><strong>${Math.ceil(req.stoneRemaining/ASCENSION_STONES_PER_D5_RUN).toLocaleString()} runs</strong>`:""}${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>
         ${mode==="detailed"?detailTable(item,entry):""}
       `}
     </article>`;

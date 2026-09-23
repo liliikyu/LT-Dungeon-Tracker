@@ -56,6 +56,9 @@
         <a class="extra-tools-item" href="item-upgrade.html" role="menuitem">
           <span class="extra-tools-item-copy"><strong>Item Upgrade Tracker</strong><small>Upgrade chains & material costs</small></span>
         </a>
+        <a class="extra-tools-item" href="adventure-map.html" role="menuitem">
+          <span class="extra-tools-item-copy"><strong>Adventure Map</strong><small>Adventure board viewer</small></span>
+        </a>
       </div>`;
     if(themeButton?.parentElement===topbarActions) themeButton.insertAdjacentElement("afterend",wrap);
     else topbarActions.appendChild(wrap);

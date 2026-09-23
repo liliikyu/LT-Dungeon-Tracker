@@ -3655,6 +3655,21 @@ body.conquest-modal-open{overflow:hidden}
 .battle-estimate small{
   margin-left:auto;
 }
+.battle-ascension-estimate{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  padding:0 10px 10px;
+  color:var(--muted);
+}
+.battle-ascension-estimate>span,
+.battle-ascension-estimate strong{
+  font-size:calc(var(--upgrade-heading-size) - 1px);
+  font-weight:750;
+}
+.battle-ascension-estimate strong{
+  color:var(--text);
+}
 @media(max-width:760px){
   .battle-field>span,
   .battle-latest-line,
@@ -3673,6 +3688,13 @@ body.conquest-modal-open{overflow:hidden}
     align-items:baseline;
     gap:8px;
     padding:0 12px 12px;
+  }
+  .battle-ascension-estimate{
+    padding:0 12px 12px;
+  }
+  .battle-ascension-estimate>span,
+  .battle-ascension-estimate strong{
+    font-size:calc(var(--upgrade-heading-size) - 1px);
   }
   .battle-estimate strong{
     width:auto;

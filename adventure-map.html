@@ -69,9 +69,69 @@
       .adventure-board-frame{min-height:0;padding:6px}
       .adventure-nav-button{height:38px}
     }
+    .adventure-lock-overlay{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(8,13,22,.94);
+      backdrop-filter:blur(8px);
+    }
+    .adventure-lock-overlay.hidden{display:none}
+    .adventure-lock-card{
+      width:min(100%,380px);
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--panel);
+      padding:20px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    .adventure-lock-card h2{margin:0 0 8px;font-size:20px}
+    .adventure-lock-card p{margin:0 0 14px;color:var(--muted);font-size:13px}
+    .adventure-lock-card input{
+      width:100%;
+      box-sizing:border-box;
+      min-height:42px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:var(--panel-2);
+      color:var(--text);
+      padding:0 12px;
+    }
+    .adventure-lock-card button{
+      width:100%;
+      min-height:42px;
+      margin-top:10px;
+      border:1px solid var(--accent);
+      border-radius:8px;
+      background:var(--accent-soft);
+      color:var(--text);
+      font-weight:750;
+      cursor:pointer;
+    }
+    .adventure-lock-error{
+      min-height:18px;
+      margin-top:8px;
+      color:#e66;
+      font-size:12px;
+    }
   </style>
 </head>
 <body class="extra-tools-page">
+  <div id="adventure-lock" class="adventure-lock-overlay" aria-hidden="false">
+    <section class="adventure-lock-card" role="dialog" aria-modal="true" aria-labelledby="adventure-lock-title">
+      <h2 id="adventure-lock-title">Adventure Map</h2>
+      <p>Enter the password to continue.</p>
+      <form id="adventure-lock-form">
+        <input id="adventure-lock-input" type="password" autocomplete="current-password" aria-label="Password" autofocus>
+        <button type="submit">Unlock</button>
+        <div id="adventure-lock-error" class="adventure-lock-error" aria-live="polite"></div>
+      </form>
+    </section>
+  </div>
   <header class="topbar">
     <div class="shell topbar-inner">
       <a class="brand" href="adventure-map.html" aria-label="Latale Adventure Map">
@@ -104,6 +164,45 @@
       <img id="adventure-source" src="assets/adventure-map.jpg?v=2" alt="" hidden>
     </section>
   </main>
+  <script>
+    (() => {
+      const EXPECTED_HASH="b3303798ccfe8acd96650ee1801b5a1d87c464871d8fe61a6f070949adbc8ef6";
+      const SESSION_KEY="latale-adventure-map-unlocked-v1";
+      const overlay=document.getElementById("adventure-lock");
+      const form=document.getElementById("adventure-lock-form");
+      const input=document.getElementById("adventure-lock-input");
+      const error=document.getElementById("adventure-lock-error");
+
+      const toHex=buffer=>[...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,"0")).join("");
+      const hashText=async value=>toHex(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value)));
+
+      const unlock=()=>{
+        overlay.classList.add("hidden");
+        overlay.setAttribute("aria-hidden","true");
+        try{sessionStorage.setItem(SESSION_KEY,"1")}catch{}
+      };
+
+      try{
+        if(sessionStorage.getItem(SESSION_KEY)==="1")unlock();
+      }catch{}
+
+      form.addEventListener("submit",async event=>{
+        event.preventDefault();
+        error.textContent="";
+        const value=input.value;
+        if(!value)return;
+        const digest=await hashText(value);
+        if(digest===EXPECTED_HASH){
+          input.value="";
+          unlock();
+        }else{
+          error.textContent="Incorrect password.";
+          input.select();
+        }
+      });
+    })();
+  </script>
+
   <script>
     (() => {
       const COLS=7, ROWS=8, TOTAL=COLS*ROWS;

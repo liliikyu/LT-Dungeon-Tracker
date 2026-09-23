@@ -638,6 +638,7 @@
           <label class="battle-field"><span>Target stage</span>${stageSelect(item,entry,key,"target")}</label>
         </div>
         <div class="battle-materials gem-materials">${gemMaterialRows(key,req)}</div>
+        <div class="battle-estimate battle-approx-stage"><span>Approx. stage</span><strong>${esc(approximateReachableStage(slot,key,item,entry))}</strong></div>
         <div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>
         ${mode==="detailed"?gemDetailTable(item,entry):""}
       `}
@@ -972,6 +973,7 @@
           <label class="battle-field"><span>${item.progressionType==="evolve"?"Target evolution":"Target stage"}</span>${stageSelect(item,entry,key,"target")}</label>
         </div>
         <div class="battle-materials special-materials">${gemMaterialRows(key,req)}</div>
+        <div class="battle-estimate battle-approx-stage"><span>Approx. stage</span><strong>${esc(approximateReachableStage(slot,key,item,entry))}</strong></div>
         ${item.syntheticRule==="badge6_copy_60_70_two_per_run"
           ?(()=>{const {st}=ensureTargets(slot,key,item,entry);const levels=Math.max(0,Number(st.target)-Number(st.current));const lowAttempts=Math.ceil(levels/0.70),highAttempts=Math.ceil(levels/0.60);return `<div class="battle-estimate"><span>Estimated attempts</span><strong>≈${lowAttempts===highAttempts?lowAttempts:lowAttempts+"–"+highAttempts} attempts</strong><small>Based on a 60–70% success rate; actual attempts may vary.</small></div>`;})()
           :item.syntheticRule==="badge6_copy_100_two_per_run"

@@ -3655,29 +3655,6 @@ body.conquest-modal-open{overflow:hidden}
 .battle-estimate small{
   margin-left:auto;
 }
-.battle-ascension-estimate{
-  display:flex;
-  align-items:baseline;
-  gap:8px;
-  padding:0 10px 10px;
-}
-.battle-ascension-estimate>span{
-  color:var(--muted);
-  font-size:calc(var(--upgrade-heading-size) - 1px);
-  font-weight:750;
-}
-.battle-ascension-estimate strong{
-  display:inline;
-  width:auto;
-  min-height:0;
-  padding:0;
-  border:0;
-  border-radius:0;
-  background:transparent;
-  color:var(--text);
-  font-size:calc(var(--upgrade-heading-size) - 1px);
-  font-weight:750;
-}
 @media(max-width:760px){
   .battle-field>span,
   .battle-latest-line,
@@ -3697,14 +3674,7 @@ body.conquest-modal-open{overflow:hidden}
     gap:8px;
     padding:0 12px 12px;
   }
-  .battle-ascension-estimate{
-    padding:0 12px 12px;
-  }
-  .battle-ascension-estimate>span,
-  .battle-ascension-estimate strong{
-    font-size:calc(var(--upgrade-heading-size) - 1px);
-  }
-  .battle-estimate strong{
+    .battle-estimate strong{
     width:auto;
     min-height:0;
     padding:0;
@@ -4513,4 +4483,11 @@ body.conquest-modal-open{overflow:hidden}
     -webkit-text-size-adjust:100%;
     text-size-adjust:100%;
   }
+}
+
+.battle-estimate-separator{
+  color:var(--muted);
+  font-size:var(--upgrade-heading-size);
+  font-weight:750;
+  margin-left:-4px;
 }

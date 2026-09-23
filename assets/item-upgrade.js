@@ -352,6 +352,42 @@
     if(st.current>st.target)st.current=st.target;
     return {st,stages,max};
   }
+  function approximateReachableStage(slot,key,item,entry){
+    const {st,stages}=ensureTargets(slot,key,item,entry);
+    const balances={};
+    for(const [name,value] of Object.entries(st.mats||{})){
+      if(name==="__stone")continue;
+      balances[name]=Math.max(0,Number(value)||0);
+    }
+    let stones=Math.max(0,Number(st.mats?.["__stone"])||0);
+    const current=Number(st.current)||0;
+    const target=Math.max(current,Number(st.target)||0);
+    let reached=current;
+
+    for(const stage of stages){
+      const seq=Number(stage.sequence)||0;
+      if(seq<=current||seq>target)continue;
+      const success=rate(stage.successRate);
+      const needed=stageMaterialEntries(stage).map(material=>({
+        name:material.name,
+        cost:material.cost/success
+      }));
+      const stoneCost=number(stage.ascensionStoneCost);
+
+      const enoughMaterials=needed.every(material=>(balances[material.name]||0)+1e-9>=material.cost);
+      const enoughStones=stones+1e-9>=stoneCost;
+      if(!enoughMaterials||!enoughStones)break;
+
+      for(const material of needed)balances[material.name]=(balances[material.name]||0)-material.cost;
+      stones-=stoneCost;
+      reached=seq;
+    }
+
+    if(reached===0)return item?.progressionType==="tier"?"Base":"+0";
+    const reachedStage=stages.find(stage=>Number(stage.sequence)===reached);
+    return reachedStage?stageName(item,reachedStage):(item?.progressionType==="enhancement"?"+"+reached:"Stage "+reached);
+  }
+
   function requirements(slot,key,item,entry){
     const {st,stages}=ensureTargets(slot,key,item,entry);
     const mats={};let stoneRequired=0,stoneName="",expected=false,elyMillions=0,elySupplied=true,selectedStageCount=0;
@@ -477,6 +513,7 @@
           <label class="battle-field"><span>Target stage</span>${stageSelect(item,entry,key,"target")}</label>
         </div>
         <div class="battle-materials">${materialRows(key,req)}</div>
+        <div class="battle-estimate battle-approx-stage"><span>Approx. stage</span><strong>${esc(approximateReachableStage(slot,key,item,entry))}</strong></div>
         <div class="battle-estimate"><span>Estimated runs</span><strong>${runsText(req.remainingTotal)}</strong>${req.stoneRequired>0?`<span class="battle-estimate-separator">,</span><span>Difficulty 5 runs</span><strong>${Math.ceil(req.stoneRemaining/ASCENSION_STONES_PER_D5_RUN).toLocaleString()} runs</strong>`:""}${req.expected?'<small>Expected value adjusted for upgrade success rate.</small>':""}</div>
         ${mode==="detailed"?detailTable(item,entry):""}
       `}

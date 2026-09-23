@@ -4491,3 +4491,12 @@ body.conquest-modal-open{overflow:hidden}
   font-weight:750;
   margin-left:-4px;
 }
+
+.battle-approx-stage{
+  padding-bottom:0;
+}
+@media(max-width:760px){
+  .battle-approx-stage{
+    padding-bottom:4px;
+  }
+}

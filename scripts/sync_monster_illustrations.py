@@ -25,6 +25,9 @@ OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "monster-illustrations
 
 MONSTER_NAME_FIXES = {
     "Shadow SaElemental Intensity Steed": "Saint Steed",
+    "SaElemental Intensity Valkyrie Warrior": "Saint Valkyrie Warrior",
+    "SaElemental Intensity Valkyrie Wizard": "Saint Valkyrie Wizard",
+    "SaElemental Intensity Valkyrie Lancer": "Saint Valkyrie Lancer",
 }
 
 ALIASES = {

@@ -1,9 +1,18 @@
 const $=id=>document.getElementById(id);
-const state={board:0,square:0,turn:0,busy:false,finished:false};
+const state={board:0,square:0,turn:0,busy:false,finished:false,facing:-1};
 function totalSquares(){return routes.reduce((n,r)=>n+r.length,0)}
 function journeyNumber(board,slot){return routes.slice(0,board).reduce((n,r)=>n+r.length,0)+slot}
 function position(){return routes.slice(0,state.board).reduce((n,r)=>n+r.length,0)+state.square}
-function setPosition(value){let board=0,square=Math.max(0,Math.min(totalSquares(),value));while(board<routes.length-1&&square>routes[board].length){square-=routes[board].length;board++}Object.assign(state,{board,square,finished:value>=totalSquares()})}
+function setPosition(value){const previous=position();let board=0,square=Math.max(0,Math.min(totalSquares(),value));while(board<routes.length-1&&square>routes[board].length){square-=routes[board].length;board++}Object.assign(state,{board,square,finished:value>=totalSquares()});if(value!==previous)facePath(Math.sign(value-previous));}
+function facePath(direction){
+ const points=routes[state.board],i=Math.max(0,state.square-1);
+ // Use the arrival segment, not a straight line across a winding route.
+ let from,to;
+ if(direction>0){from=points[Math.max(0,i-1)];to=points[i];if(i===0){from=points[0];to=points[1]||from}}
+ else{from=points[Math.min(points.length-1,i+1)];to=points[i];if(i===points.length-1){from=points[i];to=points[i-1]||from}}
+ const dx=to[0]-from[0],dy=to[1]-from[1];
+ if(Math.abs(dx)>Math.max(0.5,Math.abs(dy)*0.2))state.facing=dx>0?1:-1;
+}
 function boardImage(index){return "url('boards/"+String(index+1).padStart(2,'0')+".webp')"}
 function render(){
  state.square=Math.min(state.square,routes[state.board].length);state.finished=position()===totalSquares();
@@ -12,6 +21,7 @@ function render(){
  $('boardNumber').textContent=String(n).padStart(2,'0');$('boardBadge').textContent=String(n).padStart(2,'0');
  $('squareLabel').textContent=state.square?'Slot '+state.square+' / '+route.length+' · Slot '+traveled:'At the start';
  const p=state.square?route[state.square-1]:route[0];
+ $('playerAvatar').style.transform=state.facing>0?'scaleX(-1)':'scaleX(1)';
  $('player').style.left=p[0]/252.286*100+'%';$('player').style.top=p[1]/156.444*100+'%';
  $('player').setAttribute('aria-label','Player on board '+n+', '+(state.square?'slot '+state.square:'start'));
  $('trailLine').setAttribute('points',route.map(p=>p.join(',')).join(' '));
@@ -65,7 +75,7 @@ function goToJourneySlot(slot){
 }
 $('journeyForm').addEventListener('submit',event=>{event.preventDefault();try{goToJourneySlot(Number($('journeyInput').value.trim()))}catch(error){$('journeyError').textContent=error.message;$('journeyInput').focus()}});
 $('journeyInput').addEventListener('input',()=>{$('journeyError').textContent=''});
-function reset(){if(state.busy)return;$('journeyInput').value='';$('journeyError').textContent='';Object.assign(state,{board:0,square:0,turn:0,busy:false,finished:false});$('slotInput').value='';$('slotError').textContent='';$('announcement').textContent='Choose a movement button or enter a slot on this board.';$('lastMove').textContent='No moves yet.';render()}
+function reset(){if(state.busy)return;$('journeyInput').value='';$('journeyError').textContent='';Object.assign(state,{board:0,square:0,turn:0,busy:false,finished:false,facing:-1});facePath(1);$('slotInput').value='';$('slotError').textContent='';$('announcement').textContent='Choose a movement button or enter a slot on this board.';$('lastMove').textContent='No moves yet.';render()}
 for(const sign of [1,-1])for(let n=1;n<=12;n++){
  const button=document.createElement('button');button.type='button';button.className='step-button';button.dataset.step=String(sign*n);
  button.textContent=(sign>0?'+':'−')+n;button.setAttribute('aria-label','Move '+(sign>0?'forward':'back')+' '+n+' '+(n===1?'slot':'slots'));

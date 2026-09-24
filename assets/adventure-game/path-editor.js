@@ -23,10 +23,11 @@
  }
  function remember(){history.push({boards:clone(routes),board,slot});if(history.length>50)history.shift()}
  function draw(){
+  const offset=routes.slice(0,board).reduce((n,r)=>n+r.length,0);
   const points=routes[board];slot=Math.min(slot,points.length-1);
   $('editAddSlot').disabled=points.length>=200;$('editRemoveSlot').disabled=points.length<=1;
   $('editBoard').value=String(board);$('editSlot').replaceChildren();
-  points.forEach((p,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent='Slot '+(i+1);$('editSlot').append(o)});
+  points.forEach((p,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent='Slot '+(i+1)+' · Journey '+(offset+i+1);$('editSlot').append(o)});
   $('editSlot').value=String(slot);$('editorCanvas').style.backgroundImage=boardImage(board);
   $('editorLine').setAttribute('points',points.map(p=>p.join(',')).join(' '));
   $('editorPoints').replaceChildren();
@@ -38,7 +39,7 @@
    $('editorPoints').append(g);
   });
   $('editPrevious').disabled=slot===0;$('editNext').disabled=slot===points.length-1;$('editUndo').disabled=history.length===0;
-  $('editorInstruction').textContent='Board '+(board+1)+' · click the center of tile '+(slot+1)+'.';
+  $('editorInstruction').textContent='Board '+(board+1)+' · tile '+(slot+1)+' · Journey slot '+(offset+slot+1)+'. Click its center.';
   $('editorCanvas').setAttribute('aria-label','Board '+(board+1)+', editing slot '+(slot+1)+'. Click to place its center, or use arrow keys to adjust it.');
  }
  function place(x,y,advance=false){

@@ -100,7 +100,7 @@ dialog p{font-size:12px;color:var(--muted);line-height:1.5}
 .mini-board span{position:absolute;bottom:2px;left:2px;background:#111722e8;color:#edf3ff;border-radius:3px;padding:2px 4px;font-size:10px}
 .atlas-bottom,.reset-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px}
 #resetDialog{max-width:430px}.reset-actions{margin-top:16px}
-#pathEditor{width:min(1280px,96vw);top:0;bottom:auto;margin:16px auto}
+#pathEditor{width:calc(100% - 16px);max-width:none;top:0;bottom:auto;margin:8px auto}
 .editor-controls{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:14px 0}
 .editor-controls>label:not(.editor-check){display:grid;gap:5px;font-size:11px;color:var(--muted)}
 .editor-controls select{max-width:100%;min-height:34px;min-width:110px;border:1px solid var(--line);border-radius:7px;padding:6px 9px;background:var(--panel-2);color:var(--text)}

@@ -61,7 +61,7 @@
   $('editorZoom').value='100';fitCanvas();
   const viewport=$('editorCanvas').parentElement;viewport.scrollTop=0;viewport.scrollLeft=0;
  }
- function sizeEditor(){let height=window.innerHeight;try{height=Math.min(height,window.parent.innerHeight)}catch{}dialog.style.maxHeight=Math.max(280,height-100)+'px';mapHeight=Math.max(160,height*.42);dialog.style.setProperty('--editor-map-height',mapHeight+'px');fitCanvas()}
+ function sizeEditor(){let height=window.innerHeight;try{height=Math.min(height,window.parent.innerHeight)}catch{}dialog.style.maxHeight=Math.max(280,height-24)+'px';mapHeight=Math.max(240,height*.72);dialog.style.setProperty('--editor-map-height',mapHeight+'px');fitCanvas()}
  window.addEventListener('resize',()=>{if(dialog.open)sizeEditor()});
  $('editPathButton').addEventListener('click',()=>{
   if(state.busy)return;board=state.board;slot=Math.max(0,state.square-1);draw();

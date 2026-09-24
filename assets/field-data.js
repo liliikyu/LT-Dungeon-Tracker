@@ -1521,7 +1521,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Eidos The Sanctuary"
         },
         {
-          "name": "SaElemental Intensity Valkyrie Ranger",
+          "name": "Saint Valkyrie Ranger",
           "group": "Lv. 261 ~ 280",
           "level": "Lv. 261 ~ 280",
           "sourceField": "Eidos The Sanctuary"
@@ -1533,7 +1533,7 @@ window.LT_FIELD_DATA = {
           "sourceField": "Eidos The Sanctuary"
         },
         {
-          "name": "SaElemental Intensity Steed",
+          "name": "Saint Steed",
           "group": "Lv. 261 ~ 280",
           "level": "Lv. 261 ~ 280",
           "sourceField": "Eidos The Sanctuary"

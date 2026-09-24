@@ -2640,7 +2640,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
         "level": ""
       },
       {
-        "name": "Shadow SaElemental Intensity Steed",
+        "name": "Saint Steed",
         "group": "Lv. 1001 ~ 2000",
         "level": "Lv. 1001 ~ 2000"
       },

@@ -1371,7 +1371,7 @@ window.LT_MONSTER_ILLUSTRATIONS = {
         "level": "Lv. 241 ~ 260"
       }
     ],
-    "Jewell Forest": [
+    "Jewel Forest": [
       {
         "name": "Veska",
         "group": "Boss Monster",

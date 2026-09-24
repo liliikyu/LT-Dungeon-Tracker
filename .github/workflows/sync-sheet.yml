@@ -42,4 +42,4 @@ jobs:
           git pull --rebase origin main
           git push
 
-# Manual resync trigger: 2026-09-24 16:36 BST
+# Manual resync trigger: 2026-09-24 dng_61 dng_62 resync

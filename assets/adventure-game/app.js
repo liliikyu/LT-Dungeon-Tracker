@@ -19,8 +19,8 @@ function render(){
  $('journeyLabel').textContent='Board '+n+' of '+routes.length;$('turnLabel').textContent='Moves: '+state.turn;
  document.querySelectorAll('[data-step]').forEach(button=>{button.disabled=state.busy||(Number(button.dataset.step)>0?traveled===totalSquares():traveled===0)});
  $('editPathButton').disabled=state.busy;$('restart').disabled=state.busy;$('slotInput').disabled=state.busy;$('goButton').disabled=state.busy;
- $('slotInput').max=String(route.length);$('slotInput').placeholder='1–'+route.length;
- $('slotHint').textContent='Board '+n+' · enter a slot from 1 to '+route.length+'.';
+ $('slotInput').max='';$('slotInput').placeholder='1–'+route.length;
+ $('slotHint').textContent='Board '+n+' has '+route.length+' slots. Larger numbers continue across following boards; '+(route.length+1)+' goes to '+(n<routes.length?'board '+(n+1)+', slot 1.':'the final slot.');
  document.querySelectorAll('.mini-board').forEach((el,i)=>{el.classList.toggle('current',i===state.board);el.classList.toggle('complete',i<state.board)});
  $('atlasStatus').textContent='You are on board '+n+' of '+routes.length+'.';
 }
@@ -43,12 +43,14 @@ async function moveBy(steps){
  return result();
 }
 function goToSlot(slot){
- if(!Number.isInteger(slot)||slot<1||slot>routes[state.board].length)throw new Error('Enter a whole slot number from 1 to '+routes[state.board].length+'.');
+ if(!Number.isSafeInteger(slot)||slot<1)throw new Error('Enter a positive whole slot number.');
  if(state.busy)return {error:'A move is already in progress.'};
- const before=state.square;state.square=slot;state.finished=position()===totalSquares();if(before!==slot)state.turn++;
- $('slotError').textContent='';render();
- $('lastMove').textContent='Jumped: '+describe(state.board,before)+' → slot '+slot+'.';
- $('announcement').textContent='Character moved to slot '+slot+' on board '+(state.board+1)+'.';return result();
+ const startBoard=state.board,startSquare=state.square,from=position();
+ const offset=from-state.square,remaining=totalSquares()-offset;
+ setPosition(offset+Math.min(slot,remaining));if(from!==position())state.turn++;
+ $('slotError').textContent='';$('slotInput').value='';render();
+ $('lastMove').textContent='Jumped: '+describe(startBoard,startSquare)+' → '+describe(state.board,state.square)+'.';
+ $('announcement').textContent=(slot>remaining?'That number goes beyond the journey. Stopped at the final slot: ':'Character moved to ')+describe(state.board,state.square)+'.';return result();
 }
 function reset(){if(state.busy)return;Object.assign(state,{board:0,square:0,turn:0,busy:false,finished:false});$('slotInput').value='';$('slotError').textContent='';$('announcement').textContent='Choose a movement button or enter a slot on this board.';$('lastMove').textContent='No moves yet.';render()}
 for(const sign of [1,-1])for(let n=1;n<=12;n++){
@@ -67,7 +69,7 @@ $('confirmReset').addEventListener('click',()=>{reset();$('resetDialog').close()
 if(document.modelContext?.registerTool){
  for(const tool of [
   {name:'move_adventure_character',title:'Move adventure character',description:'Move forward or backward by 1–12 slots, crossing board boundaries as needed.',key:'steps',minimum:-12,maximum:12,action:moveBy},
-  {name:'go_to_adventure_slot',title:'Go to adventure slot',description:'Move directly to a numbered slot on the current board.',key:'slot',minimum:1,action:goToSlot}
+  {name:'go_to_adventure_slot',title:'Go to adventure slot',description:'Jump to a slot counted from the start of the current board, continuing across following boards when needed and stopping at the journey end.',key:'slot',minimum:1,action:goToSlot}
  ])try{Promise.resolve(document.modelContext.registerTool({name:tool.name,title:tool.title,description:tool.description,inputSchema:{type:'object',properties:{[tool.key]:{type:'integer',minimum:tool.minimum,...(tool.maximum?{maximum:tool.maximum}:{})}},required:[tool.key],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:async input=>{if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).length!==1||!Object.hasOwn(input,tool.key))throw new Error('Expected '+tool.key+'.');return tool.action(input[tool.key])}})).catch(()=>{})}catch{}
 }
 reset();

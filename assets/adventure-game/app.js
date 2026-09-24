@@ -26,8 +26,7 @@ function render(){
  $('player').setAttribute('aria-label','Player on board '+n+', '+(state.square?'slot '+state.square:'start'));
  $('trailLine').setAttribute('points',route.map(p=>p.join(',')).join(' '));
  $('destination').setAttribute('cx',route.at(-1)[0]);$('destination').setAttribute('cy',route.at(-1)[1]);
- $('progressFill').style.width=traveled/totalSquares()*100+'%';
- $('journeyLabel').textContent='Journey slot '+traveled+' / '+totalSquares();
+
  $('journeyInput').max=String(totalSquares());$('journeyInput').disabled=state.busy;$('journeyGo').disabled=state.busy;
  $('journeyHint').textContent='Unique across all boards: 1–'+totalSquares()+'. This board: '+journeyNumber(state.board,1)+'–'+journeyNumber(state.board,route.length)+'.';$('turnLabel').textContent='Moves: '+state.turn;
  document.querySelectorAll('[data-step]').forEach(button=>{button.disabled=state.busy||(Number(button.dataset.step)>0?traveled===totalSquares():traveled===0)});

@@ -33,7 +33,7 @@ ALIASES = {
     "Taid: Dragon Garden": "TAID Dragon Garden",
     "TAID: Dragon Garden": "TAID Dragon Garden",
     "World Genesis": "World's Genesis",
-    "Jewel Forest": "Jewell Forest",
+    "Jewell Forest": "Jewel Forest",
     "Promised Sanctuary": "Promised Sancutary",
     "Oblivion Lake": "Oblivon Lake",
     "Munchkin Storage": "Muchkin Storage",

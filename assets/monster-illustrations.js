@@ -2687,17 +2687,17 @@ window.LT_MONSTER_ILLUSTRATIONS = {
         "level": "Lv. 1001 ~ 2000"
       },
       {
-        "name": "SaElemental Intensity Valkyrie Warrior",
+        "name": "Saint Valkyrie Warrior",
         "group": "Lv. 1001 ~ 2000",
         "level": "Lv. 1001 ~ 2000"
       },
       {
-        "name": "SaElemental Intensity Valkyrie Wizard",
+        "name": "Saint Valkyrie Wizard",
         "group": "Lv. 1001 ~ 2000",
         "level": "Lv. 1001 ~ 2000"
       },
       {
-        "name": "SaElemental Intensity Valkyrie Lancer",
+        "name": "Saint Valkyrie Lancer",
         "group": "Lv. 1001 ~ 2000",
         "level": "Lv. 1001 ~ 2000"
       },

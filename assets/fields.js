@@ -294,7 +294,7 @@
       return `<label class="dungeon-achievement-row${checked?" completed":""}" data-field-achievement-key="${esc(k)}">
         <input class="achievement-check field-achievement-check" type="checkbox" data-field="${esc(field.name)}" ${checked?"checked":""} aria-label="Mark ${esc(a.name)} achievement as completed">
         <span class="dungeon-achievement-copy">
-          <span class="dungeon-achievement-name">${esc(a.name)} <span class="dungeon-achievement-via">(via Exploration)</span></span>
+          <span class="dungeon-achievement-name">${esc(a.name)} <span class="dungeon-achievement-via">(via ${esc(a.category||"Explore")})</span></span>
           <span class="dungeon-achievement-objective"><strong>Objective:</strong> ${esc(a.objective||"—")}</span>
           ${notes?`<span class="dungeon-achievement-notes"><strong>Notes:</strong> ${esc(notes)}</span>`:""}
         </span>

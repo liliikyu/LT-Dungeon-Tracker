@@ -23,6 +23,10 @@ SOURCE = "https://latale.wiki.gg/wiki/Monster_Illustrations"
 API = "https://latale.wiki.gg/api.php"
 OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "monster-illustrations.js"
 
+MONSTER_NAME_FIXES = {
+    "Shadow SaElemental Intensity Steed": "Saint Steed",
+}
+
 ALIASES = {
     "Dragon's Lair": "Dragon Lair",
     "Shangri-La": "Shangri-la",
@@ -337,7 +341,7 @@ def parse_dungeons(html: str) -> dict[str, list[dict]]:
         for row in table[header_index + 1:]:
             if name_index >= len(row) or location_index >= len(row):
                 continue
-            name = clean_text(row[name_index])
+            name = MONSTER_NAME_FIXES.get(clean_text(row[name_index]), clean_text(row[name_index]))
             location = clean_text(row[location_index])
             if not name or not location:
                 continue

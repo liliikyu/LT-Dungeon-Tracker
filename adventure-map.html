@@ -9,66 +9,7 @@
   <link rel="stylesheet" href="assets/styles.css?v=13.9.4.150-approx-stage">
   <style>
     .adventure-page{padding-top:18px;padding-bottom:28px}
-    .adventure-hero{margin-bottom:14px}
-    .adventure-hero h1{margin:0 0 6px;font-size:22px}
-    .adventure-hero p{margin:0;color:var(--muted)}
-    .adventure-viewer{
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:var(--panel);
-      padding:14px;
-    }
-    .adventure-board-frame{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:260px;
-      overflow:hidden;
-      border:1px solid var(--line-soft);
-      border-radius:10px;
-      background:var(--panel-2);
-      padding:12px;
-    }
-    #adventure-board{
-      display:block;
-      width:min(100%,584px);
-      height:auto;
-      aspect-ratio:292 / 204;
-      image-rendering:auto;
-    }
-    .adventure-controls{
-      display:grid;
-      grid-template-columns:auto minmax(0,1fr) auto;
-      gap:10px;
-      align-items:center;
-      margin-top:12px;
-    }
-    .adventure-nav-button{
-      min-width:48px;
-      height:40px;
-      border:1px solid var(--line);
-      border-radius:8px;
-      background:var(--panel-2);
-      color:var(--text);
-      font-size:24px;
-      font-weight:800;
-      cursor:pointer;
-    }
-    .adventure-nav-button:hover{border-color:var(--accent)}
-    .adventure-board-count{
-      text-align:center;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:750;
-    }
-    .adventure-board-count strong{color:var(--text)}
-    @media(max-width:760px){
-      .adventure-page{padding-top:12px}
-      .adventure-hero h1{font-size:18px}
-      .adventure-viewer{padding:8px;border-radius:9px}
-      .adventure-board-frame{min-height:0;padding:6px}
-      .adventure-nav-button{height:38px}
-    }
+    #adventure-game{display:block;width:100%;height:1250px;border:1px solid var(--line);border-radius:12px;background:#142223}
     .adventure-lock-overlay{
       position:fixed;
       inset:0;
@@ -147,22 +88,9 @@
       </div>
     </div>
   </header>
-  <main class="shell adventure-page">
-    <section class="adventure-hero">
-      <h1>Adventure Map</h1>
-      <p>View one adventure board at a time. Use the arrows to move between boards.</p>
-    </section>
-    <section class="adventure-viewer" aria-label="Adventure board viewer">
-      <div class="adventure-board-frame">
-        <canvas id="adventure-board" width="584" height="408" aria-label="Adventure board 1"></canvas>
-      </div>
-      <div class="adventure-controls">
-        <button id="adventure-prev" class="adventure-nav-button" type="button" aria-label="Previous board">‹</button>
-        <div class="adventure-board-count"><strong id="adventure-board-label">Board 1</strong> / 56</div>
-        <button id="adventure-next" class="adventure-nav-button" type="button" aria-label="Next board">›</button>
-      </div>
-      <img id="adventure-source" src="assets/adventure-map.jpg?v=3" alt="" hidden>
-    </section>
+  <main class="shell adventure-page" id="adventure-content" inert>
+    <iframe id="adventure-game" title="Interactive Adventure Map — roll two dice through 62 boards" data-src="assets/adventure-game/index.html?v=dice-1"></iframe>
+    <noscript>Enable JavaScript to unlock and play the interactive adventure map.</noscript>
   </main>
   <script>
     (() => {
@@ -177,6 +105,9 @@
       const hashText=async value=>toHex(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value)));
 
       const unlock=()=>{
+        const frame=document.getElementById("adventure-game");
+        if(!frame.getAttribute("src"))frame.src=frame.dataset.src;
+        document.getElementById("adventure-content").inert=false;
         overlay.classList.add("hidden");
         overlay.setAttribute("aria-hidden","true");
         try{sessionStorage.setItem(SESSION_KEY,"1")}catch{}
@@ -205,45 +136,13 @@
 
   <script>
     (() => {
-      const COLS=7, ROWS=8, TOTAL=COLS*ROWS;
-      const img=document.getElementById("adventure-source");
-      const canvas=document.getElementById("adventure-board");
-      const ctx=canvas.getContext("2d");
-      const label=document.getElementById("adventure-board-label");
-      const prev=document.getElementById("adventure-prev");
-      const next=document.getElementById("adventure-next");
-      let board=0;
-
-      function draw(){
-        if(!img.complete || !img.naturalWidth)return;
-        const col=board%COLS,row=Math.floor(board/COLS);
-        const x0=Math.round(col*img.naturalWidth/COLS);
-        const x1=Math.round((col+1)*img.naturalWidth/COLS);
-        const y0=Math.round(row*img.naturalHeight/ROWS);
-        const y1=Math.round((row+1)*img.naturalHeight/ROWS);
-        const sw=x1-x0,sh=y1-y0;
-
-        canvas.width=sw*2;
-        canvas.height=sh*2;
-        ctx.imageSmoothingEnabled=true;
-        ctx.imageSmoothingQuality="high";
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        ctx.drawImage(img,x0,y0,sw,sh,0,0,canvas.width,canvas.height);
-
-        label.textContent="Board "+(board+1);
-        canvas.setAttribute("aria-label","Adventure board "+(board+1));
-        prev.disabled=board===0;
-        next.disabled=board===TOTAL-1;
-      }
-
-      prev.addEventListener("click",()=>{if(board>0){board--;draw();}});
-      next.addEventListener("click",()=>{if(board<TOTAL-1){board++;draw();}});
-      document.addEventListener("keydown",event=>{
-        if(event.key==="ArrowLeft"&&board>0){board--;draw();}
-        if(event.key==="ArrowRight"&&board<TOTAL-1){board++;draw();}
+      const frame=document.getElementById("adventure-game");
+      window.addEventListener("message",event=>{
+        if(event.origin!==location.origin || event.source!==frame.contentWindow)return;
+        if(event.data?.type!=="adventure:height")return;
+        const height=Number(event.data.height);
+        if(Number.isFinite(height) && height>=300 && height<=10000)frame.style.height=(Math.ceil(height)+2)+"px";
       });
-      img.addEventListener("load",draw);
-      if(img.complete)draw();
     })();
   </script>
   <script src="assets/global-header.js?v=13.9.4.85-soft-ex"></script>

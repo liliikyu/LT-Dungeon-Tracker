@@ -24,7 +24,7 @@
  function remember(){history.push({boards:clone(routes),board,slot});if(history.length>50)history.shift()}
  function draw(){
   const points=routes[board];slot=Math.min(slot,points.length-1);
-  $('editAddSlot').disabled=points.length>=200;
+  $('editAddSlot').disabled=points.length>=200;$('editRemoveSlot').disabled=points.length<=1;
   $('editBoard').value=String(board);$('editSlot').replaceChildren();
   points.forEach((p,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent='Slot '+(i+1);$('editSlot').append(o)});
   $('editSlot').value=String(slot);$('editorCanvas').style.backgroundImage=boardImage(board);
@@ -64,6 +64,11 @@
   if(routes[board].length>=200)return;
   remember();routes[board].push(routes[board].at(-1).slice());slot=routes[board].length-1;
   draw();save('Slot '+(slot+1)+' added. Click the center of its tile to place it.');
+ });
+ $('editRemoveSlot').addEventListener('click',()=>{
+  const count=routes[board].length;if(count<=1)return;
+  remember();routes[board].pop();draw();
+  save('Slot '+count+' removed from board '+(board+1)+'. You can undo this.');
  });
  $('editorLabels').addEventListener('change',draw);
  $('editorZoom').addEventListener('input',()=>{$('editorCanvas').style.width=$('editorZoom').value+'%';$('editorZoomValue').textContent=$('editorZoom').value+'%'});

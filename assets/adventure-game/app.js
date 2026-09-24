@@ -10,7 +10,7 @@ function render(){
  const n=state.board+1,route=routes[state.board],traveled=position();
  $('board').style.backgroundImage=boardImage(state.board);
  $('boardNumber').textContent=String(n).padStart(2,'0');$('boardBadge').textContent=String(n).padStart(2,'0');
- $('squareLabel').textContent=state.square?'Slot '+state.square+' / '+route.length+' · Journey '+traveled:'At the start';
+ $('squareLabel').textContent=state.square?'Slot '+state.square+' / '+route.length+' · Slot '+traveled:'At the start';
  const p=state.square?route[state.square-1]:route[0];
  $('player').style.left=p[0]/252.286*100+'%';$('player').style.top=p[1]/156.444*100+'%';
  $('player').setAttribute('aria-label','Player on board '+n+', '+(state.square?'slot '+state.square:'start'));

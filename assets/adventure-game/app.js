@@ -31,7 +31,7 @@ function render(){
  $('journeyInput').max=String(totalSquares());$('journeyInput').disabled=state.busy;$('journeyGo').disabled=state.busy;
  $('journeyHint').textContent='Unique across all boards: 1–'+totalSquares()+'. This board: '+journeyNumber(state.board,1)+'–'+journeyNumber(state.board,route.length)+'.';$('turnLabel').textContent='Moves: '+state.turn;
  document.querySelectorAll('[data-step]').forEach(button=>{button.disabled=state.busy||(Number(button.dataset.step)>0?traveled===totalSquares():traveled===0)});
- $('editPathButton').disabled=state.busy;$('restart').disabled=state.busy;$('slotInput').disabled=state.busy;$('goButton').disabled=state.busy;
+ $('restart').disabled=state.busy;$('slotInput').disabled=state.busy;$('goButton').disabled=state.busy;
  $('slotInput').max='';$('slotInput').placeholder='1–'+route.length;
  $('slotHint').textContent='Board '+n+' has '+route.length+' slots. Larger numbers continue across following boards; '+(route.length+1)+' goes to '+(n<routes.length?'board '+(n+1)+', slot 1.':'the final slot.');
  document.querySelectorAll('.mini-board').forEach((el,i)=>{el.classList.toggle('current',i===state.board);el.classList.toggle('complete',i<state.board)});

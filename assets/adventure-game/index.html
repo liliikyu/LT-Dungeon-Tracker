@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Adventure — Map Tracker</title><meta name="description" content="Move through 62 adventure boards using step buttons or a direct slot jump."><link rel="icon" type="image/x-icon" href="../moul.ico?v=moul-1"><link rel="stylesheet" href="style.css?v=mapped-18"></head>
-<body><header><div class="board-heading"><div><span class="eyebrow">Latale Adventure</span><h1 id="squareLabel">At the start</h1></div><div class="location"><i></i><span>Board <span id="boardNumber">01</span> / 62</span></div></div><div class="map-header-actions"><button id="editPathButton" class="editor-button" type="button">Edit paths</button><button id="atlasButton" class="quiet">View all boards <span>↗</span></button></div></header>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Adventure — Map Tracker</title><meta name="description" content="Move through 62 adventure boards using step buttons or a direct slot jump."><link rel="icon" type="image/x-icon" href="../moul.ico?v=moul-1"><link rel="stylesheet" href="style.css?v=published-19"></head>
+<body><header><div class="board-heading"><div><span class="eyebrow">Latale Adventure</span><h1 id="squareLabel">At the start</h1></div><div class="location"><i></i><span>Board <span id="boardNumber">01</span> / 62</span></div></div><div class="map-header-actions"><button id="atlasButton" class="quiet">View all boards <span>↗</span></button></div></header>
 <main><section class="game">
 <div class="board-frame"><div id="board" class="board"><svg id="trail" viewBox="0 0 252.286 156.444" aria-hidden="true"><polyline id="trailLine"/><circle id="destination" r="3"/></svg><div id="player" role="img" aria-label="Your position"><img id="playerAvatar" src="moul.png" alt="" draggable="false"></div><span id="boardBadge">01</span></div></div>
 <div class="under-board"><label><input type="checkbox" id="showTrail"> Show movement trail</label><span>Route preview · approximate tile positions</span></div>
@@ -15,20 +15,5 @@
 <dialog id="atlas"><div class="dialog-heading"><div><span class="eyebrow">THE FULL JOURNEY</span><h2>Your adventure atlas</h2></div><button id="closeAtlas" aria-label="Close atlas" class="quiet">✕</button></div><p>Travel left to right through each row. Your current board is highlighted.</p><div id="atlasGrid"></div><div class="atlas-bottom"><span id="atlasStatus"></span><button id="backToGame" class="primary">Back to the journey</button></div></dialog>
 <dialog id="resetDialog"><h2>Start a new journey?</h2><p>This takes you back to the first board.</p><div class="reset-actions"><button id="cancelReset" class="quiet">Keep playing</button><button id="confirmReset" class="primary">Start again</button></div></dialog>
 
-<dialog id="pathEditor" aria-labelledby="editorTitle">
- <div class="dialog-heading"><div><span class="eyebrow">PATH EDITOR</span><h2 id="editorTitle">Place each slot on its tile</h2></div><button id="editorClose" class="primary" type="button">Done</button></div>
- <p>Choose a board and slot, then click or tap the center of its tile. Use Add slot to append a missing tile, then click its center. Use Remove last slot to trim extra tiles from the end; Undo restores a removed slot. Edits apply to your game and save in this browser.</p>
- <div class="editor-controls">
-  <label>Board<select id="editBoard"></select></label>
-  <label>Slot<select id="editSlot"></select></label>
-  <div class="editor-slot-nav"><button id="editPrevious" class="editor-button" type="button">← Previous</button><button id="editNext" class="editor-button" type="button">Next →</button><button id="editAddSlot" class="editor-button" type="button">+ Add slot</button><button id="editRemoveSlot" class="editor-button" type="button">− Remove last slot</button></div>
-  <label class="editor-check"><input id="editorAdvance" type="checkbox"> Next slot after placing</label>
- </div>
- <div class="editor-view-controls"><strong id="editorInstruction"></strong><label>Zoom <input id="editorZoom" type="range" min="100" max="300" step="25" value="100"><span id="editorZoomValue">100%</span></label><button id="editorFit" type="button">Fit whole map</button><label class="editor-check"><input id="editorLabels" type="checkbox" checked> Slot numbers</label></div>
- <div class="editor-viewport"><div id="editorCanvas" tabindex="0"><svg viewBox="0 0 252.286 156.444" aria-hidden="true"><polyline id="editorLine"/><g id="editorPoints"></g></svg></div></div>
- <p class="editor-help">100% fits the whole board. Zoom in and scroll for detail; Fit whole map restores the full view. With the map focused, arrow keys fine-tune the selected slot; Shift + arrow moves farther.</p>
- <div class="editor-actions"><button id="editUndo" class="editor-button" type="button">Undo</button><button id="editResetBoard" class="editor-button" type="button">Restore this board</button><button id="editUsePublished" class="editor-button" type="button">Use published paths</button><button id="editExport" class="editor-button" type="button">Export backup</button><label class="editor-button file-button">Import backup<input id="editImport" type="file" accept=".json,application/json"></label><button id="editPublishExport" class="editor-button" type="button">Export for website</button></div>
- <p id="editorStatus" class="editor-status" role="status" aria-live="polite"></p>
- <p class="editor-help">These default paths were mapped by the site owner. Browser edits are private to this browser. Use published paths replaces all your local paths with the website version; you can undo it. To share corrections with everyone, use Export for website and replace <code>assets/adventure-game/routes.js</code> in GitHub. Export backup lets you restore edits on another device.</p>
-</dialog>
-<script src="routes.js?v=mapped-18"></script><script src="app.js?v=mapped-18"></script><script src="path-editor.js?v=mapped-18"></script><script src="embed.js?v=mapped-18"></script></body></html>
+
+<script src="routes.js?v=published-19"></script><script src="app.js?v=published-19"></script><script src="embed.js?v=published-19"></script></body></html>

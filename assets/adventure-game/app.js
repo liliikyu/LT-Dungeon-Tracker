@@ -27,7 +27,7 @@ function render(){
  state.square=Math.min(state.square,routes[state.board].length);state.finished=position()===totalSquares();
  const n=state.board+1,route=routes[state.board],traveled=position();
  $('board').style.backgroundImage=boardImage(state.board);
- $('boardNumber').textContent=String(n).padStart(2,'0');$('boardBadge').textContent=String(n).padStart(2,'0');
+ $('boardBadge').textContent=String(n).padStart(2,'0');
  $('squareLabel').textContent=state.square?'Slot '+state.square+' / '+route.length+' · Slot '+traveled:'At the start';
  const p=state.square?route[state.square-1]:route[0];
  $('playerAvatar').style.transform=state.facing>0?'scaleX(-1)':'scaleX(1)';

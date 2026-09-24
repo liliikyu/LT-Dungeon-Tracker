@@ -22,6 +22,8 @@ MONSTER_NAME_FIXES={
   'Grey FootprElemental Intensity Cat':'Grey Footprint Intensity Cat',
   'Niez':'Nez',
   'Shadow Tief':'Shadow Thief',
+  'SaElemental Intensity Valkyrie Ranger':'Saint Valkyrie Ranger',
+  'SaElemental Intensity Steed':'Saint Steed',
 }
 
 MONSTER_FIELD_NAME_FIXES={

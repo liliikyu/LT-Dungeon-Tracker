@@ -41,3 +41,5 @@ jobs:
           git add assets/monster-illustrations.js
           git commit -m "Sync Monster Illustrations from La Tale Wiki"
           git push
+
+# Manual resync trigger: 2026-09-24 16:36 BST

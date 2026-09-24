@@ -1,61 +1,72 @@
 const $=id=>document.getElementById(id);
 const state={board:0,square:0,turn:0,busy:false,finished:false};
-const pipPositions={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
 const totalSquares=routes.reduce((n,r)=>n+r.length,0);
-function drawDie(id,value){const el=$(id);el.replaceChildren();el.setAttribute('aria-label',`Die ${id==='die1'?'one':'two'}: ${value}`);for(let i=0;i<9;i++){const dot=document.createElement('span');if(pipPositions[value].includes(i))dot.className='pip';el.append(dot)}}
-function die(){const buffer=new Uint32Array(1);do{crypto.getRandomValues(buffer)}while(buffer[0]>=4294967292);return buffer[0]%6+1}
-function boardImage(index){return `url('boards/${String(index+1).padStart(2,'0')}.webp')`}
+function position(){return routes.slice(0,state.board).reduce((n,r)=>n+r.length,0)+state.square}
+function setPosition(value){let board=0,square=Math.max(0,Math.min(totalSquares,value));while(board<routes.length-1&&square>routes[board].length){square-=routes[board].length;board++}Object.assign(state,{board,square,finished:value>=totalSquares})}
+function boardImage(index){return "url('boards/"+String(index+1).padStart(2,'0')+".webp')"}
 function render(){
- const n=state.board+1, route=routes[state.board];
+ const n=state.board+1,route=routes[state.board],traveled=position();
  $('board').style.backgroundImage=boardImage(state.board);
  $('boardNumber').textContent=String(n).padStart(2,'0');$('boardBadge').textContent=String(n).padStart(2,'0');
- $('squareLabel').textContent=state.square?`Square ${state.square} / ${route.length}`:'At the start';
+ $('squareLabel').textContent=state.square?'Slot '+state.square+' / '+route.length:'At the start';
  const p=state.square?route[state.square-1]:[4,140];
- $('player').style.left=`${p[0]/252.286*100}%`;$('player').style.top=`${p[1]/156.444*100}%`;
- $('player').setAttribute('aria-label',`Player on board ${n}, ${state.square?'square '+state.square:'start'}`);
+ $('player').style.left=p[0]/252.286*100+'%';$('player').style.top=p[1]/156.444*100+'%';
+ $('player').setAttribute('aria-label','Player on board '+n+', '+(state.square?'slot '+state.square:'start'));
  $('trailLine').setAttribute('points',route.map(p=>p.join(',')).join(' '));
  $('destination').setAttribute('cx',route.at(-1)[0]);$('destination').setAttribute('cy',route.at(-1)[1]);
- const traveled=routes.slice(0,state.board).reduce((s,r)=>s+r.length,0)+state.square;
- $('progressFill').style.width=`${traveled/totalSquares*100}%`;
- $('journeyLabel').textContent=`Board ${n} of ${routes.length}`;$('turnLabel').textContent=`Turn ${state.turn+1}`;
- $('rollButton').disabled=state.busy||state.finished;$('restart').disabled=state.busy;
- $('rollButton').innerHTML=state.finished?'Journey complete ✓':state.busy?'Moving…':'Roll the dice <span>↗</span>';
+ $('progressFill').style.width=traveled/totalSquares*100+'%';
+ $('journeyLabel').textContent='Board '+n+' of '+routes.length;$('turnLabel').textContent='Moves: '+state.turn;
+ document.querySelectorAll('[data-step]').forEach(button=>{button.disabled=state.busy||(Number(button.dataset.step)>0?traveled===totalSquares:traveled===0)});
+ $('restart').disabled=state.busy;$('slotInput').disabled=state.busy;$('goButton').disabled=state.busy;
+ $('slotInput').max=String(route.length);$('slotInput').placeholder='1–'+route.length;
+ $('slotHint').textContent='Board '+n+' · enter a slot from 1 to '+route.length+'.';
  document.querySelectorAll('.mini-board').forEach((el,i)=>{el.classList.toggle('current',i===state.board);el.classList.toggle('complete',i<state.board)});
- $('atlasStatus').textContent=`You are on board ${n} of ${routes.length}.`;
+ $('atlasStatus').textContent='You are on board '+n+' of '+routes.length+'.';
 }
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-async function roll(){
- if(state.busy||state.finished)return {error:'A move is in progress or the journey is complete.'};
- state.busy=true;render();
- const a=die(),b=die(),sum=a+b,startBoard=state.board,startSquare=state.square;
- $('die1').classList.add('rolling');$('die2').classList.add('rolling');
+function result(){return {board:state.board+1,slot:state.square,finished:state.finished}}
+function describe(board,square){return 'Board '+(board+1)+', '+(square?'slot '+square:'start')}
+async function moveBy(steps){
+ if(!Number.isInteger(steps)||steps===0||Math.abs(steps)>12)throw new Error('Choose +1 to +12 or −1 to −12.');
+ if(state.busy)return {error:'A move is already in progress.'};
+ const from=position(),target=Math.max(0,Math.min(totalSquares,from+steps));
+ if(target===from)return result();
+ const startBoard=state.board,startSquare=state.square,direction=Math.sign(steps);
+ state.busy=true;$('slotError').textContent='';render();
+ $('announcement').textContent='Moving '+(direction>0?'forward':'back')+' '+Math.abs(target-from)+' slots…';
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
- for(let i=0;i<(reduced?1:7);i++){drawDie('die1',die());drawDie('die2',die());await delay(reduced?0:70)}
- $('die1').classList.remove('rolling');$('die2').classList.remove('rolling');drawDie('die1',a);drawDie('die2',b);
- $('rollTotal').textContent=`${a} + ${b} = ${sum} steps`;
- $('announcement').textContent=`You rolled ${sum}. Moving forward…`;
- let moved=0;
- for(let i=0;i<sum;i++){
-  if(state.square>=routes[state.board].length){
-   if(state.board===routes.length-1){state.finished=true;break}
-   state.board++;state.square=0;
-  }
-  state.square++;moved++;render();await delay(reduced?0:210);
-  if(state.board===routes.length-1&&state.square===routes[state.board].length){state.finished=true;break}
- }
- state.turn++;state.busy=false;render();
- $('lastMove').textContent=`Rolled ${a} + ${b}. Board ${startBoard+1}, ${startSquare?'square '+startSquare:'start'} → board ${state.board+1}, square ${state.square}.`;
- $('announcement').textContent=state.finished?`Adventure complete! You reached the end of all ${routes.length} boards in ${state.turn} rolls.`:state.board!==startBoard?`Welcome to board ${state.board+1}! Your remaining steps carried you to square ${state.square}.`:`You moved ${moved} squares. Ready for your next roll.`;
- return {dice:[a,b],board:state.board+1,square:state.square,finished:state.finished};
+ for(let next=from+direction;direction>0?next<=target:next>=target;next+=direction){setPosition(next);render();await delay(reduced?0:150)}
+ state.turn++;state.busy=false;$('slotInput').value='';render();
+ $('lastMove').textContent=(steps>0?'+':'')+steps+': '+describe(startBoard,startSquare)+' → '+describe(state.board,state.square)+'.';
+ $('announcement').textContent=state.finished?'You reached the final slot. You can still move back or jump to another slot.':target===0?'Back at the start.':'Moved '+Math.abs(target-from)+' slots '+(direction>0?'forward':'back')+'. '+describe(state.board,state.square)+'.';
+ return result();
 }
-function reset(){if(state.busy)return;Object.assign(state,{board:0,square:0,turn:0,busy:false,finished:false});drawDie('die1',3);drawDie('die2',5);$('rollTotal').textContent='Two dice. One journey.';$('announcement').textContent='Your adventure starts here. Roll both dice to move forward.';$('lastMove').textContent='The first roll is yours.';render()}
-for(let i=0;i<routes.length;i++){const el=document.createElement('div');el.className='mini-board';el.dataset.board=String(i);el.setAttribute('aria-label',`Board ${i+1}`);const label=document.createElement('span');label.textContent=String(i+1).padStart(2,'0');el.append(label);$('atlasGrid').append(el)}
-$('rollButton').addEventListener('click',roll);
+function goToSlot(slot){
+ if(!Number.isInteger(slot)||slot<1||slot>routes[state.board].length)throw new Error('Enter a whole slot number from 1 to '+routes[state.board].length+'.');
+ if(state.busy)return {error:'A move is already in progress.'};
+ const before=state.square;state.square=slot;state.finished=position()===totalSquares;if(before!==slot)state.turn++;
+ $('slotError').textContent='';render();
+ $('lastMove').textContent='Jumped: '+describe(state.board,before)+' → slot '+slot+'.';
+ $('announcement').textContent='Character moved to slot '+slot+' on board '+(state.board+1)+'.';return result();
+}
+function reset(){if(state.busy)return;Object.assign(state,{board:0,square:0,turn:0,busy:false,finished:false});$('slotInput').value='';$('slotError').textContent='';$('announcement').textContent='Choose a movement button or enter a slot on this board.';$('lastMove').textContent='No moves yet.';render()}
+for(const sign of [1,-1])for(let n=1;n<=12;n++){
+ const button=document.createElement('button');button.type='button';button.className='step-button';button.dataset.step=String(sign*n);
+ button.textContent=(sign>0?'+':'−')+n;button.setAttribute('aria-label','Move '+(sign>0?'forward':'back')+' '+n+' '+(n===1?'slot':'slots'));
+ button.addEventListener('click',()=>moveBy(sign*n));$(sign>0?'forwardButtons':'backwardButtons').append(button);
+}
+for(let i=0;i<routes.length;i++){const el=document.createElement('div');el.className='mini-board';el.dataset.board=String(i);el.setAttribute('aria-label','Board '+(i+1));const label=document.createElement('span');label.textContent=String(i+1).padStart(2,'0');el.append(label);$('atlasGrid').append(el)}
+$('slotForm').addEventListener('submit',event=>{event.preventDefault();try{goToSlot(Number($('slotInput').value.trim()))}catch(error){$('slotError').textContent=error.message;$('slotInput').focus()}});
+$('slotInput').addEventListener('input',()=>{$('slotError').textContent=''});
 $('showTrail').addEventListener('change',e=>$('trail').classList.toggle('visible',e.target.checked));
 $('atlasButton').addEventListener('click',()=>{document.querySelectorAll('.mini-board').forEach(el=>{el.style.backgroundImage=boardImage(Number(el.dataset.board))});$('atlas').showModal()});
 $('closeAtlas').addEventListener('click',()=>$('atlas').close());$('backToGame').addEventListener('click',()=>$('atlas').close());
 $('restart').addEventListener('click',()=>$('resetDialog').showModal());$('cancelReset').addEventListener('click',()=>$('resetDialog').close());
 $('confirmReset').addEventListener('click',()=>{reset();$('resetDialog').close()});
-document.addEventListener('keydown',e=>{if(e.code==='Space'&&!e.repeat&&!document.querySelector('dialog[open]')&&!['INPUT','BUTTON','SUMMARY','A'].includes(e.target.tagName)){e.preventDefault();roll()}});
-if(document.modelContext?.registerTool){try{Promise.resolve(document.modelContext.registerTool({name:'roll_adventure_dice',title:'Roll adventure dice',description:'Roll two dice and move the player forward by their sum in the current adventure.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:async input=>{if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).length)throw new Error('Expected an empty object.');return roll()}})).catch(()=>{})}catch{}}
+if(document.modelContext?.registerTool){
+ for(const tool of [
+  {name:'move_adventure_character',title:'Move adventure character',description:'Move forward or backward by 1–12 slots, crossing board boundaries as needed.',key:'steps',minimum:-12,maximum:12,action:moveBy},
+  {name:'go_to_adventure_slot',title:'Go to adventure slot',description:'Move directly to a numbered slot on the current board.',key:'slot',minimum:1,action:goToSlot}
+ ])try{Promise.resolve(document.modelContext.registerTool({name:tool.name,title:tool.title,description:tool.description,inputSchema:{type:'object',properties:{[tool.key]:{type:'integer',minimum:tool.minimum,...(tool.maximum?{maximum:tool.maximum}:{})}},required:[tool.key],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:async input=>{if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).length!==1||!Object.hasOwn(input,tool.key))throw new Error('Expected '+tool.key+'.');return tool.action(input[tool.key])}})).catch(()=>{})}catch{}
+}
 reset();

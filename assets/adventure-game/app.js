@@ -1,10 +1,11 @@
 const $=id=>document.getElementById(id);
 const state={board:0,square:0,turn:0,busy:false,finished:false};
-const totalSquares=routes.reduce((n,r)=>n+r.length,0);
+function totalSquares(){return routes.reduce((n,r)=>n+r.length,0)}
 function position(){return routes.slice(0,state.board).reduce((n,r)=>n+r.length,0)+state.square}
-function setPosition(value){let board=0,square=Math.max(0,Math.min(totalSquares,value));while(board<routes.length-1&&square>routes[board].length){square-=routes[board].length;board++}Object.assign(state,{board,square,finished:value>=totalSquares})}
+function setPosition(value){let board=0,square=Math.max(0,Math.min(totalSquares(),value));while(board<routes.length-1&&square>routes[board].length){square-=routes[board].length;board++}Object.assign(state,{board,square,finished:value>=totalSquares()})}
 function boardImage(index){return "url('boards/"+String(index+1).padStart(2,'0')+".webp')"}
 function render(){
+ state.square=Math.min(state.square,routes[state.board].length);state.finished=position()===totalSquares();
  const n=state.board+1,route=routes[state.board],traveled=position();
  $('board').style.backgroundImage=boardImage(state.board);
  $('boardNumber').textContent=String(n).padStart(2,'0');$('boardBadge').textContent=String(n).padStart(2,'0');
@@ -14,9 +15,9 @@ function render(){
  $('player').setAttribute('aria-label','Player on board '+n+', '+(state.square?'slot '+state.square:'start'));
  $('trailLine').setAttribute('points',route.map(p=>p.join(',')).join(' '));
  $('destination').setAttribute('cx',route.at(-1)[0]);$('destination').setAttribute('cy',route.at(-1)[1]);
- $('progressFill').style.width=traveled/totalSquares*100+'%';
+ $('progressFill').style.width=traveled/totalSquares()*100+'%';
  $('journeyLabel').textContent='Board '+n+' of '+routes.length;$('turnLabel').textContent='Moves: '+state.turn;
- document.querySelectorAll('[data-step]').forEach(button=>{button.disabled=state.busy||(Number(button.dataset.step)>0?traveled===totalSquares:traveled===0)});
+ document.querySelectorAll('[data-step]').forEach(button=>{button.disabled=state.busy||(Number(button.dataset.step)>0?traveled===totalSquares():traveled===0)});
  $('editPathButton').disabled=state.busy;$('restart').disabled=state.busy;$('slotInput').disabled=state.busy;$('goButton').disabled=state.busy;
  $('slotInput').max=String(route.length);$('slotInput').placeholder='1–'+route.length;
  $('slotHint').textContent='Board '+n+' · enter a slot from 1 to '+route.length+'.';
@@ -29,7 +30,7 @@ function describe(board,square){return 'Board '+(board+1)+', '+(square?'slot '+s
 async function moveBy(steps){
  if(!Number.isInteger(steps)||steps===0||Math.abs(steps)>12)throw new Error('Choose +1 to +12 or −1 to −12.');
  if(state.busy)return {error:'A move is already in progress.'};
- const from=position(),target=Math.max(0,Math.min(totalSquares,from+steps));
+ const from=position(),target=Math.max(0,Math.min(totalSquares(),from+steps));
  if(target===from)return result();
  const startBoard=state.board,startSquare=state.square,direction=Math.sign(steps);
  state.busy=true;$('slotError').textContent='';render();
@@ -44,7 +45,7 @@ async function moveBy(steps){
 function goToSlot(slot){
  if(!Number.isInteger(slot)||slot<1||slot>routes[state.board].length)throw new Error('Enter a whole slot number from 1 to '+routes[state.board].length+'.');
  if(state.busy)return {error:'A move is already in progress.'};
- const before=state.square;state.square=slot;state.finished=position()===totalSquares;if(before!==slot)state.turn++;
+ const before=state.square;state.square=slot;state.finished=position()===totalSquares();if(before!==slot)state.turn++;
  $('slotError').textContent='';render();
  $('lastMove').textContent='Jumped: '+describe(state.board,before)+' → slot '+slot+'.';
  $('announcement').textContent='Character moved to slot '+slot+' on board '+(state.board+1)+'.';return result();

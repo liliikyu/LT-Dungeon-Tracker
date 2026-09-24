@@ -8,7 +8,7 @@
  function validate(data){
   if(!data||data.version!==1||!Array.isArray(data.boards)||data.boards.length!==original.length)throw Error('This is not a compatible adventure path backup.');
   data.boards.forEach((points,b)=>{
-   if(!Array.isArray(points)||points.length!==original[b].length)throw Error('The slot count does not match board '+(b+1)+'.');
+   if(!Array.isArray(points)||points.length<1||points.length>200)throw Error('Choose between 1 and 200 slots for board '+(b+1)+'.');
    points.forEach(point=>{if(!Array.isArray(point)||point.length!==2||!point.every(Number.isFinite)||point[0]<0||point[0]>W||point[1]<0||point[1]>H)throw Error('A tile position is outside its board.');});
   });
   return clone(data.boards);
@@ -23,7 +23,8 @@
  }
  function remember(){history.push({boards:clone(routes),board,slot});if(history.length>50)history.shift()}
  function draw(){
-  const points=routes[board];
+  const points=routes[board];slot=Math.min(slot,points.length-1);
+  $('editAddSlot').disabled=points.length>=200;
   $('editBoard').value=String(board);$('editSlot').replaceChildren();
   points.forEach((p,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent='Slot '+(i+1);$('editSlot').append(o)});
   $('editSlot').value=String(slot);$('editorCanvas').style.backgroundImage=boardImage(board);
@@ -59,6 +60,11 @@
  $('editSlot').addEventListener('change',()=>{slot=Number($('editSlot').value);draw()});
  $('editPrevious').addEventListener('click',()=>{if(slot>0){slot--;draw()}});
  $('editNext').addEventListener('click',()=>{if(slot<routes[board].length-1){slot++;draw()}});
+ $('editAddSlot').addEventListener('click',()=>{
+  if(routes[board].length>=200)return;
+  remember();routes[board].push(routes[board].at(-1).slice());slot=routes[board].length-1;
+  draw();save('Slot '+(slot+1)+' added. Click the center of its tile to place it.');
+ });
  $('editorLabels').addEventListener('change',draw);
  $('editorZoom').addEventListener('input',()=>{$('editorCanvas').style.width=$('editorZoom').value+'%';$('editorZoomValue').textContent=$('editorZoom').value+'%'});
  $('editorCanvas').addEventListener('click',event=>{

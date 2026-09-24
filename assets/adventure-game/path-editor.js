@@ -97,6 +97,7 @@
  });
  $('editUndo').addEventListener('click',()=>{const previous=history.pop();if(!previous)return;board=previous.board;slot=previous.slot;apply(previous.boards);draw();save('Last path change undone.')});
  $('editResetBoard').addEventListener('click',()=>{remember();routes[board]=clone([original[board]])[0];draw();save('Original path restored for board '+(board+1)+'. You can undo this.')});
+ $('editUsePublished').addEventListener('click',()=>{remember();apply(original);draw();save('Published paths loaded for all 62 boards. You can undo this.')});
  function download(name,content,type){const url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
  $('editExport').addEventListener('click',()=>{download('adventure-paths.json',JSON.stringify({version:1,boards:routes},null,2),'application/json');status('Backup exported. Keep it to restore your paths in another browser.')});
  $('editPublishExport').addEventListener('click',()=>{download('routes.js','// Tile centers exported from the visual path editor.\nconst routes = '+JSON.stringify(routes)+';\n','text/javascript');status('Website paths exported. Replace assets/adventure-game/routes.js in your GitHub repository to publish these corrections for everyone.')});

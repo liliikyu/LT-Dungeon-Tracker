@@ -17,7 +17,7 @@ function render(){
  $('progressFill').style.width=traveled/totalSquares*100+'%';
  $('journeyLabel').textContent='Board '+n+' of '+routes.length;$('turnLabel').textContent='Moves: '+state.turn;
  document.querySelectorAll('[data-step]').forEach(button=>{button.disabled=state.busy||(Number(button.dataset.step)>0?traveled===totalSquares:traveled===0)});
- $('restart').disabled=state.busy;$('slotInput').disabled=state.busy;$('goButton').disabled=state.busy;
+ $('editPathButton').disabled=state.busy;$('restart').disabled=state.busy;$('slotInput').disabled=state.busy;$('goButton').disabled=state.busy;
  $('slotInput').max=String(route.length);$('slotInput').placeholder='1–'+route.length;
  $('slotHint').textContent='Board '+n+' · enter a slot from 1 to '+route.length+'.';
  document.querySelectorAll('.mini-board').forEach((el,i)=>{el.classList.toggle('current',i===state.board);el.classList.toggle('complete',i<state.board)});

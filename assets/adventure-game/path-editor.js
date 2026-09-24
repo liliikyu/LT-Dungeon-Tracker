@@ -49,15 +49,27 @@
   draw();save('Board '+(board+1)+', slot '+(edited+1)+' updated.');
  }
  for(let b=0;b<routes.length;b++){const o=document.createElement('option');o.value=String(b);o.textContent='Board '+(b+1);$('editBoard').append(o)}
- function sizeEditor(){let height=window.innerHeight;try{height=Math.min(height,window.parent.innerHeight)}catch{}dialog.style.maxHeight=Math.max(280,height-100)+'px';dialog.style.setProperty('--editor-map-height',Math.max(160,height*.42)+'px')}
+ let mapHeight=300;
+ function fitCanvas(){
+  const viewport=$('editorCanvas').parentElement;
+  const width=Math.min(viewport.clientWidth-2,(mapHeight-2)*W/H);
+  if(width<=0)return;
+  $('editorCanvas').style.width=(width*Number($('editorZoom').value)/100)+'px';
+  $('editorZoomValue').textContent=$('editorZoom').value+'%';
+ }
+ function resetZoom(){
+  $('editorZoom').value='100';fitCanvas();
+  const viewport=$('editorCanvas').parentElement;viewport.scrollTop=0;viewport.scrollLeft=0;
+ }
+ function sizeEditor(){let height=window.innerHeight;try{height=Math.min(height,window.parent.innerHeight)}catch{}dialog.style.maxHeight=Math.max(280,height-100)+'px';mapHeight=Math.max(160,height*.42);dialog.style.setProperty('--editor-map-height',mapHeight+'px');fitCanvas()}
  window.addEventListener('resize',()=>{if(dialog.open)sizeEditor()});
  $('editPathButton').addEventListener('click',()=>{
   if(state.busy)return;board=state.board;slot=Math.max(0,state.square-1);draw();
-  status(storageWarning||'Choose a slot, then click its tile center. Changes save automatically in this browser.');sizeEditor();dialog.showModal();
+  status(storageWarning||'Choose a slot, then click its tile center. Changes save automatically in this browser.');dialog.showModal();sizeEditor();resetZoom();
  });
  $('editorClose').addEventListener('click',()=>dialog.close());
  dialog.addEventListener('close',()=>{render();$('editPathButton').focus()});
- $('editBoard').addEventListener('change',()=>{board=Number($('editBoard').value);slot=0;draw()});
+ $('editBoard').addEventListener('change',()=>{board=Number($('editBoard').value);slot=0;draw();resetZoom()});
  $('editSlot').addEventListener('change',()=>{slot=Number($('editSlot').value);draw()});
  $('editPrevious').addEventListener('click',()=>{if(slot>0){slot--;draw()}});
  $('editNext').addEventListener('click',()=>{if(slot<routes[board].length-1){slot++;draw()}});
@@ -72,7 +84,8 @@
   save('Slot '+count+' removed from board '+(board+1)+'. You can undo this.');
  });
  $('editorLabels').addEventListener('change',draw);
- $('editorZoom').addEventListener('input',()=>{$('editorCanvas').style.width=$('editorZoom').value+'%';$('editorZoomValue').textContent=$('editorZoom').value+'%'});
+ $('editorZoom').addEventListener('input',fitCanvas);
+ $('editorFit').addEventListener('click',resetZoom);
  $('editorCanvas').addEventListener('click',event=>{
   const rect=$('editorCanvas').getBoundingClientRect();if(!rect.width||!rect.height)return;
   place((event.clientX-rect.left)/rect.width*W,(event.clientY-rect.top)/rect.height*H,true);

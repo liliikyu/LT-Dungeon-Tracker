@@ -53,6 +53,9 @@
       </button>
       <div id="extra-tools-dropdown" class="extra-tools-dropdown hidden" role="menu" aria-label="Extra tools">
         <div class="extra-tools-heading">Extra Tools</div>
+        <a class="extra-tools-item" href="fields.html" role="menuitem">
+          <span class="extra-tools-item-copy"><strong>Latale Fanmade Illustration Book</strong><small>Fields, dungeons & titles</small></span>
+        </a>
         <a class="extra-tools-item" href="item-upgrade.html" role="menuitem">
           <span class="extra-tools-item-copy"><strong>Item Upgrade Tracker</strong><small>Upgrade chains & material costs</small></span>
         </a>

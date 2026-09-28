@@ -96,6 +96,7 @@
       const form=document.getElementById("adventure-lock-form");
       const input=document.getElementById("adventure-lock-input");
       const error=document.getElementById("adventure-lock-error");
+      const back=document.getElementById("adventure-lock-back");
 
       const toHex=buffer=>[...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,"0")).join("");
       const hashText=async value=>toHex(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value)));
@@ -112,6 +113,8 @@
       try{
         if(sessionStorage.getItem(SESSION_KEY)==="1")unlock();
       }catch{}
+
+      back.addEventListener("click",()=>{ location.href="fields.html"; });
 
       form.addEventListener("submit",async event=>{
         event.preventDefault();

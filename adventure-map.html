@@ -124,15 +124,20 @@
       form.addEventListener("submit",async event=>{
         event.preventDefault();
         error.textContent="";
-        const value=input.value;
+        const value=input.value.normalize("NFKC").trim();
         if(!value)return;
-        const digest=await hashText(value);
-        if(digest===EXPECTED_HASH){
-          input.value="";
-          unlock();
-        }else{
+        try{
+          const digest=await hashText(value);
+          if(digest===EXPECTED_HASH){
+            input.value="";
+            unlock();
+            return;
+          }
           error.textContent="Incorrect password.";
           input.select();
+        }catch(err){
+          console.error("Adventure unlock failed",err);
+          error.textContent="Unable to verify the password in this browser. Refresh and try again.";
         }
       });
     })();

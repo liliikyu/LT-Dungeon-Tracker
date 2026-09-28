@@ -54,6 +54,10 @@
       font-weight:750;
       cursor:pointer;
     }
+    .adventure-lock-card .adventure-lock-back{
+      border-color:var(--line);
+      background:var(--panel-2);
+    }
     .adventure-lock-error{
       min-height:18px;
       margin-top:8px;
@@ -70,6 +74,7 @@
       <form id="adventure-lock-form">
         <input id="adventure-lock-input" type="password" autocomplete="current-password" aria-label="Password" autofocus>
         <button type="submit">Unlock</button>
+        <button type="button" id="adventure-lock-back" class="adventure-lock-back">Back</button>
         <div id="adventure-lock-error" class="adventure-lock-error" aria-live="polite"></div>
       </form>
     </section>

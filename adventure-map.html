@@ -72,7 +72,7 @@
       <h2 id="adventure-lock-title">Adventure Map</h2>
       <p>Enter the password to continue.</p>
       <form id="adventure-lock-form">
-        <input id="adventure-lock-input" type="password" autocomplete="current-password" aria-label="Password" autofocus>
+        <input id="adventure-lock-input" type="password" name="adventure-access-code" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Password" autofocus>
         <button type="submit">Unlock</button>
         <button type="button" id="adventure-lock-back" class="adventure-lock-back">Back</button>
         <div id="adventure-lock-error" class="adventure-lock-error" aria-live="polite"></div>
@@ -119,7 +119,7 @@
         if(sessionStorage.getItem(SESSION_KEY)==="1")unlock();
       }catch{}
 
-      back.addEventListener("click",()=>{ location.href="fields.html"; });
+      back?.addEventListener("click",()=>{ location.href="fields.html"; });
 
       form.addEventListener("submit",async event=>{
         event.preventDefault();

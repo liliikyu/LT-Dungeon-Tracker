@@ -6,6 +6,7 @@
   const STATE_KEY="lt-item-upgrade-progress-v2";
   const MODE_KEY="lt-item-upgrade-mode-v1";
   const TAB_KEY="lt-item-upgrade-tab-v1";
+  const HIDE_MAXED_KEY="lt-item-upgrade-hide-maxed-v1";
   const RUN_MIN=90,RUN_MAX=150,ASCENSION_STONES_PER_D5_RUN=36;
   function preferredTheme(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
   function savedTheme(){const x=localStorage.getItem(THEME_KEY);return ["system","light","dark"].includes(x)?x:"system";}
@@ -1024,11 +1025,18 @@
 
   let mode=localStorage.getItem(MODE_KEY)==="detailed"?"detailed":"simple";
   let tab=["battle","specials","gems"].includes(localStorage.getItem(TAB_KEY))?localStorage.getItem(TAB_KEY):"battle";
+  let hideMaxed=localStorage.getItem(HIDE_MAXED_KEY)==="1";
+  function syncHideMaxed(){
+    const button=$("upgrade-hide-maxed");
+    button?.classList.toggle("active",hideMaxed);
+    button?.setAttribute("aria-pressed",String(hideMaxed));
+  }
   function syncMode(){$("upgrade-mode-simple")?.classList.toggle("active",mode==="simple");$("upgrade-mode-detailed")?.classList.toggle("active",mode==="detailed");$("upgrade-mode-simple")?.setAttribute("aria-pressed",String(mode==="simple"));$("upgrade-mode-detailed")?.setAttribute("aria-pressed",String(mode==="detailed"));}
   function syncTabs(){document.querySelectorAll(".upgrade-game-tab").forEach(b=>{const active=b.dataset.upgradeTab===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});}
   function render(){
-    syncMode();syncTabs();
+    syncMode();syncTabs();syncHideMaxed();
     const root=$("upgrade-tab-content");if(!root)return;
+    root.classList.toggle("hide-maxed",hideMaxed);
     try{
       root.innerHTML=tab==="battle"?renderBattle(mode):tab==="specials"?renderSpecials(mode):renderGems(mode);
     }catch(err){
@@ -1038,6 +1046,7 @@
   }
   $("upgrade-mode-simple")?.addEventListener("click",()=>{mode="simple";localStorage.setItem(MODE_KEY,mode);render();});
   $("upgrade-mode-detailed")?.addEventListener("click",()=>{mode="detailed";localStorage.setItem(MODE_KEY,mode);render();});
+  $("upgrade-hide-maxed")?.addEventListener("click",()=>{hideMaxed=!hideMaxed;localStorage.setItem(HIDE_MAXED_KEY,hideMaxed?"1":"0");render();});
   document.querySelectorAll(".upgrade-game-tab").forEach(b=>b.addEventListener("click",()=>{tab=b.dataset.upgradeTab;localStorage.setItem(TAB_KEY,tab);render();}));
 
   $("upgrade-tab-content")?.addEventListener("change",(event)=>{

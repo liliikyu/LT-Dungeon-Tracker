@@ -4506,3 +4506,45 @@ body.conquest-modal-open{overflow:hidden}
 .upgrade-tab-content.hide-maxed .battle-item-card.maxed{
   display:none!important;
 }
+
+
+/* v13.9.4.152 — Item Upgrade Summary & Inventory */
+.summary-inventory-page{display:grid;gap:12px}
+.summary-overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.summary-overview-grid>div{padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.summary-overview-grid span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.summary-overview-grid strong{display:block;margin-top:4px;font-size:20px}
+.summary-columns{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(520px,1.7fr);gap:12px;align-items:start}
+.summary-panel{border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:hidden}
+.summary-panel-head{padding:13px 14px;border-bottom:1px solid var(--line-soft);background:var(--panel-2)}
+.summary-panel-head h2{margin:0;font-size:15px}
+.summary-panel-head p{margin:4px 0 0;color:var(--muted);font-size:11.5px;line-height:1.4}
+.summary-inventory-list,.summary-progress-list{display:grid}
+.summary-inventory-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 12px;border-top:1px solid var(--line-soft)}
+.summary-inventory-row:first-child{border-top:0}
+.summary-inventory-row label{display:grid;grid-template-columns:minmax(0,1fr) 94px;gap:8px;align-items:center;font-size:12px;font-weight:700}
+.summary-inventory-row input,.summary-priority-input{height:31px;border:1px solid var(--line);border-radius:6px;background:var(--panel-3);color:var(--text);padding:3px 7px;text-align:right}
+.summary-inventory-row small{color:var(--muted);font-size:10.5px;white-space:nowrap}
+.summary-progress-card{display:grid;grid-template-columns:72px minmax(210px,1fr) minmax(220px,1.2fr);gap:10px;align-items:center;padding:10px 12px;border-top:1px solid var(--line-soft)}
+.summary-progress-card:first-child{border-top:0}
+.summary-progress-card.maxed{opacity:.66;background:color-mix(in srgb,var(--panel) 94%,var(--badge5-bg) 6%)}
+.summary-priority label{display:grid;gap:4px;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.04em}
+.summary-priority-input{width:58px;text-align:center}
+.summary-progress-title{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.summary-progress-title strong{font-size:12.5px}
+.summary-progress-title span{color:var(--muted);font-size:10px}
+.summary-progress-track{height:5px;margin:6px 0;border-radius:999px;background:var(--line-soft);overflow:hidden}
+.summary-progress-track i{display:block;height:100%;background:var(--accent)}
+.summary-progress-main small{color:var(--muted);font-size:10.5px}
+.summary-progress-materials{color:var(--muted);font-size:10.5px;line-height:1.45}
+.summary-empty{padding:14px;color:var(--muted);font-size:12px}
+@media(max-width:900px){
+  .summary-columns{grid-template-columns:1fr}
+  .summary-progress-card{grid-template-columns:64px minmax(180px,1fr) minmax(180px,1fr)}
+}
+@media(max-width:620px){
+  .summary-overview-grid{grid-template-columns:1fr}
+  .summary-progress-card{grid-template-columns:58px 1fr}
+  .summary-progress-materials{grid-column:2}
+  .summary-inventory-row{grid-template-columns:1fr}
+}

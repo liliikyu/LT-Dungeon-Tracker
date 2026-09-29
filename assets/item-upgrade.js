@@ -1095,7 +1095,7 @@
     });
     const names=new Set(Object.keys(inventory));
     cards.forEach(card=>Object.keys(card.materials||{}).forEach(name=>names.add(name)));
-    const sortedCards=cards.filter(card=>!card.maxed).sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
+    const sortedCards=cards.filter(card=>!card.maxed&&(Number(card.progress)||0)<100).sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
     const available={};
     Array.from(names).forEach(name=>available[name]=Math.max(0,Number(inventory[name])||0));
     const allocations={};

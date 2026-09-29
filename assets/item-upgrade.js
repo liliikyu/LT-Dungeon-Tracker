@@ -1095,7 +1095,7 @@
     });
     const names=new Set(Object.keys(inventory));
     cards.forEach(card=>Object.keys(card.materials||{}).forEach(name=>names.add(name)));
-    const sortedCards=cards.slice().sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
+    const sortedCards=cards.filter(card=>!card.maxed).sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
     const available={};
     Array.from(names).forEach(name=>available[name]=Math.max(0,Number(inventory[name])||0));
     const allocations={};
@@ -1128,6 +1128,8 @@
       const materials=card.maxed?"No materials required":rows.length?rows.map(row=>esc(row.name)+": "+row.allocated.toLocaleString()+" / "+row.required.toLocaleString()).join("<br>"):"No material requirement available";
       cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track"><i style="width:'+Math.max(0,Math.min(100,card.progress||0))+'%"></i></div><small>'+(card.maxed?"MAXED":esc(card.status))+' · '+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
     });
+
+    if(!cardsHtml)cardsHtml='<div class="summary-empty">Everything in your current setup is marked MAXED, so there is nothing left to prioritize.</div>';
 
     return '<section class="summary-inventory-page"><div class="summary-overview-grid"><div><span>Overall progress</span><strong>'+overall+'%</strong></div><div><span>Maxed items</span><strong>'+maxedCount+' / '+cards.length+'</strong></div><div><span>Materials allocated</span><strong>'+totalAllocated.toLocaleString()+' / '+totalRequired.toLocaleString()+'</strong></div></div><div class="summary-columns"><section class="summary-panel"><div class="summary-panel-head"><div><h2>Inventory</h2><p>Enter each material once. Shared materials are allocated using the priority order.</p></div></div><div class="summary-inventory-list">'+inventoryHtml+'</div></section><section class="summary-panel summary-priority-panel"><div class="summary-panel-head"><div><h2>Progress & Priority</h2><p>Lower numbers get shared materials first. This is useful for armor, gems, accessories and other multi-piece sets.</p></div></div><div class="summary-progress-list">'+cardsHtml+'</div></section></div></section>';
   }

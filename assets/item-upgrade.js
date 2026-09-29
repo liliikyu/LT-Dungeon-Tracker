@@ -7,6 +7,8 @@
   const MODE_KEY="lt-item-upgrade-mode-v1";
   const TAB_KEY="lt-item-upgrade-tab-v1";
   const HIDE_MAXED_KEY="lt-item-upgrade-hide-maxed-v1";
+  const INVENTORY_KEY="lt-item-upgrade-inventory-v1";
+  const PRIORITY_KEY="lt-item-upgrade-priority-v1";
   const RUN_MIN=90,RUN_MAX=150,ASCENSION_STONES_PER_D5_RUN=36;
   function preferredTheme(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
   function savedTheme(){const x=localStorage.getItem(THEME_KEY);return ["system","light","dark"].includes(x)?x:"system";}
@@ -1023,8 +1025,115 @@
   function unavailableCard(slot){return `<article class="upgrade-calc-card unavailable"><header class="upgrade-calc-head"><div><strong>${esc(labels[slot]||slot)}</strong><small>Upgrade data not yet available</small></div></header><div class="upgrade-unavailable-copy">Data not available in <code>item_upgrade</code>.</div></article>`;}
   function renderGems(mode){return renderGemSection(mode);}
 
+  function readSavedObject(key){
+    try{
+      const value=JSON.parse(localStorage.getItem(key)||"{}");
+      return value&&typeof value==="object"&&!Array.isArray(value)?value:{};
+    }catch{return {};}
+  }
+  const inventory=readSavedObject(INVENTORY_KEY);
+  const priorities=readSavedObject(PRIORITY_KEY);
+  const saveInventory=()=>{try{localStorage.setItem(INVENTORY_KEY,JSON.stringify(inventory));}catch{}};
+  const savePriorities=()=>{try{localStorage.setItem(PRIORITY_KEY,JSON.stringify(priorities));}catch{}};
+
+  function summaryCards(){
+    const cards=[
+      ["weapon","battle:weapon1","Weapon","Battle"],
+      ["elemental_stone","battle:stone","Elemental Stone","Battle"],
+      ["bindi","battle:bindi","Bindi","Battle"],
+      ["glasses","battle:glasses","Glasses","Battle"],
+      ["stockings","battle:stockings","Stockings","Battle"],
+      ["earrings","battle:earrings","Earrings","Battle"],
+      ["ring","battle:ring","Ring","Battle"],
+      ["cloak","battle:cloak","Cloak","Battle"],
+      ["armor","battle:armor:helmet","Helmet","Battle"],
+      ["armor","battle:armor:top","Top","Battle"],
+      ["armor","battle:armor:bottom","Bottom","Battle"],
+      ["armor","battle:armor:gloves","Gloves","Battle"],
+      ["armor","battle:armor:boots","Boots","Battle"],
+      ["red_gem","gems:red","Red First Gem","Gems"],
+      ["yellow_gem","gems:yellow","Yellow First Gem","Gems"],
+      ["blue_gem","gems:blue","Blue First Gem","Gems"]
+    ];
+    if(Boolean(state["battle:weapon2Enabled"]))cards.splice(1,0,["weapon","battle:weapon2","Second Weapon","Battle"]);
+    ["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"].forEach(slot=>{
+      cards.push([slot,"special:"+slot,labels[slot]||slot,"Specials"]);
+    });
+    return cards.map(row=>({slot:row[0],key:row[1],title:row[2],section:row[3]}));
+  }
+
+  function summaryRequirement(card){
+    const st=getState(card.key);
+    if(st.maxed)return {materials:{},progress:100,status:"MAXED",maxed:true};
+    if((card.slot==="totem"||card.slot==="badge_5")&&card.key.indexOf("special:")===0){
+      const plan=evolutionPlan(card.slot,card.key);
+      if(!plan)return {materials:{},progress:0,status:"No data",maxed:false};
+      const materials={};
+      (plan.rows||[]).forEach(row=>(row.materials||[]).forEach(m=>{
+        if(m.complete!==false&&m.required>0)materials[m.name]=(materials[m.name]||0)+m.required;
+      }));
+      const phaseCount=Math.max(1,(plan.groups||[]).length-1);
+      const progress=Math.round(Math.max(0,Math.min(1,(plan.ci||0)/phaseCount))*100);
+      return {materials,progress,status:(plan.currentGroup?.dungeonName||"Current")+" → "+(plan.targetGroup?.dungeonName||"Target"),maxed:false};
+    }
+    const sel=selectedEntry(card.slot,card.key);
+    if(!sel)return {materials:{},progress:0,status:"No series selected",maxed:false};
+    const item=upgradeItemFor(sel.entry);
+    if(!item)return {materials:{},progress:0,status:"Upgrade data unavailable",maxed:false};
+    const req=requirements(card.slot,card.key,item,sel.entry);
+    const materials={};
+    Object.entries(req.mats||{}).forEach(pair=>materials[pair[0]]=Math.ceil(pair[1]));
+    if(req.stoneRequired>0)materials[req.stoneName||"Ascension Stone"]=Math.ceil(req.stoneRequired);
+    return {materials,progress:req.completion||0,status:"Current progress "+(req.completion||0)+"%",maxed:false};
+  }
+
+  function renderSummaryInventory(){
+    const cards=summaryCards().map((card,index)=>{
+      const req=summaryRequirement(card);
+      if(!(Number(priorities[card.key])>0))priorities[card.key]=index+1;
+      return Object.assign({},card,req);
+    });
+    const names=new Set(Object.keys(inventory));
+    cards.forEach(card=>Object.keys(card.materials||{}).forEach(name=>names.add(name)));
+    const sortedCards=cards.slice().sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
+    const available={};
+    Array.from(names).forEach(name=>available[name]=Math.max(0,Number(inventory[name])||0));
+    const allocations={};
+    sortedCards.forEach(card=>{
+      allocations[card.key]=[];
+      Object.entries(card.materials||{}).forEach(pair=>{
+        const name=pair[0],required=Math.max(0,Math.ceil(pair[1]));
+        const have=Math.max(0,available[name]||0),allocated=Math.min(required,have);
+        available[name]=have-allocated;
+        allocations[card.key].push({name,required,allocated,remaining:Math.max(0,required-allocated)});
+      });
+    });
+    const overall=cards.length?Math.round(cards.reduce((sum,card)=>sum+(card.maxed?100:(card.progress||0)),0)/cards.length):0;
+    const maxedCount=cards.filter(card=>card.maxed).length;
+    let totalRequired=0,totalAllocated=0;
+    Object.values(allocations).forEach(rows=>rows.forEach(row=>{totalRequired+=row.required;totalAllocated+=row.allocated;}));
+
+    let inventoryHtml="";
+    Array.from(names).sort((a,b)=>a.localeCompare(b)).forEach(name=>{
+      const needed=cards.reduce((sum,card)=>sum+Math.max(0,Math.ceil(Number(card.materials?.[name])||0)),0);
+      const owned=Math.max(0,Number(inventory[name])||0);
+      inventoryHtml+='<div class="summary-inventory-row"><label><span>'+esc(name)+'</span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label><small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';
+    });
+    if(!inventoryHtml)inventoryHtml='<div class="summary-empty">Select item series and targets in Battle, Specials or Gems to populate materials here.</div>';
+
+    let cardsHtml="";
+    sortedCards.forEach(card=>{
+      const rows=allocations[card.key]||[];
+      const remaining=rows.reduce((sum,row)=>sum+row.remaining,0);
+      const materials=card.maxed?"No materials required":rows.length?rows.map(row=>esc(row.name)+": "+row.allocated.toLocaleString()+" / "+row.required.toLocaleString()).join("<br>"):"No material requirement available";
+      cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track"><i style="width:'+Math.max(0,Math.min(100,card.progress||0))+'%"></i></div><small>'+(card.maxed?"MAXED":esc(card.status))+' · '+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
+    });
+
+    return '<section class="summary-inventory-page"><div class="summary-overview-grid"><div><span>Overall progress</span><strong>'+overall+'%</strong></div><div><span>Maxed items</span><strong>'+maxedCount+' / '+cards.length+'</strong></div><div><span>Materials allocated</span><strong>'+totalAllocated.toLocaleString()+' / '+totalRequired.toLocaleString()+'</strong></div></div><div class="summary-columns"><section class="summary-panel"><div class="summary-panel-head"><div><h2>Inventory</h2><p>Enter each material once. Shared materials are allocated using the priority order.</p></div></div><div class="summary-inventory-list">'+inventoryHtml+'</div></section><section class="summary-panel summary-priority-panel"><div class="summary-panel-head"><div><h2>Progress & Priority</h2><p>Lower numbers get shared materials first. This is useful for armor, gems, accessories and other multi-piece sets.</p></div></div><div class="summary-progress-list">'+cardsHtml+'</div></section></div></section>';
+  }
+
   let mode=localStorage.getItem(MODE_KEY)==="detailed"?"detailed":"simple";
-  let tab=["battle","specials","gems"].includes(localStorage.getItem(TAB_KEY))?localStorage.getItem(TAB_KEY):"battle";
+  let tab=["summary","battle","specials","gems"].includes(localStorage.getItem(TAB_KEY))?localStorage.getItem(TAB_KEY):"summary";
   let hideMaxed=localStorage.getItem(HIDE_MAXED_KEY)==="1";
   function syncHideMaxed(){
     const button=$("upgrade-hide-maxed");
@@ -1038,7 +1147,7 @@
     const root=$("upgrade-tab-content");if(!root)return;
     root.classList.toggle("hide-maxed",hideMaxed);
     try{
-      root.innerHTML=tab==="battle"?renderBattle(mode):tab==="specials"?renderSpecials(mode):renderGems(mode);
+      root.innerHTML=tab==="summary"?renderSummaryInventory():tab==="battle"?renderBattle(mode):tab==="specials"?renderSpecials(mode):renderGems(mode);
     }catch(err){
       console.error("Item Upgrade tab render failed:",tab,err);
       root.innerHTML='<div class="upgrade-render-error"><strong>Unable to render this tab.</strong><span>Please refresh the page. The tracker will preserve your saved inputs.</span></div>';
@@ -1051,6 +1160,8 @@
 
   $("upgrade-tab-content")?.addEventListener("change",(event)=>{
     const el=event.target;
+    if(el.classList.contains("summary-inventory-input")){inventory[el.dataset.material]=Math.max(0,Number(el.value)||0);saveInventory();render();return;}
+    if(el.classList.contains("summary-priority-input")){priorities[el.dataset.key]=Math.max(1,Number(el.value)||1);savePriorities();render();return;}
     if(el.id==="battle-second-weapon-toggle"){state["battle:weapon2Enabled"]=el.checked;saveState();render();return;}
     const key=el.dataset?.key;if(!key)return;const st=getState(key);
     if(el.classList.contains("evolution-current-series")){
@@ -1086,7 +1197,10 @@
     saveState();render();
   });
   $("upgrade-tab-content")?.addEventListener("input",(event)=>{
-    const el=event.target,key=el.dataset?.key;if(!key)return;
+    const el=event.target;
+    if(el.classList.contains("summary-inventory-input")){inventory[el.dataset.material]=Math.max(0,Number(el.value)||0);saveInventory();return;}
+    if(el.classList.contains("summary-priority-input")){priorities[el.dataset.key]=Math.max(1,Number(el.value)||1);savePriorities();return;}
+    const key=el.dataset?.key;if(!key)return;
     if(el.classList.contains("battle-material-input")||el.classList.contains("compact-mats")){const st=getState(key);st.mats=st.mats||{};st.mats[el.dataset.material]=Math.max(0,Number(el.value)||0);saveState();}
   });
 

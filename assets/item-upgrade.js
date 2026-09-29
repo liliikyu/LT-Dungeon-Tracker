@@ -1090,12 +1090,20 @@
   function renderSummaryInventory(){
     const cards=summaryCards().map((card,index)=>{
       const req=summaryRequirement(card);
-      if(!(Number(priorities[card.key])>0))priorities[card.key]=index+1;
+      if(req.maxed){
+        return Object.assign({},card,req);
+      }
+      if((Number(req.progress)||0)>=100){
+        priorities[card.key]=99;
+      }else if(!(Number(priorities[card.key])>0)){
+        priorities[card.key]=index+1;
+      }
       return Object.assign({},card,req);
     });
     const names=new Set(Object.keys(inventory));
     cards.forEach(card=>Object.keys(card.materials||{}).forEach(name=>names.add(name)));
-    const sortedCards=cards.filter(card=>!card.maxed&&(Number(card.progress)||0)<100).sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
+    const sortedCards=cards.filter(card=>!card.maxed).sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
+    savePriorities();
     const available={};
     Array.from(names).forEach(name=>available[name]=Math.max(0,Number(inventory[name])||0));
     const allocations={};

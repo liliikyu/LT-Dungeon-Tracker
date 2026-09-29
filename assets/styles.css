@@ -4500,3 +4500,9 @@ body.conquest-modal-open{overflow:hidden}
     padding-bottom:4px;
   }
 }
+
+
+/* v13.9.4.151 — global Item Upgrade maxed filter */
+.upgrade-tab-content.hide-maxed .battle-item-card.maxed{
+  display:none!important;
+}

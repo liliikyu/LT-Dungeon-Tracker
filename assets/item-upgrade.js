@@ -1064,27 +1064,30 @@
 
   function summaryRequirement(card){
     const st=getState(card.key);
-    if(st.maxed)return {materials:{},progress:100,status:"MAXED",maxed:true};
+    if(st.maxed)return {materials:{},materialDungeonIds:{},progress:100,status:"MAXED",maxed:true};
     if((card.slot==="totem"||card.slot==="badge_5")&&card.key.indexOf("special:")===0){
       const plan=evolutionPlan(card.slot,card.key);
-      if(!plan)return {materials:{},progress:0,status:"No data",maxed:false};
-      const materials={};
+      if(!plan)return {materials:{},materialDungeonIds:{},progress:0,status:"No data",maxed:false};
+      const materials={},materialDungeonIds={};
       (plan.rows||[]).forEach(row=>(row.materials||[]).forEach(m=>{
-        if(m.complete!==false&&m.required>0)materials[m.name]=(materials[m.name]||0)+m.required;
+        if(m.complete!==false&&m.required>0){
+          materials[m.name]=(materials[m.name]||0)+m.required;
+          if(!materialDungeonIds[m.name])materialDungeonIds[m.name]=row.group?.id||"";
+        }
       }));
       const phaseCount=Math.max(1,(plan.groups||[]).length-1);
       const progress=Math.round(Math.max(0,Math.min(1,(plan.ci||0)/phaseCount))*100);
-      return {materials,progress,status:(plan.currentGroup?.dungeonName||"Current")+" → "+(plan.targetGroup?.dungeonName||"Target"),maxed:false};
+      return {materials,materialDungeonIds,progress,status:(plan.currentGroup?.dungeonName||"Current")+" → "+(plan.targetGroup?.dungeonName||"Target"),maxed:false};
     }
     const sel=selectedEntry(card.slot,card.key);
-    if(!sel)return {materials:{},progress:0,status:"No series selected",maxed:false};
+    if(!sel)return {materials:{},materialDungeonIds:{},progress:0,status:"No series selected",maxed:false};
     const item=upgradeItemFor(sel.entry);
-    if(!item)return {materials:{},progress:0,status:"Upgrade data unavailable",maxed:false};
+    if(!item)return {materials:{},materialDungeonIds:{},progress:0,status:"Upgrade data unavailable",maxed:false};
     const req=requirements(card.slot,card.key,item,sel.entry);
-    const materials={};
-    Object.entries(req.mats||{}).forEach(pair=>materials[pair[0]]=Math.ceil(pair[1]));
-    if(req.stoneRequired>0)materials[req.stoneName||"Ascension Stone"]=Math.ceil(req.stoneRequired);
-    return {materials,progress:req.completion||0,status:"Current progress "+(req.completion||0)+"%",maxed:false};
+    const materials={},materialDungeonIds={};
+    Object.entries(req.mats||{}).forEach(pair=>{materials[pair[0]]=Math.ceil(pair[1]);materialDungeonIds[pair[0]]=sel.group?.id||"";});
+    if(req.stoneRequired>0){const stoneName=req.stoneName||"Ascension Stone";materials[stoneName]=Math.ceil(req.stoneRequired);materialDungeonIds[stoneName]=sel.group?.id||"";}
+    return {materials,materialDungeonIds,progress:req.completion||0,status:"Current progress "+(req.completion||0)+"%",maxed:false};
   }
 
   function renderSummaryInventory(){
@@ -1121,8 +1124,18 @@
     let totalRequired=0,totalAllocated=0;
     Object.values(allocations).forEach(rows=>rows.forEach(row=>{totalRequired+=row.required;totalAllocated+=row.allocated;}));
 
+    const materialDungeonId=name=>{
+      const ids=cards.map(card=>card.materialDungeonIds?.[name]).filter(Boolean);
+      if(!ids.length)return "";
+      return ids.sort((a,b)=>dungeonNum(a)-dungeonNum(b)||String(a).localeCompare(String(b)))[0];
+    };
     let inventoryHtml="";
-    Array.from(names).sort((a,b)=>a.localeCompare(b)).forEach(name=>{
+    Array.from(names).sort((a,b)=>{
+      const ad=materialDungeonId(a),bd=materialDungeonId(b);
+      const an=ad?dungeonNum(ad):Number.MAX_SAFE_INTEGER;
+      const bn=bd?dungeonNum(bd):Number.MAX_SAFE_INTEGER;
+      return an-bn||String(ad).localeCompare(String(bd))||a.localeCompare(b);
+    }).forEach(name=>{
       const needed=cards.reduce((sum,card)=>sum+Math.max(0,Math.ceil(Number(card.materials?.[name])||0)),0);
       const owned=Math.max(0,Number(inventory[name])||0);
       inventoryHtml+='<div class="summary-inventory-row"><label><span>'+esc(name)+'</span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label><small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';

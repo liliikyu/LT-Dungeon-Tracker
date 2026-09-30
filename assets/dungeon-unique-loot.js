@@ -4,7 +4,7 @@ window.LT_DUNGEON_UNIQUE_LOOT = {
     "https://latale.wiki.gg/wiki/Endgame"
   ],
   "source": "https://latale.wiki.gg/wiki/Dungeons",
-  "updated": "2026-09-21",
+  "updated": "2026-09-30",
   "dungeons": {
     "Dragon Lair": [
       "Invoke Set"
@@ -348,13 +348,14 @@ window.LT_DUNGEON_UNIQUE_LOOT = {
       "Craft Keeper Textbook"
     ],
     "Justitia": [
-      "Bottle of Orange Stars"
+      "Bottle of Orange Stars",
+      "Bottle of Shining Stars"
     ],
     "Inspirational Playground": [
       "Tireman's First Badge"
     ],
     "Nectar Circus Hall": [
-      "Third Badge of the Circus"
+      "Circus Third Badge"
     ],
     "Nest of the Blind Bird": [
       "Peridot's Gems"
@@ -362,6 +363,12 @@ window.LT_DUNGEON_UNIQUE_LOOT = {
     "Rikimo Pelke": [
       "Rikimo Pelke Accessories",
       "Mirror Relic"
+    ],
+    "Camelot Ranch": [
+      "Camelot Sticker"
+    ],
+    "Spiral of Silence": [
+      "Minuet Belt"
     ],
     "mare Ingenii": [
       "Gabriella Second Badge"

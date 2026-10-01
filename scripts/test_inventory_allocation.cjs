@@ -47,9 +47,9 @@ function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='
     vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets',file),'utf8'),ctx);
   }
   let source=fs.readFileSync(path.join(__dirname,'../assets/item-upgrade.js'),'utf8').replace(/\r\n/g,'\n');
-  source=source.replace('  render();\n})();','  render(); window.testPlan=inventoryPlan; window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
+  source=source.replace('  render();\n})();','  render(); window.testPlan=inventoryPlan; window.testProjection=(key)=>summaryProjectedProgress(inventoryPlan.cards.find(card=>card.key===key)); window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
   vm.runInNewContext(source,ctx);
-  assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.160-header-controls','fresh tracker replaces the stylesheet from cached HTML');
+  assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.161-summary-projection','fresh tracker replaces the stylesheet from cached HTML');
   assert(!root.innerHTML.includes('Unable to render this tab.'));
   return {ctx,root,saved};
 }
@@ -98,3 +98,8 @@ assert.equal(forestReq.mats['Vigor Mutant Ent Badge'],30);
 assert.equal(forestReq.elyMillions,0);
 assert(forest.root.innerHTML.includes('<strong>15 runs</strong>'));
 console.log('Independent Badge 6 enhancement regressions passed.');
+
+const projectedSummary=tracker('summary',1000,false,1000);
+assert.equal(projectedSummary.ctx.window.testProjection('battle:glasses'),33);
+assert.equal(projectedSummary.ctx.window.testProjection('battle:bindi'),0);
+assert(projectedSummary.root.innerHTML.includes('summary-projected-progress'));

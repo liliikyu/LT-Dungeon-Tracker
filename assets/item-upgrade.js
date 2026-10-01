@@ -2,7 +2,7 @@
   // This script loads fresh even when the browser retains an older HTML page.
   // Keep its stylesheet in sync so new controls never use obsolete styles.
   const stylesheet=document.querySelector('link[rel="stylesheet"][href*="assets/styles.css"]');
-  const stylesheetHref='assets/styles.css?v=13.9.4.160-header-controls';
+  const stylesheetHref='assets/styles.css?v=13.9.4.161-summary-projection';
   if(stylesheet&&stylesheet.getAttribute('href')!==stylesheetHref)stylesheet.setAttribute('href',stylesheetHref);
   const D=window.LT_ITEM_UPGRADE_DATA||{items:[],battleCatalog:[]};
   const $=(id)=>document.getElementById(id);
@@ -374,7 +374,7 @@
     if(st.current>st.target)st.current=st.target;
     return {st,stages,max};
   }
-  function approximateReachableStage(slot,key,item,entry){
+  function approximateReachableStage(slot,key,item,entry,returnSequence=false){
     const {st,stages}=ensureTargets(slot,key,item,entry);
     const balances={};
     const materialNames=new Set();
@@ -409,6 +409,7 @@
       reached=seq;
     }
 
+    if(returnSequence)return reached;
     if(reached===0)return item?.progressionType==="tier"?"Base":"+0";
     const reachedStage=stages.find(stage=>Number(stage.sequence)===reached);
     return reachedStage?stageName(item,reachedStage):(item?.progressionType==="enhancement"?"+"+reached:"Stage "+reached);
@@ -1107,8 +1108,7 @@
           if(!materialDungeonIds[m.name])materialDungeonIds[m.name]=row.group?.id||"";
         }
       }));
-      const phaseCount=Math.max(1,(plan.groups||[]).length-1);
-      const progress=Math.round(Math.max(0,Math.min(1,(plan.ci||0)/phaseCount))*100);
+      const progress=evolutionProgress(plan,plan.ci,Number(st.current)||0);
       return {materials,materialDungeonIds,progress,status:(plan.currentGroup?.dungeonName||"Current")+" → "+(plan.targetGroup?.dungeonName||"Target"),maxed:false};
     }
     const sel=selectedEntry(card.slot,card.key);
@@ -1141,6 +1141,41 @@
     savePriorities();
     const allocations=window.LT_INVENTORY_ALLOCATION.allocate(sortedCards,inventory);
     return {cards,names,sortedCards,allocations};
+  }
+
+  function evolutionProgress(plan,index,level){
+    const phaseMax=i=>{
+      const entry=plan.groups[i]?.entries?.[0],item=entry&&upgradeItemFor(entry);
+      return item?Math.max(1,...stagesFor(item,entry).map(s=>Number(s.sequence)||0)):1;
+    };
+    const target=plan.ti+(Number(plan.st.target)||0)/phaseMax(plan.ti);
+    return Math.min(100,Math.round((index+level/phaseMax(index))/Math.max(1e-9,target)*100));
+  }
+
+  function summaryProjectedProgress(card){
+    if(card.maxed)return 100;
+    if(card.slot==="totem"||card.slot==="badge_5"){
+      const plan=evolutionPlan(card.slot,card.key);
+      if(!plan)return card.progress||0;
+      const balances={};
+      (inventoryPlan.allocations[card.key]||[]).forEach(row=>balances[row.name]=row.allocated);
+      let projected=card.progress||0;
+      for(const row of plan.rows){
+        if(!row.materialsComplete||!row.stages.length)break;
+        for(const stage of row.stages){
+          const costs=stageMaterialEntries(stage).map(m=>({name:m.name,cost:m.cost/rate(stage.successRate)}));
+          if(number(stage.ascensionStoneCost)>0)costs.push({name:stage.ascensionStoneName||"Ascension Stone",cost:number(stage.ascensionStoneCost)});
+          if(!costs.every(m=>(balances[m.name]||0)+1e-9>=m.cost))return Math.min(100,projected);
+          costs.forEach(m=>balances[m.name]-=m.cost);
+          projected=Math.max(projected,evolutionProgress(plan,plan.groups.findIndex(g=>g.id===row.group.id),Number(stage.sequence)||0));
+        }
+      }
+      return Math.min(100,projected);
+    }
+    const sel=selectedEntry(card.slot,card.key),item=sel&&upgradeItemFor(sel.entry);
+    if(!item)return card.progress||0;
+    const reached=approximateReachableStage(card.slot,card.key,item,sel.entry,true);
+    return Math.max(card.progress||0,Math.min(100,Math.round(reached/Math.max(1,Number(sel.state.target)||1)*100)));
   }
 
   function renderSummaryInventory(){
@@ -1198,10 +1233,12 @@
 
     let cardsHtml="";
     sortedCards.forEach(card=>{
+      const current=Math.max(0,Math.min(100,card.progress||0));
+      const projected=summaryProjectedProgress(card);
       const rows=allocations[card.key]||[];
       const remaining=rows.reduce((sum,row)=>sum+row.remaining,0);
       const materials=card.maxed?"No materials required":rows.length?rows.map(row=>esc(row.name)+": "+row.allocated.toLocaleString()+" / "+row.required.toLocaleString()).join("<br>"):"No material requirement available";
-      cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track"><i style="width:'+Math.max(0,Math.min(100,card.progress||0))+'%"></i></div><small>'+(card.maxed?"MAXED":esc(card.status))+' · '+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
+      cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track" title="Current '+current+'% · Projected '+projected+'%" aria-label="Current '+current+'%, projected '+projected+'%"><i class="summary-projected-progress" style="width:'+projected+'%"></i><i class="summary-current-progress" style="width:'+current+'%"></i></div><small>'+(card.maxed?"MAXED":esc(card.status))+' · Projected '+projected+'% · '+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
     });
 
     if(!cardsHtml)cardsHtml='<div class="summary-empty">Everything in your current setup is marked MAXED, so there is nothing left to prioritize.</div>';

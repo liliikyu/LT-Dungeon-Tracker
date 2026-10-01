@@ -1177,10 +1177,11 @@
       inventoryHtml+='<section class="summary-inventory-group"><div class="summary-inventory-group-head">'+esc(dungeonLabel)+'</div>';
       group.materials.forEach((name,index)=>{
         const difficulty=materialSource(name)?.difficulty;
+        const materialLabel=/\bascension stone$/.test(window.LT_MATERIAL_SOURCES.materialKey(name))?"Ascension Stone":"Material "+(index+1);
         const sourceNote=difficulty?' <small>Difficulty '+esc(difficulty)+'</small>':"";
         const needed=cards.reduce((sum,card)=>sum+Math.max(0,Math.ceil(Number(card.materials?.[name])||0)),0);
         const owned=Math.max(0,Number(inventory[name])||0);
-        inventoryHtml+='<div class="summary-inventory-row"><label><span class="summary-inventory-material"><small class="summary-inventory-material-label">Material '+(index+1)+'</small><span>'+esc(name)+sourceNote+'</span></span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label><small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';
+        inventoryHtml+='<div class="summary-inventory-row"><label><span class="summary-inventory-material"><small class="summary-inventory-material-label">'+esc(materialLabel)+'</small><span>'+esc(name)+sourceNote+'</span></span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label><small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';
       });
       inventoryHtml+='</section>';
     });

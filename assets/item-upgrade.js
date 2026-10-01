@@ -1124,21 +1124,39 @@
     let totalRequired=0,totalAllocated=0;
     Object.values(allocations).forEach(rows=>rows.forEach(row=>{totalRequired+=row.required;totalAllocated+=row.allocated;}));
 
+    const dungeonById=new Map((window.LT_DATA?.dungeons||[]).map(d=>[d.id||d.dungeonId,d]));
     const materialDungeonId=name=>{
       const ids=cards.map(card=>card.materialDungeonIds?.[name]).filter(Boolean);
       if(!ids.length)return "";
-      return ids.sort((a,b)=>dungeonNum(a)-dungeonNum(b)||String(a).localeCompare(String(b)))[0];
+      return ids.sort((a,b)=>{
+        const ad=dungeonById.get(a),bd=dungeonById.get(b);
+        const ar=ad?dungeonProgressSort(ad):Number.MAX_SAFE_INTEGER;
+        const br=bd?dungeonProgressSort(bd):Number.MAX_SAFE_INTEGER;
+        return ar-br||String(a).localeCompare(String(b));
+      })[0];
+    };
+    const dungeonProgressSort=d=>{
+      const type=String(d?.levelType||"");
+      const typeRank=type==="Lv"?0:type==="ULv"?1:type==="SLv"?2:3;
+      const numeric=Number(d?.numericLevel);
+      return typeRank*1000000+(Number.isFinite(numeric)?numeric:999999);
+    };
+    const materialDungeonMeta=name=>{
+      const id=materialDungeonId(name);
+      return id?dungeonById.get(id)||null:null;
     };
     let inventoryHtml="";
     Array.from(names).sort((a,b)=>{
-      const ad=materialDungeonId(a),bd=materialDungeonId(b);
-      const an=ad?dungeonNum(ad):Number.MAX_SAFE_INTEGER;
-      const bn=bd?dungeonNum(bd):Number.MAX_SAFE_INTEGER;
-      return an-bn||String(ad).localeCompare(String(bd))||a.localeCompare(b);
+      const am=materialDungeonMeta(a),bm=materialDungeonMeta(b);
+      const ar=am?dungeonProgressSort(am):Number.MAX_SAFE_INTEGER;
+      const br=bm?dungeonProgressSort(bm):Number.MAX_SAFE_INTEGER;
+      return ar-br||String(am?.name||"").localeCompare(String(bm?.name||""))||a.localeCompare(b);
     }).forEach(name=>{
       const needed=cards.reduce((sum,card)=>sum+Math.max(0,Math.ceil(Number(card.materials?.[name])||0)),0);
       const owned=Math.max(0,Number(inventory[name])||0);
-      inventoryHtml+='<div class="summary-inventory-row"><label><span>'+esc(name)+'</span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label><small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';
+      const dungeon=materialDungeonMeta(name);
+      const dungeonLabel=dungeon?String(dungeon.level||"")+" - "+String(dungeon.name||""):"Dungeon unknown";
+      inventoryHtml+='<div class="summary-inventory-row"><label><span class="summary-inventory-copy"><small class="summary-inventory-dungeon">'+esc(dungeonLabel)+'</small><span class="summary-inventory-material">'+esc(name)+'</span></span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label><small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';
     });
     if(!inventoryHtml)inventoryHtml='<div class="summary-empty">Select item series and targets in Battle, Specials or Gems to populate materials here.</div>';
 

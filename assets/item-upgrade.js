@@ -488,7 +488,7 @@
       const required=Math.ceil(requiredRaw),owned=itemAllocated(key,name),remaining=st.maxed?0:Math.max(0,required-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material">
         <span class="battle-material-name"><small>MATERIAL ${index+1}</small><span>${esc(name)}</span></span>
-        <input class="battle-material-input" type="number" readonly title="Allocated by priority; edit owned materials in Summary &amp; Inventory" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
+        <input class="battle-material-input" type="number" readonly title="Edit this quantity using the number field in Summary &amp; Inventory. This field shows the amount allocated to this item by priority." min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
         <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
       </div>`);
     });
@@ -497,7 +497,7 @@
       const owned=itemAllocated(key,stoneInventoryName),remaining=st.maxed?0:Math.max(0,req.stoneRequired-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material ascension">
         <span class="battle-material-name"><small>ASCENSION STONE</small><span>${esc(req.stoneName||"Ascension Stone")}</span></span>
-        <input class="battle-material-input" type="number" readonly title="Allocated by priority; edit owned materials in Summary &amp; Inventory" min="0" step="1" data-key="${esc(key)}" data-material="${esc(stoneInventoryName)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
+        <input class="battle-material-input" type="number" readonly title="Edit this quantity using the number field in Summary &amp; Inventory. This field shows the amount allocated to this item by priority." min="0" step="1" data-key="${esc(key)}" data-material="${esc(stoneInventoryName)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
         <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
       </div>`);
     }else{
@@ -610,7 +610,7 @@
       const remaining=st.maxed?0:Math.max(0,required-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material gem-material-row">
         <span class="battle-material-name"><small>MATERIAL ${index+1}</small><span>${esc(name)}</span></span>
-        <input class="battle-material-input" type="number" readonly title="Allocated by priority; edit owned materials in Summary &amp; Inventory" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
+        <input class="battle-material-input" type="number" readonly title="Edit this quantity using the number field in Summary &amp; Inventory. This field shows the amount allocated to this item by priority." min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
         <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
       </div>`);
     });
@@ -922,7 +922,7 @@
           : "TBC remaining";
         return `<div class="evolution-phase-material">
           <span class="evolution-phase-material-name">${esc(material.name)}</span>
-          <input class="battle-material-input evolution-material-input" type="number" readonly title="Allocated by priority; edit owned materials in Summary &amp; Inventory" min="0" step="1" data-key="${esc(key)}" data-material="${esc(material.name)}" value="${esc(material.owned)}" ${st.maxed?"disabled":""}>
+          <input class="battle-material-input evolution-material-input" type="number" readonly title="Edit this quantity using the number field in Summary &amp; Inventory. This field shows the amount allocated to this item by priority." min="0" step="1" data-key="${esc(key)}" data-material="${esc(material.name)}" value="${esc(material.owned)}" ${st.maxed?"disabled":""}>
           <span class="evolution-phase-remaining">/ ${esc(remainingText)}</span>
         </div>`;
       }).join(""):'<div class="evolution-phase-material muted"><span>Upgrade material not specified</span></div>';

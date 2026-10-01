@@ -4548,3 +4548,9 @@ body.conquest-modal-open{overflow:hidden}
   .summary-progress-materials{grid-column:2}
   .summary-inventory-row{grid-template-columns:1fr}
 }
+
+
+/* v13.9.4.153 — inventory dungeon grouping */
+.summary-inventory-copy{min-width:0;display:flex;flex-direction:column;gap:2px}
+.summary-inventory-dungeon{color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.025em}
+.summary-inventory-material{color:var(--text);font-size:12px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}

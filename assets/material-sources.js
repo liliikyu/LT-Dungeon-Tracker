@@ -52,5 +52,9 @@
     return [dungeon.level,dungeon.name].filter(Boolean).join(" · ")+
       (equipment.length?" ("+equipment.join(" / ")+")":"");
   }
-  root.LT_MATERIAL_SOURCES={materialKey,createResolver,inventoryHeading};
+  function compareInventoryMaterials(a,b){
+    const ascension=name=>/\bascension stone$/.test(materialKey(name));
+    return Number(ascension(a))-Number(ascension(b))||a.localeCompare(b);
+  }
+  root.LT_MATERIAL_SOURCES={materialKey,createResolver,inventoryHeading,compareInventoryMaterials};
 })(typeof window!=="undefined"?window:globalThis);

@@ -348,6 +348,15 @@
     return number(raw)===0?"No cost":formatElyMillions(raw);
   }
 
+  function inventoryOwned(name){return Math.max(0,Number(inventory?.[name])||0);}
+  function migrateLegacyInventory(name,value){
+    if(!name||Object.prototype.hasOwnProperty.call(inventory,name))return;
+    const n=Math.max(0,Number(value)||0);
+    if(n<=0)return;
+    inventory[name]=n;
+    saveInventory();
+  }
+
   function ensureTargets(slot,key,item,entry){
     const st=getState(key),stages=stagesFor(item,entry);
     const max=Math.max(0,...stages.map(s=>Number(s.sequence)||0));
@@ -358,11 +367,15 @@
   function approximateReachableStage(slot,key,item,entry){
     const {st,stages}=ensureTargets(slot,key,item,entry);
     const balances={};
-    for(const [name,value] of Object.entries(st.mats||{})){
-      if(name==="__stone")continue;
-      balances[name]=Math.max(0,Number(value)||0);
+    const materialNames=new Set();
+    for(const stage of stages)stageMaterialEntries(stage).forEach(material=>materialNames.add(material.name));
+    for(const name of materialNames){
+      migrateLegacyInventory(name,st.mats?.[name]);
+      balances[name]=inventoryOwned(name);
     }
-    let stones=Math.max(0,Number(st.mats?.["__stone"])||0);
+    const stoneName=stages.map(stage=>String(stage.ascensionStoneName||"").trim()).find(Boolean)||"Ascension Stone";
+    migrateLegacyInventory(stoneName,st.mats?.["__stone"]);
+    let stones=inventoryOwned(stoneName);
     const current=Number(st.current)||0;
     const target=Math.max(current,Number(st.target)||0);
     let reached=current;
@@ -412,10 +425,12 @@
     }
     let remainingTotal=0,rawTotal=0;
     for(const [name,required] of Object.entries(mats)){
-      const owned=Math.max(0,Number(st.mats?.[name])||0);
+      migrateLegacyInventory(name,st.mats?.[name]);
+      const owned=inventoryOwned(name);
       const rounded=Math.ceil(required);rawTotal+=rounded;remainingTotal+=Math.max(0,rounded-owned);
     }
-    const stoneOwned=Math.max(0,Number(st.mats?.["__stone"])||0);
+    if(stoneName)migrateLegacyInventory(stoneName,st.mats?.["__stone"]);
+    const stoneOwned=stoneName?inventoryOwned(stoneName):0;
     const stoneRemaining=Math.max(0,Math.ceil(stoneRequired)-stoneOwned);
     const target=Math.max(1,Number(st.target)||1),completion=Math.min(100,Math.round((Number(st.current)||0)/target*100));
     if(st.maxed){
@@ -465,7 +480,7 @@
   function materialRows(key,req){
     const st=getState(key),rows=[];
     Object.entries(req.mats).forEach(([name,requiredRaw],index)=>{
-      const required=Math.ceil(requiredRaw),owned=Math.max(0,Number(st.mats?.[name])||0),remaining=st.maxed?0:Math.max(0,required-owned);
+      const required=Math.ceil(requiredRaw),owned=inventoryOwned(name),remaining=st.maxed?0:Math.max(0,required-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material">
         <span class="battle-material-name"><small>MATERIAL ${index+1}</small><span>${esc(name)}</span></span>
         <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
@@ -473,10 +488,11 @@
       </div>`);
     });
     if(req.stoneName||req.stoneRequired>0){
-      const owned=Math.max(0,Number(st.mats?.["__stone"])||0),remaining=st.maxed?0:Math.max(0,req.stoneRequired-owned);
+      const stoneInventoryName=req.stoneName||"Ascension Stone";
+      const owned=inventoryOwned(stoneInventoryName),remaining=st.maxed?0:Math.max(0,req.stoneRequired-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material ascension">
         <span class="battle-material-name"><small>ASCENSION STONE</small><span>${esc(req.stoneName||"Ascension Stone")}</span></span>
-        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="__stone" value="${esc(owned)}" ${st.maxed?"disabled":""}>
+        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(stoneInventoryName)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
         <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
       </div>`);
     }else{
@@ -585,7 +601,7 @@
     const materials=Object.entries(req.mats);
     materials.forEach(([name,requiredRaw],index)=>{
       const required=Math.ceil(requiredRaw);
-      const owned=Math.max(0,Number(st.mats?.[name])||0);
+      const owned=inventoryOwned(name);
       const remaining=st.maxed?0:Math.max(0,required-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material gem-material-row">
         <span class="battle-material-name"><small>MATERIAL ${index+1}</small><span>${esc(name)}</span></span>
@@ -786,7 +802,8 @@
       const materials=[...materialTotals.values()].map((m,index)=>{
         const required=Math.ceil(m.required);
         const stateKey=entry.itemId+"::"+m.name;
-        const owned=Math.max(0,Number(st.mats?.[stateKey])||0);
+        migrateLegacyInventory(m.name,st.mats?.[stateKey]);
+        const owned=inventoryOwned(m.name);
         const remaining=st.maxed?0:Math.max(0,required-owned);
         if(m.complete){
           totalMats+=required;
@@ -898,7 +915,7 @@
           : "TBC remaining";
         return `<div class="evolution-phase-material">
           <span class="evolution-phase-material-name">${esc(material.name)}</span>
-          <input class="battle-material-input evolution-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(material.stateKey)}" value="${esc(material.owned)}" ${st.maxed?"disabled":""}>
+          <input class="battle-material-input evolution-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(material.name)}" value="${esc(material.owned)}" ${st.maxed?"disabled":""}>
           <span class="evolution-phase-remaining">/ ${esc(remainingText)}</span>
         </div>`;
       }).join(""):'<div class="evolution-phase-material muted"><span>Upgrade material not specified</span></div>';
@@ -1254,7 +1271,10 @@
     if(el.classList.contains("battle-current-select"))st.current=Number(el.value)||0;
     if(el.classList.contains("battle-target-select"))st.target=Number(el.value)||0;
     if(el.classList.contains("battle-maxed-check"))st.maxed=el.checked;
-    if(el.classList.contains("battle-material-input")||el.classList.contains("compact-mats")){st.mats=st.mats||{};st.mats[el.dataset.material]=Math.max(0,Number(el.value)||0);}
+    if(el.classList.contains("battle-material-input")||el.classList.contains("compact-mats")){
+      inventory[el.dataset.material]=Math.max(0,Number(el.value)||0);
+      saveInventory();
+    }
     saveState();render();
   });
   $("upgrade-tab-content")?.addEventListener("input",(event)=>{
@@ -1262,7 +1282,7 @@
     if(el.classList.contains("summary-inventory-input")){inventory[el.dataset.material]=Math.max(0,Number(el.value)||0);saveInventory();return;}
     if(el.classList.contains("summary-priority-input")){priorities[el.dataset.key]=Math.max(1,Number(el.value)||1);savePriorities();return;}
     const key=el.dataset?.key;if(!key)return;
-    if(el.classList.contains("battle-material-input")||el.classList.contains("compact-mats")){const st=getState(key);st.mats=st.mats||{};st.mats[el.dataset.material]=Math.max(0,Number(el.value)||0);saveState();}
+    if(el.classList.contains("battle-material-input")||el.classList.contains("compact-mats")){inventory[el.dataset.material]=Math.max(0,Number(el.value)||0);saveInventory();}
   });
 
   render();

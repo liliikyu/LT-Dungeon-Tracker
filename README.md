@@ -31,6 +31,17 @@ All three tracker pages use the same Light / Dark / System theme control and the
 
 ## Data sources
 
+Item Upgrade inventory groups use `assets/data.js` material-source links generated
+from `dungeon_drop`, rather than the dungeon of the equipment being upgraded.
+Ascension-material rows carry Difficulty V; source-name aliases preserve sheet
+typos and the resolver treats “Ascension Stone” and “Stone of Ascension” alike.
+Equipment copies used as materials resolve through their own drop rows. Unknown
+materials stay under Dungeon unknown instead of borrowing an upgrade location.
+The item-upgrade snapshot is maintained independently of `sync_sheet.py`.
+
+Validate with `python -m unittest discover -s scripts -p 'test_*.py'` and
+`node scripts/test_material_sources.cjs`.
+
 - Dungeons and Titles: project Google Sheet (`dungeon_id` + `dungeon_drop`)
 - `dungeon_id` is the canonical dungeon master list; `dungeon_drop` supplies item/drop, Codex, title, and upgrade-target relationships.
 - Dungeon Monster Illustrations: Official La Tale Wiki

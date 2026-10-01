@@ -155,6 +155,28 @@ def item_key(name: str) -> str:
     return " ".join(value.split())
 
 
+def build_material_sources(drop_records: list[dict[str, str]]) -> list[dict]:
+    """Keep acquisition locations separate from the equipment upgrade targets."""
+    sources = []
+    for row in drop_records:
+        name = clean_text(row.get("item_name"))
+        dungeon_id = clean_text(row.get("dungeon_id"))
+        if not name or not dungeon_id:
+            continue
+        # Source-sheet typo; retain the original as an alias for older snapshots.
+        canonical = {"Banner of Inspiraton": "Banner of Inspiration"}.get(name, name)
+        source = {
+            "name": canonical,
+            "aliases": [name] if name != canonical else [],
+            "dungeonId": dungeon_id,
+            "difficulty": "V" if row.get("item_type") == "upgrade_material_asc" else None,
+            "upgradeItemIds": [row[col] for col in UPGRADE_COLUMNS if row.get(col)],
+        }
+        if source not in sources:
+            sources.append(source)
+    return sources
+
+
 def add_item(items: list[dict], name: str, **flags) -> None:
     name = str(name or "").strip()
     if not name or name.lower() in {"not yet", "n/a", "na"}:
@@ -414,6 +436,7 @@ def build_data(
         "lastSyncedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "generatedFrom": "Google Sheets — LT Boss Matts Tracker / dungeon_id + dungeon_drop + title_set_id + title_id",
         "schemaVersion": "v8",
+        "materialSources": build_material_sources(drop_records),
         "levelFilters": [
             {"id": "all", "label": "All"},
             {"id": "lv-1-235", "label": "Lv. 1–235"},

@@ -4554,3 +4554,11 @@ body.conquest-modal-open{overflow:hidden}
 .summary-inventory-copy{min-width:0;display:flex;flex-direction:column;gap:2px}
 .summary-inventory-dungeon{color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.025em}
 .summary-inventory-material{color:var(--text);font-size:12px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+
+
+/* v13.9.4.154 — grouped inventory by dungeon */
+.summary-inventory-group{border-top:1px solid var(--line-soft)}
+.summary-inventory-group:first-child{border-top:0}
+.summary-inventory-group-head{padding:8px 12px 6px;background:var(--panel-2);color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.035em}
+.summary-inventory-group .summary-inventory-row:first-of-type{border-top:1px solid var(--line-soft)}
+.summary-inventory-copy,.summary-inventory-dungeon{display:none}

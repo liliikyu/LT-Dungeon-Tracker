@@ -348,6 +348,11 @@
     return number(raw)===0?"No cost":formatElyMillions(raw);
   }
 
+  let inventoryPlan=null;
+  function itemAllocated(key,name){
+    if(!inventoryPlan)return inventoryOwned(name);
+    return inventoryPlan.allocations[key]?.find(row=>row.name===name)?.allocated||0;
+  }
   function inventoryOwned(name){return Math.max(0,Number(inventory?.[name])||0);}
   function migrateLegacyInventory(name,value){
     if(!name||Object.prototype.hasOwnProperty.call(inventory,name))return;
@@ -371,11 +376,11 @@
     for(const stage of stages)stageMaterialEntries(stage).forEach(material=>materialNames.add(material.name));
     for(const name of materialNames){
       migrateLegacyInventory(name,st.mats?.[name]);
-      balances[name]=inventoryOwned(name);
+      balances[name]=itemAllocated(key,name);
     }
     const stoneName=stages.map(stage=>String(stage.ascensionStoneName||"").trim()).find(Boolean)||"Ascension Stone";
     migrateLegacyInventory(stoneName,st.mats?.["__stone"]);
-    let stones=inventoryOwned(stoneName);
+    let stones=itemAllocated(key,stoneName);
     const current=Number(st.current)||0;
     const target=Math.max(current,Number(st.target)||0);
     let reached=current;
@@ -426,11 +431,11 @@
     let remainingTotal=0,rawTotal=0;
     for(const [name,required] of Object.entries(mats)){
       migrateLegacyInventory(name,st.mats?.[name]);
-      const owned=inventoryOwned(name);
+      const owned=itemAllocated(key,name);
       const rounded=Math.ceil(required);rawTotal+=rounded;remainingTotal+=Math.max(0,rounded-owned);
     }
     if(stoneName)migrateLegacyInventory(stoneName,st.mats?.["__stone"]);
-    const stoneOwned=stoneName?inventoryOwned(stoneName):0;
+    const stoneOwned=stoneName?itemAllocated(key,stoneName):0;
     const stoneRemaining=Math.max(0,Math.ceil(stoneRequired)-stoneOwned);
     const target=Math.max(1,Number(st.target)||1),completion=Math.min(100,Math.round((Number(st.current)||0)/target*100));
     if(st.maxed){
@@ -480,19 +485,19 @@
   function materialRows(key,req){
     const st=getState(key),rows=[];
     Object.entries(req.mats).forEach(([name,requiredRaw],index)=>{
-      const required=Math.ceil(requiredRaw),owned=inventoryOwned(name),remaining=st.maxed?0:Math.max(0,required-owned);
+      const required=Math.ceil(requiredRaw),owned=itemAllocated(key,name),remaining=st.maxed?0:Math.max(0,required-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material">
         <span class="battle-material-name"><small>MATERIAL ${index+1}</small><span>${esc(name)}</span></span>
-        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
+        <input class="battle-material-input" type="number" readonly title="Allocated by priority; edit owned materials in Summary &amp; Inventory" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
         <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
       </div>`);
     });
     if(req.stoneName||req.stoneRequired>0){
       const stoneInventoryName=req.stoneName||"Ascension Stone";
-      const owned=inventoryOwned(stoneInventoryName),remaining=st.maxed?0:Math.max(0,req.stoneRequired-owned);
+      const owned=itemAllocated(key,stoneInventoryName),remaining=st.maxed?0:Math.max(0,req.stoneRequired-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material ascension">
         <span class="battle-material-name"><small>ASCENSION STONE</small><span>${esc(req.stoneName||"Ascension Stone")}</span></span>
-        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(stoneInventoryName)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
+        <input class="battle-material-input" type="number" readonly title="Allocated by priority; edit owned materials in Summary &amp; Inventory" min="0" step="1" data-key="${esc(key)}" data-material="${esc(stoneInventoryName)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
         <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
       </div>`);
     }else{
@@ -601,11 +606,11 @@
     const materials=Object.entries(req.mats);
     materials.forEach(([name,requiredRaw],index)=>{
       const required=Math.ceil(requiredRaw);
-      const owned=inventoryOwned(name);
+      const owned=itemAllocated(key,name);
       const remaining=st.maxed?0:Math.max(0,required-owned);
       rows.push(`<div class="battle-material-row battle-stacked-material gem-material-row">
         <span class="battle-material-name"><small>MATERIAL ${index+1}</small><span>${esc(name)}</span></span>
-        <input class="battle-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
+        <input class="battle-material-input" type="number" readonly title="Allocated by priority; edit owned materials in Summary &amp; Inventory" min="0" step="1" data-key="${esc(key)}" data-material="${esc(name)}" value="${esc(owned)}" ${st.maxed?"disabled":""}>
         <span class="battle-material-total">/ ${remaining.toLocaleString()} remaining</span>
       </div>`);
     });
@@ -738,7 +743,7 @@
     st.target=Math.max(0,Math.min(Number(st.target)||0,targetMax));
     if(ci===ti&&st.target<st.current)st.target=st.current;
 
-    const rows=[];
+    const rows=[],materialBudget={};
     let elyMillions=0,elyComplete=true,totalMats=0,totalRemainingMats=0,materialsComplete=true;
 
     for(let i=ci;i<=ti;i++){
@@ -803,7 +808,9 @@
         const required=Math.ceil(m.required);
         const stateKey=entry.itemId+"::"+m.name;
         migrateLegacyInventory(m.name,st.mats?.[stateKey]);
-        const owned=inventoryOwned(m.name);
+        if(!Object.prototype.hasOwnProperty.call(materialBudget,m.name))materialBudget[m.name]=itemAllocated(key,m.name);
+        const owned=Math.min(required,materialBudget[m.name]);
+        materialBudget[m.name]-=owned;
         const remaining=st.maxed?0:Math.max(0,required-owned);
         if(m.complete){
           totalMats+=required;
@@ -915,7 +922,7 @@
           : "TBC remaining";
         return `<div class="evolution-phase-material">
           <span class="evolution-phase-material-name">${esc(material.name)}</span>
-          <input class="battle-material-input evolution-material-input" type="number" min="0" step="1" data-key="${esc(key)}" data-material="${esc(material.name)}" value="${esc(material.owned)}" ${st.maxed?"disabled":""}>
+          <input class="battle-material-input evolution-material-input" type="number" readonly title="Allocated by priority; edit owned materials in Summary &amp; Inventory" min="0" step="1" data-key="${esc(key)}" data-material="${esc(material.name)}" value="${esc(material.owned)}" ${st.maxed?"disabled":""}>
           <span class="evolution-phase-remaining">/ ${esc(remainingText)}</span>
         </div>`;
       }).join(""):'<div class="evolution-phase-material muted"><span>Upgrade material not specified</span></div>';
@@ -1107,7 +1114,7 @@
     return {materials,materialDungeonIds,progress:req.completion||0,status:"Current progress "+(req.completion||0)+"%",maxed:false};
   }
 
-  function renderSummaryInventory(){
+  function buildInventoryPlan(){
     const cards=summaryCards().map((card,index)=>{
       const req=summaryRequirement(card);
       if(req.maxed){
@@ -1124,18 +1131,12 @@
     cards.forEach(card=>Object.keys(card.materials||{}).forEach(name=>names.add(name)));
     const sortedCards=cards.filter(card=>!card.maxed).sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
     savePriorities();
-    const available={};
-    Array.from(names).forEach(name=>available[name]=Math.max(0,Number(inventory[name])||0));
-    const allocations={};
-    sortedCards.forEach(card=>{
-      allocations[card.key]=[];
-      Object.entries(card.materials||{}).forEach(pair=>{
-        const name=pair[0],required=Math.max(0,Math.ceil(pair[1]));
-        const have=Math.max(0,available[name]||0),allocated=Math.min(required,have);
-        available[name]=have-allocated;
-        allocations[card.key].push({name,required,allocated,remaining:Math.max(0,required-allocated)});
-      });
-    });
+    const allocations=window.LT_INVENTORY_ALLOCATION.allocate(sortedCards,inventory);
+    return {cards,names,sortedCards,allocations};
+  }
+
+  function renderSummaryInventory(){
+    const {cards,names,sortedCards,allocations}=inventoryPlan;
     const overall=cards.length?Math.round(cards.reduce((sum,card)=>sum+(card.maxed?100:(card.progress||0)),0)/cards.length):0;
     const maxedCount=cards.filter(card=>card.maxed).length;
     let totalRequired=0,totalAllocated=0;
@@ -1203,6 +1204,9 @@
   let mode=localStorage.getItem(MODE_KEY)==="detailed"?"detailed":"simple";
   let tab=["summary","battle","specials","gems"].includes(localStorage.getItem(TAB_KEY))?localStorage.getItem(TAB_KEY):"summary";
   let hideMaxed=localStorage.getItem(HIDE_MAXED_KEY)==="1";
+  function allocationNotice(){
+    return '<p class="battle-latest-line">Material quantities below are allocated by priority. <button type="button" class="inventory-edit-link">Edit owned materials and priorities in Summary &amp; Inventory</button></p>';
+  }
   function syncHideMaxed(){
     const button=$("upgrade-hide-maxed");
     button?.classList.toggle("active",hideMaxed);
@@ -1215,7 +1219,10 @@
     const root=$("upgrade-tab-content");if(!root)return;
     root.classList.toggle("hide-maxed",hideMaxed);
     try{
-      root.innerHTML=tab==="summary"?renderSummaryInventory():tab==="battle"?renderBattle(mode):tab==="specials"?renderSpecials(mode):renderGems(mode);
+      // Gather raw requirements without reusing the previous render's allocation.
+      inventoryPlan=null;
+      inventoryPlan=buildInventoryPlan();
+      root.innerHTML=tab==="summary"?renderSummaryInventory():allocationNotice()+(tab==="battle"?renderBattle(mode):tab==="specials"?renderSpecials(mode):renderGems(mode));
     }catch(err){
       console.error("Item Upgrade tab render failed:",tab,err);
       root.innerHTML='<div class="upgrade-render-error"><strong>Unable to render this tab.</strong><span>Please refresh the page. The tracker will preserve your saved inputs.</span></div>';
@@ -1226,6 +1233,9 @@
   $("upgrade-hide-maxed")?.addEventListener("click",()=>{hideMaxed=!hideMaxed;localStorage.setItem(HIDE_MAXED_KEY,hideMaxed?"1":"0");render();});
   document.querySelectorAll(".upgrade-game-tab").forEach(b=>b.addEventListener("click",()=>{tab=b.dataset.upgradeTab;localStorage.setItem(TAB_KEY,tab);render();}));
 
+  $("upgrade-tab-content")?.addEventListener("click",event=>{
+    if(event.target.closest(".inventory-edit-link")){tab="summary";localStorage.setItem(TAB_KEY,tab);render();}
+  });
   $("upgrade-tab-content")?.addEventListener("change",(event)=>{
     const el=event.target;
     if(el.classList.contains("summary-inventory-input")){inventory[el.dataset.material]=Math.max(0,Number(el.value)||0);saveInventory();render();return;}

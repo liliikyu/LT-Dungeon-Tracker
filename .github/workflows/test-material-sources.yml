@@ -15,4 +15,5 @@ jobs:
           node-version: "24"
       - run: python -m unittest discover -s scripts -p 'test_*.py'
       - run: node scripts/test_material_sources.cjs
+      - run: node scripts/test_inventory_allocation.cjs
       - run: node --check assets/material-sources.js && node --check assets/item-upgrade.js

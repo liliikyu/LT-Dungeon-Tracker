@@ -1145,18 +1145,38 @@
       const id=materialDungeonId(name);
       return id?dungeonById.get(id)||null:null;
     };
-    let inventoryHtml="";
-    Array.from(names).sort((a,b)=>{
+    const sortedMaterials=Array.from(names).sort((a,b)=>{
       const am=materialDungeonMeta(a),bm=materialDungeonMeta(b);
       const ar=am?dungeonProgressSort(am):Number.MAX_SAFE_INTEGER;
       const br=bm?dungeonProgressSort(bm):Number.MAX_SAFE_INTEGER;
       return ar-br||String(am?.name||"").localeCompare(String(bm?.name||""))||a.localeCompare(b);
-    }).forEach(name=>{
-      const needed=cards.reduce((sum,card)=>sum+Math.max(0,Math.ceil(Number(card.materials?.[name])||0)),0);
-      const owned=Math.max(0,Number(inventory[name])||0);
+    });
+    const inventoryGroups=[];
+    const groupByKey=new Map();
+    sortedMaterials.forEach(name=>{
+      const dungeonId=materialDungeonId(name);
       const dungeon=materialDungeonMeta(name);
-      const dungeonLabel=dungeon?String(dungeon.level||"")+" - "+String(dungeon.name||""):"Dungeon unknown";
-      inventoryHtml+='<div class="summary-inventory-row"><label><span class="summary-inventory-copy"><small class="summary-inventory-dungeon">'+esc(dungeonLabel)+'</small><span class="summary-inventory-material">'+esc(name)+'</span></span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label><small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';
+      const key=dungeonId||"__unknown__";
+      let group=groupByKey.get(key);
+      if(!group){
+        group={key,dungeon,materials:[]};
+        groupByKey.set(key,group);
+        inventoryGroups.push(group);
+      }
+      group.materials.push(name);
+    });
+    let inventoryHtml="";
+    inventoryGroups.forEach(group=>{
+      const dungeonLabel=group.dungeon
+        ?String(group.dungeon.level||"")+" - "+String(group.dungeon.name||"")
+        :"Dungeon unknown";
+      inventoryHtml+='<section class="summary-inventory-group"><div class="summary-inventory-group-head">'+esc(dungeonLabel)+'</div>';
+      group.materials.forEach(name=>{
+        const needed=cards.reduce((sum,card)=>sum+Math.max(0,Math.ceil(Number(card.materials?.[name])||0)),0);
+        const owned=Math.max(0,Number(inventory[name])||0);
+        inventoryHtml+='<div class="summary-inventory-row"><label><span class="summary-inventory-material">'+esc(name)+'</span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label><small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';
+      });
+      inventoryHtml+='</section>';
     });
     if(!inventoryHtml)inventoryHtml='<div class="summary-empty">Select item series and targets in Battle, Specials or Gems to populate materials here.</div>';
 

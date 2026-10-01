@@ -26,5 +26,31 @@
       return {key:source.dungeonId,dungeon,difficulty:source.difficulty||null};
     };
   }
-  root.LT_MATERIAL_SOURCES={materialKey,createResolver};
+  function inventoryHeading(data,catalog,dungeon,materialNames){
+    if(!dungeon)return "Dungeon unknown";
+    const names=new Set(materialNames.map(materialKey));
+    const targets=new Set();
+    for(const source of data.materialSources||[]){
+      if(source.dungeonId!==(dungeon.id||dungeon.dungeonId))continue;
+      if(![source.name,...(source.aliases||[])].some(name=>names.has(materialKey(name))))continue;
+      for(const id of source.upgradeItemIds||[])targets.add(id.toLowerCase().replace(/bellial/g,"belial"));
+    }
+    const labels={weapon:"Weapon",elemental_stone:"Elemental Stone",armor:"Armor",
+      bindi:"Bindi",glasses:"Glasses",stockings:"Stockings",earrings:"Earrings",ring:"Ring",cloak:"Cloak",
+      charm:"Charm",totem:"Totem",relic:"Relic",watch:"Watch",necklace:"Necklace",textbook:"Textbook",
+      sticker:"Sticker",belt:"Belt",brooch:"Brooch",pendant:"Pendant",
+      badge_1:"Badge 1",badge_2:"Badge 2",badge_3:"Badge 3",badge_4:"Badge 4",badge_5:"Badge 5",badge_6:"Badge 6",
+      red_gem:"Red Gem",yellow_gem:"Yellow Gem",blue_gem:"Blue Gem"};
+    const types=new Set();
+    for(const item of catalog||[]){
+      if(!targets.has(String(item.itemId||"").toLowerCase().replace(/bellial/g,"belial")))continue;
+      const type=String(item.itemType||"").toLowerCase();
+      const slot=Object.keys(labels).find(key=>type===key||type.startsWith(key+"_"));
+      if(slot)types.add(slot);
+    }
+    const equipment=Object.keys(labels).filter(key=>types.has(key)).map(key=>labels[key]);
+    return [dungeon.level,dungeon.name].filter(Boolean).join(" · ")+
+      (equipment.length?" ("+equipment.join(" / ")+")":"");
+  }
+  root.LT_MATERIAL_SOURCES={materialKey,createResolver,inventoryHeading};
 })(typeof window!=="undefined"?window:globalThis);

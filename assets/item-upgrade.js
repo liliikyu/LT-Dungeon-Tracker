@@ -1172,9 +1172,8 @@
     });
     let inventoryHtml="";
     inventoryGroups.forEach(group=>{
-      const dungeonLabel=group.dungeon
-        ?String(group.dungeon.level||"")+" - "+String(group.dungeon.name||"")
-        :"Dungeon unknown";
+      const dungeonLabel=window.LT_MATERIAL_SOURCES.inventoryHeading(
+        window.LT_DATA||{},D.battleCatalog||[],group.dungeon,group.materials);
       inventoryHtml+='<section class="summary-inventory-group"><div class="summary-inventory-group-head">'+esc(dungeonLabel)+'</div>';
       group.materials.forEach(name=>{
         const difficulty=materialSource(name)?.difficulty;

@@ -1141,27 +1141,15 @@
     let totalRequired=0,totalAllocated=0;
     Object.values(allocations).forEach(rows=>rows.forEach(row=>{totalRequired+=row.required;totalAllocated+=row.allocated;}));
 
-    const dungeonById=new Map((window.LT_DATA?.dungeons||[]).map(d=>[d.id||d.dungeonId,d]));
-    const materialDungeonId=name=>{
-      const ids=cards.map(card=>card.materialDungeonIds?.[name]).filter(Boolean);
-      if(!ids.length)return "";
-      return ids.sort((a,b)=>{
-        const ad=dungeonById.get(a),bd=dungeonById.get(b);
-        const ar=ad?dungeonProgressSort(ad):Number.MAX_SAFE_INTEGER;
-        const br=bd?dungeonProgressSort(bd):Number.MAX_SAFE_INTEGER;
-        return ar-br||String(a).localeCompare(String(b));
-      })[0];
-    };
+    const resolveSource=window.LT_MATERIAL_SOURCES.createResolver(window.LT_DATA||{});
+    const materialSource=name=>resolveSource(name,cards.map(card=>card.materialDungeonIds?.[name]).filter(Boolean));
     const dungeonProgressSort=d=>{
       const type=String(d?.levelType||"");
       const typeRank=type==="Lv"?0:type==="ULv"?1:type==="SLv"?2:3;
       const numeric=Number(d?.numericLevel);
       return typeRank*1000000+(Number.isFinite(numeric)?numeric:999999);
     };
-    const materialDungeonMeta=name=>{
-      const id=materialDungeonId(name);
-      return id?dungeonById.get(id)||null:null;
-    };
+    const materialDungeonMeta=name=>materialSource(name)?.dungeon||null;
     const sortedMaterials=Array.from(names).sort((a,b)=>{
       const am=materialDungeonMeta(a),bm=materialDungeonMeta(b);
       const ar=am?dungeonProgressSort(am):Number.MAX_SAFE_INTEGER;
@@ -1171,9 +1159,9 @@
     const inventoryGroups=[];
     const groupByKey=new Map();
     sortedMaterials.forEach(name=>{
-      const dungeonId=materialDungeonId(name);
-      const dungeon=materialDungeonMeta(name);
-      const key=dungeonId||"__unknown__";
+      const source=materialSource(name);
+      const dungeon=source?.dungeon||null;
+      const key=source?.key||"__unknown__";
       let group=groupByKey.get(key);
       if(!group){
         group={key,dungeon,materials:[]};

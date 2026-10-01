@@ -2,7 +2,7 @@
   // This script loads fresh even when the browser retains an older HTML page.
   // Keep its stylesheet in sync so new controls never use obsolete styles.
   const stylesheet=document.querySelector('link[rel="stylesheet"][href*="assets/styles.css"]');
-  const stylesheetHref='assets/styles.css?v=13.9.4.161-summary-projection';
+  const stylesheetHref='assets/styles.css?v=13.9.4.162-summary-layout';
   if(stylesheet&&stylesheet.getAttribute('href')!==stylesheetHref)stylesheet.setAttribute('href',stylesheetHref);
   const D=window.LT_ITEM_UPGRADE_DATA||{items:[],battleCatalog:[]};
   const $=(id)=>document.getElementById(id);
@@ -1243,7 +1243,7 @@
 
     if(!cardsHtml)cardsHtml='<div class="summary-empty">Everything in your current setup is marked MAXED, so there is nothing left to prioritize.</div>';
 
-    return '<section class="summary-inventory-page"><div class="summary-overview-grid"><div><span>Overall progress</span><strong>'+overall+'%</strong></div><div><span>Maxed items</span><strong>'+maxedCount+' / '+cards.length+'</strong></div><div><span>Materials allocated</span><strong>'+totalAllocated.toLocaleString()+' / '+totalRequired.toLocaleString()+'</strong></div></div><div class="summary-columns"><section class="summary-panel"><div class="summary-panel-head"><div><h2>Inventory</h2><p>Enter each material once. Shared materials are allocated using the priority order.</p></div></div><div class="summary-inventory-list">'+inventoryHtml+'</div></section><section class="summary-panel summary-priority-panel"><div class="summary-panel-head"><div><h2>Progress & Priority</h2><p>Lower numbers get shared materials first. This is useful for armor, gems, accessories and other multi-piece sets.</p></div></div><div class="summary-progress-list">'+cardsHtml+'</div></section></div></section>';
+    return '<section class="summary-inventory-page"><div class="summary-columns"><div class="summary-inventory-column"><div class="summary-overview-grid"><div><span>Overall progress</span><strong>'+overall+'%</strong></div><div><span>Maxed items</span><strong>'+maxedCount+' / '+cards.length+'</strong></div><div><span>Materials allocated</span><strong>'+totalAllocated.toLocaleString()+' / '+totalRequired.toLocaleString()+'</strong></div></div><section class="summary-panel"><div class="summary-panel-head"><div><h2>Inventory</h2><p>Enter each material once. Shared materials are allocated using the priority order.</p></div></div><div class="summary-inventory-list">'+inventoryHtml+'</div></section></div><section class="summary-panel summary-priority-panel"><div class="summary-panel-head"><div><h2>Progress & Priority</h2><p>Lower numbers get shared materials first. This is useful for armor, gems, accessories and other multi-piece sets.</p></div></div><div class="summary-progress-list">'+cardsHtml+'</div></section></div></section>';
   }
 
   let mode=localStorage.getItem(MODE_KEY)==="detailed"?"detailed":"simple";

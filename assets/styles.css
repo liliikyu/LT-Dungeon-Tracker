@@ -4578,3 +4578,5 @@ body.conquest-modal-open{overflow:hidden}
 .summary-inventory-row .summary-inventory-material-label{color:var(--muted);font-size:8px;font-weight:800;letter-spacing:.04em;line-height:1.2;text-transform:uppercase;white-space:normal}
 .summary-inventory-row input{width:96px;height:32px;text-align:left;font-size:var(--upgrade-body-size);font-weight:400}
 .summary-inventory-group .summary-inventory-row+.summary-inventory-row{border-top:1px solid var(--line-soft)}
+
+.summary-inventory-material > span > small{font-weight:400;font-style:italic}

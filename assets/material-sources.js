@@ -22,8 +22,8 @@
       const source=candidates.find(s=>preferredDungeonIds.includes(s.dungeonId))||candidates[0];
       if(!source)return null;
       const dungeon=dungeons.get(source.dungeonId);
-      return {key:source.dungeonId+(source.difficulty?":"+source.difficulty:""),
-        dungeon:{...dungeon,name:dungeon.name+(source.difficulty?" Difficulty "+source.difficulty:"")}};
+      // Difficulty describes the material source, not a separate inventory group.
+      return {key:source.dungeonId,dungeon,difficulty:source.difficulty||null};
     };
   }
   root.LT_MATERIAL_SOURCES={materialKey,createResolver};

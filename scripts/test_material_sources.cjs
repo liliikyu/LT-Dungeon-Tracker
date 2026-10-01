@@ -10,9 +10,9 @@ const resolve=context.window.LT_MATERIAL_SOURCES.createResolver(context.window.L
 for(const [name,label,key] of [
   ['Banner of Inspiration','Inspirational Playground','dng_132'],
   ['Banner of Inspiraton','Inspirational Playground','dng_132'],
-  ['Belial Stone of Ascension','Rikimo Pelke Difficulty V','dng_135:V'],
-  ['Dorothea Ascension Stone','Emeraldia Difficulty V','dng_125:V'],
-  ['Dorothea Stone of Ascension','Emeraldia Difficulty V','dng_125:V'],
+  ['Belial Stone of Ascension','Rikimo Pelke','dng_135'],
+  ['Dorothea Ascension Stone','Emeraldia','dng_125'],
+  ['Dorothea Stone of Ascension','Emeraldia','dng_125'],
   ['Vigor Mutant Ent Badge','Unknown Forest','dng_129'],
   ['Mutant Clawrence Badge 6','Unknown Beach','dng_138'],
 ]){
@@ -22,8 +22,12 @@ for(const [name,label,key] of [
   assert.equal(source?.key,key,name);
 }
 assert.equal(resolve('Unlisted material',['dng_135']),null);
-assert.equal(resolve('  DOROTHEA Stone of Ascension (Event) ').key,'dng_125:V');
-assert.notEqual(resolve('Belial Stone of Ascension').key,resolve("Belial's Brooch").key);
+assert.equal(resolve('  DOROTHEA Stone of Ascension (Event) ').key,'dng_125');
+assert.equal(resolve('Belial Stone of Ascension').key,resolve("Belial's Brooch").key);
+assert.equal(resolve('Dorothea Stone of Ascension').key,resolve("Dorothea's Emerald Bow").key);
+assert.equal(resolve('Belial Stone of Ascension').difficulty,'V');
+assert.equal(resolve('Dorothea Ascension Stone').difficulty,'V');
+assert.equal(resolve("Belial's Brooch").difficulty,null);
 const multiple=context.window.LT_MATERIAL_SOURCES.createResolver({
   dungeons:[{id:'a',name:'A'},{id:'b',name:'B'}],
   materialSources:[{name:'Shared',dungeonId:'a'},{name:'Shared',dungeonId:'b'}],

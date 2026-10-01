@@ -33,7 +33,8 @@ All three tracker pages use the same Light / Dark / System theme control and the
 
 Item Upgrade inventory groups use `assets/data.js` material-source links generated
 from `dungeon_drop`, rather than the dungeon of the equipment being upgraded.
-Ascension-material rows carry Difficulty V; source-name aliases preserve sheet
+Ascension stones share their dungeon's inventory group with ordinary materials;
+Difficulty V is shown on the stone row. Source-name aliases preserve sheet
 typos and the resolver treats “Ascension Stone” and “Stone of Ascension” alike.
 Equipment copies used as materials resolve through their own drop rows. Unknown
 materials stay under Dungeon unknown instead of borrowing an upgrade location.

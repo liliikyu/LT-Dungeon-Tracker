@@ -1205,7 +1205,7 @@
   let tab=["summary","battle","specials","gems"].includes(localStorage.getItem(TAB_KEY))?localStorage.getItem(TAB_KEY):"summary";
   let hideMaxed=localStorage.getItem(HIDE_MAXED_KEY)==="1";
   function allocationNotice(){
-    return '<p class="battle-latest-line">Material quantities below are allocated by priority. <button type="button" class="inventory-edit-link">Edit owned materials and priorities in Summary &amp; Inventory</button></p>';
+    return '<div class="inventory-allocation-notice"><div><strong>Your materials, assigned by priority</strong><p>Update your owned quantities and priorities in Summary &amp; Inventory.</p></div><button type="button" class="inventory-edit-link">Edit inventory &amp; priorities <span aria-hidden="true">→</span></button></div>';
   }
   function syncHideMaxed(){
     const button=$("upgrade-hide-maxed");

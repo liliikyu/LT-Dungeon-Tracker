@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="dark light">
   <link rel="icon" type="image/x-icon" href="assets/item-upgrade.ico?v=1">
   <title>Latale Fanmade Illustration Book · Item Upgrade Tracker</title>
-  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.162-summary-layout">
+  <link rel="stylesheet" href="assets/styles.css?v=13.9.4.163-upgrade-guide">
 </head>
 <body class="extra-tools-page item-upgrade-page">
   <header class="topbar">
@@ -19,10 +19,27 @@
         <a class="extra-back-link" href="https://kedanao.github.io/lt-gear-score-calculator/" target="_blank" rel="noopener noreferrer">LaTale Gear Score Calculator</a>
       </nav>
       <div class="topbar-actions">
+        <button id="upgrade-help-toggle" class="icon-button help-button" type="button" aria-label="How to use the Item Upgrade Tracker" title="How to use the tracker">?</button>
         <button id="theme-toggle" class="icon-button" type="button" aria-label="Theme: System. Click to switch theme." title="Theme: System">◐</button>
       </div>
     </div>
   </header>
+
+  <dialog id="upgrade-guide" class="welcome-popup upgrade-guide" aria-labelledby="upgrade-guide-title">
+    <div class="welcome-popup-head">
+      <div><span class="tutorial-kicker">QUICK GUIDE</span><h1 id="upgrade-guide-title">Plan your upgrades</h1><p>Choose your goals, enter your materials, then set your priorities.</p></div>
+      <button id="upgrade-guide-close" class="icon-button welcome-close" type="button" aria-label="Close tutorial" autofocus>×</button>
+    </div>
+    <div class="welcome-guide-grid">
+      <section class="welcome-guide-card"><span class="tutorial-step">1</span><h2>Choose your items</h2><p>Open Battle, Specials or Gems. Select the item series and type you want to upgrade.</p></section>
+      <section class="welcome-guide-card"><span class="tutorial-step">2</span><h2>Set your stages</h2><p>Current stage is where your item is now. Target stage is your goal. Mark completed items MAXED; Hide maxed keeps them out of view.</p></section>
+      <section class="welcome-guide-card"><span class="tutorial-step">3</span><h2>Enter what you own</h2><p>In Summary &amp; Inventory, enter each material quantity once. The other tabs show the amount assigned to each item.</p></section>
+      <section class="welcome-guide-card"><span class="tutorial-step">4</span><h2>Set your priorities</h2><p>Lower numbers get shared materials first. Priority 1 receives what it needs before priority 2 gets any leftovers.</p></section>
+      <section class="welcome-guide-card"><span class="tutorial-step">5</span><h2>Read your progress</h2><p>Solid pink shows your current stage. Soft pink shows the stage your assigned materials could reach. Materials allocated means stock reserved in your plan, not materials spent.</p></section>
+      <section class="welcome-guide-card"><span class="tutorial-step">6</span><h2>Check what is left</h2><p>Needed is the total required; short is what you still need to collect. The item tabs show projected stages and estimated dungeon runs. Detailed mode shows the upgrade steps.</p></section>
+    </div>
+    <p class="welcome-disclaimer">Estimates use materials and upgrade success rates. Check the Ely cost and your planned setup before upgrading. Update your inventory after spending materials.</p>
+  </dialog>
 
   <main class="shell upgrade-page">
     <section class="upgrade-hero">

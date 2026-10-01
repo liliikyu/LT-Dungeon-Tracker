@@ -1121,6 +1121,8 @@ html[data-theme="light"] .title-summary-row{background:color-mix(in srgb,var(--p
 
 /* v13.9.4.16: welcome/help popup */
 .help-button{font-weight:850;font-size:16px;}
+.upgrade-guide{padding:0;color:var(--text)}
+.upgrade-guide::backdrop{background:rgba(5,9,15,.62);backdrop-filter:blur(7px)}
 .welcome-overlay{
   position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:18px;
   background:rgba(5,9,15,.62);

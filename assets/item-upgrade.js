@@ -1154,7 +1154,7 @@
       const am=materialDungeonMeta(a),bm=materialDungeonMeta(b);
       const ar=am?dungeonProgressSort(am):Number.MAX_SAFE_INTEGER;
       const br=bm?dungeonProgressSort(bm):Number.MAX_SAFE_INTEGER;
-      return ar-br||String(am?.name||"").localeCompare(String(bm?.name||""))||a.localeCompare(b);
+      return ar-br||String(am?.name||"").localeCompare(String(bm?.name||""))||window.LT_MATERIAL_SOURCES.compareInventoryMaterials(a,b);
     });
     const inventoryGroups=[];
     const groupByKey=new Map();

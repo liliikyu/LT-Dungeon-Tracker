@@ -47,3 +47,11 @@ assert.equal(heading(data,catalog,null,[]),'Dungeon unknown');
 assert.equal(heading(data,catalog,data.dungeons.find(d=>d.id==='dng_129'),['Vigor Mutant Ent Badge']),
   'UL3500 · Unknown Forest (Badge 6)');
 console.log('Material source mapping regression checks passed.');
+
+const compare=context.window.LT_MATERIAL_SOURCES.compareInventoryMaterials;
+assert.deepEqual(
+  ['Belial Stone of Ascension','Z material','A material'].sort(compare),
+  ['A material','Z material','Belial Stone of Ascension']);
+assert.deepEqual(
+  ['Dorothea Ascension Stone','Dorothea Stone of Ascension (Event)','Z material'].sort(compare),
+  ['Z material','Dorothea Ascension Stone','Dorothea Stone of Ascension (Event)']);

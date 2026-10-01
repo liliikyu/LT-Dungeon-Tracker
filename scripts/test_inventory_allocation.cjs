@@ -39,7 +39,8 @@ function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='
   };
   const root={innerHTML:'',classList:{toggle(){}},addEventListener(){}};
   const localStorage={getItem:k=>saved[k]||null,setItem:(k,v)=>saved[k]=v};
-  const document={documentElement:{dataset:{},style:{}},getElementById:id=>id==='upgrade-tab-content'?root:null,querySelectorAll:()=>[]};
+  const stylesheet={href:'assets/styles.css?v=old',getAttribute(){return this.href;},setAttribute(name,value){this[name]=value;}};
+  const document={documentElement:{dataset:{},style:{}},getElementById:id=>id==='upgrade-tab-content'?root:null,querySelectorAll:()=>[],querySelector:()=>stylesheet};
   const ctx={window:{},document,localStorage,console};
   for(const file of ['data.js','item-upgrade-data.js','material-sources.js','inventory-allocation.js']){
     vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets',file),'utf8'),ctx);
@@ -47,6 +48,7 @@ function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='
   let source=fs.readFileSync(path.join(__dirname,'../assets/item-upgrade.js'),'utf8').replace(/\r\n/g,'\n');
   source=source.replace('  render();\n})();','  render(); window.testPlan=inventoryPlan; window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
   vm.runInNewContext(source,ctx);
+  assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.159-inventory-guidance','fresh tracker replaces the stylesheet from cached HTML');
   assert(!root.innerHTML.includes('Unable to render this tab.'));
   return {ctx,root,saved};
 }

@@ -536,6 +536,7 @@
       ${relatedSpecialDropsHtml(group.id)}
       ${upcomingWarning(entry)}
       ${opts.showTypes?typeChoices(group,key,st):""}
+      ${["armor_icarus","earrings_mirror","ring_mirror","cloak_mirror"].includes(entry.itemType)?'<p class="battle-latest-line"><strong>Decomposition refund:</strong> Returns 30% of the materials used to upgrade this item.</p>':""}
       ${!item?missingUpgradeCopy(latest):`
         <div class="battle-stage-pair">
           <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>

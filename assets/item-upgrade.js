@@ -536,6 +536,7 @@
       ${relatedSpecialDropsHtml(group.id)}
       ${upcomingWarning(entry)}
       ${opts.showTypes?typeChoices(group,key,st):""}
+      ${["armor_icarus","earrings_mirror","ring_mirror","cloak_mirror"].includes(entry.itemType)?'<p class="battle-latest-line"><strong>Decomposition refund:</strong> Returns 30% of the materials used to upgrade this item.</p>':""}
       ${!item?missingUpgradeCopy(latest):`
         <div class="battle-stage-pair">
           <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
@@ -1134,7 +1135,7 @@
       }
       return Object.assign({},card,req);
     });
-    const names=new Set(Object.keys(inventory));
+    const names=new Set(Object.keys(inventory).filter(name=>Number(inventory[name])>0));
     cards.forEach(card=>Object.keys(card.materials||{}).forEach(name=>names.add(name)));
     const sortedCards=cards.filter(card=>!card.maxed).sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
     savePriorities();

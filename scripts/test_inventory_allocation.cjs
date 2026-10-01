@@ -25,16 +25,17 @@ assert.equal(allocate([{key:'first',materials:{stone:2.1}},{key:'second',materia
 console.log('Priority allocation checks passed.');
 
 // Run the real tracker with a tiny DOM fixture, including direct Battle startup.
-function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='dng_138',badgeCurrent=0,badgeStock=0){
+function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='dng_138',badgeCurrent=0,badgeStock=0,bannerStock=0,badge1Maxed=true){
   const saved={
     'lt-item-upgrade-tab-v1':savedTab,
-    'lt-item-upgrade-inventory-v1':JSON.stringify({"Dorothea's Emerald Bow":stock,"Dorothea's Red Shoes":shoes,'Mutant Clawrence Badge 6':badgeStock}),
+    'lt-item-upgrade-inventory-v1':JSON.stringify({"Dorothea's Emerald Bow":stock,"Dorothea's Red Shoes":shoes,'Mutant Clawrence Badge 6':badgeStock,'Banner of Inspiraton':bannerStock}),
     'lt-item-upgrade-priority-v1':JSON.stringify({'battle:glasses':1,'battle:stockings':2,'battle:bindi':3}),
     'lt-item-upgrade-progress-v2':JSON.stringify({
       'battle:glasses':{seriesId:'dng_125',current:0,target:6,maxed},
       'battle:stockings':{seriesId:'dng_125',current:0,target:6},
       'battle:bindi':{seriesId:'dng_125',current:0,target:6},
       'special:badge_6':{seriesId:badgeSeries,current:badgeCurrent,target:30},
+      'special:badge_1':{maxed:badge1Maxed},
     }),
   };
   const root={innerHTML:'',classList:{toggle(){}},addEventListener(){}};
@@ -67,6 +68,9 @@ assert.equal(battle.ctx.window.testPlan.allocations['battle:bindi'].find(r=>r.na
 assert(battle.root.innerHTML.includes('readonly title="Edit this quantity using the number field in Summary &amp; Inventory.'));
 assert(!battle.root.innerHTML.includes('value="379"')||battle.root.innerHTML.match(/value="379"/g).length===1);
 const summary=tracker('summary');
+assert(!summary.root.innerHTML.includes('data-material="Banner of Inspiraton"'),'hide empty saved material for maxed Badge 1');
+assert(tracker('summary',379,false,353,'dng_138',0,0,5).root.innerHTML.includes('data-material="Banner of Inspiraton"'),'keep unused stock editable');
+assert(tracker('summary',379,false,353,'dng_138',0,0,0,false).root.innerHTML.includes('data-material="Banner of Inspiraton"'),'keep zero stock material needed by an unfinished item');
 assert.equal(JSON.stringify(summary.ctx.window.testPlan.allocations),JSON.stringify(battle.ctx.window.testPlan.allocations));
 const enough=tracker('battle',10000);
 assert.equal(enough.ctx.window.testRequirements('glasses','battle:glasses').remainingTotal,enough.ctx.window.testPlan.allocations['battle:glasses'].reduce((n,r)=>n+r.remaining,0));

@@ -25,15 +25,16 @@ assert.equal(allocate([{key:'first',materials:{stone:2.1}},{key:'second',materia
 console.log('Priority allocation checks passed.');
 
 // Run the real tracker with a tiny DOM fixture, including direct Battle startup.
-function tracker(savedTab='battle',stock=379,maxed=false,shoes=353){
+function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='dng_138',badgeCurrent=0,badgeStock=0){
   const saved={
     'lt-item-upgrade-tab-v1':savedTab,
-    'lt-item-upgrade-inventory-v1':JSON.stringify({"Dorothea's Emerald Bow":stock,"Dorothea's Red Shoes":shoes}),
+    'lt-item-upgrade-inventory-v1':JSON.stringify({"Dorothea's Emerald Bow":stock,"Dorothea's Red Shoes":shoes,'Mutant Clawrence Badge 6':badgeStock}),
     'lt-item-upgrade-priority-v1':JSON.stringify({'battle:glasses':1,'battle:stockings':2,'battle:bindi':3}),
     'lt-item-upgrade-progress-v2':JSON.stringify({
       'battle:glasses':{seriesId:'dng_125',current:0,target:6,maxed},
       'battle:stockings':{seriesId:'dng_125',current:0,target:6},
       'battle:bindi':{seriesId:'dng_125',current:0,target:6},
+      'special:badge_6':{seriesId:badgeSeries,current:badgeCurrent,target:30},
     }),
   };
   const root={innerHTML:'',classList:{toggle(){}},addEventListener(){}};
@@ -43,7 +44,7 @@ function tracker(savedTab='battle',stock=379,maxed=false,shoes=353){
   for(const file of ['data.js','item-upgrade-data.js','material-sources.js','inventory-allocation.js']){
     vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets',file),'utf8'),ctx);
   }
-  let source=fs.readFileSync(path.join(__dirname,'../assets/item-upgrade.js'),'utf8');
+  let source=fs.readFileSync(path.join(__dirname,'../assets/item-upgrade.js'),'utf8').replace(/\r\n/g,'\n');
   source=source.replace('  render();\n})();','  render(); window.testPlan=inventoryPlan; window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
   vm.runInNewContext(source,ctx);
   assert(!root.innerHTML.includes('Unable to render this tab.'));
@@ -77,3 +78,17 @@ for(const tab of ['specials','gems']){
   assert.equal(JSON.stringify(other.ctx.window.testPlan.allocations),JSON.stringify(battle.ctx.window.testPlan.allocations));
 }
 console.log('Battle and Summary integration checks passed.');
+const claw=tracker('specials');
+const clawReq=claw.ctx.window.testRequirements('badge_6','special:badge_6');
+assert.deepEqual(Object.keys(clawReq.mats),['Mutant Clawrence Badge 6']);
+assert.equal(Math.ceil(clawReq.mats['Mutant Clawrence Badge 6']),43);
+assert(claw.root.innerHTML.includes('<strong>22 runs</strong>'));
+assert(!claw.root.innerHTML.includes('Vigor Mutant Ent Badge</span>'));
+const partial=tracker('specials',379,false,353,'dng_138',29,1);
+assert.equal(partial.ctx.window.testRequirements('badge_6','special:badge_6').remainingTotal,0);
+const forest=tracker('specials',379,false,353,'dng_129');
+const forestReq=forest.ctx.window.testRequirements('badge_6','special:badge_6');
+assert.equal(forestReq.mats['Vigor Mutant Ent Badge'],30);
+assert.equal(forestReq.elyMillions,0);
+assert(forest.root.innerHTML.includes('<strong>15 runs</strong>'));
+console.log('Independent Badge 6 enhancement regressions passed.');

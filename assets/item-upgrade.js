@@ -1001,7 +1001,9 @@
         </div>
         <div class="battle-materials special-materials">${gemMaterialRows(key,req)}</div>
         <div class="battle-estimate battle-approx-stage"><span>Approx. stage</span><strong>${esc(approximateReachableStage(slot,key,item,entry))}</strong></div>
-        ${item.syntheticRule==="badge6_copy_60_70_two_per_run"
+        ${item.copiesPerRun
+          ?`<div class="battle-estimate"><span>Estimated runs</span><strong>${Math.ceil(req.remainingTotal/item.copiesPerRun)} runs</strong><small>Based on ${item.copiesPerRun} badge copies per dungeon run.</small></div>`
+          :item.syntheticRule==="badge6_copy_60_70_two_per_run"
           ?(()=>{const {st}=ensureTargets(slot,key,item,entry);const levels=Math.max(0,Number(st.target)-Number(st.current));const lowAttempts=Math.ceil(levels/0.70),highAttempts=Math.ceil(levels/0.60);return `<div class="battle-estimate"><span>Estimated attempts</span><strong>≈${lowAttempts===highAttempts?lowAttempts:lowAttempts+"–"+highAttempts} attempts</strong><small>Based on a 60–70% success rate; actual attempts may vary.</small></div>`;})()
           :item.syntheticRule==="badge6_copy_100_two_per_run"
             ?`<div class="battle-estimate"><span>Estimated runs</span><strong>${Math.ceil(req.remainingTotal/2)} runs</strong><small>Based on 2 badge copies per dungeon run.</small></div>`
@@ -1205,7 +1207,7 @@
   let tab=["summary","battle","specials","gems"].includes(localStorage.getItem(TAB_KEY))?localStorage.getItem(TAB_KEY):"summary";
   let hideMaxed=localStorage.getItem(HIDE_MAXED_KEY)==="1";
   function allocationNotice(){
-    return '<p class="battle-latest-line">Material quantities below are allocated by priority. <button type="button" class="inventory-edit-link">Edit owned materials and priorities in Summary &amp; Inventory</button></p>';
+    return '<div class="inventory-allocation-notice"><div><strong>Your materials, assigned by priority</strong><p>Update your owned quantities and priorities in Summary &amp; Inventory.</p></div><button type="button" class="inventory-edit-link">Edit inventory &amp; priorities <span aria-hidden="true">→</span></button></div>';
   }
   function syncHideMaxed(){
     const button=$("upgrade-hide-maxed");

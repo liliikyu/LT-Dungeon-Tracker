@@ -4580,3 +4580,5 @@ body.conquest-modal-open{overflow:hidden}
 .summary-inventory-group .summary-inventory-row+.summary-inventory-row{border-top:1px solid var(--line-soft)}
 
 .summary-inventory-material > span > small{font-weight:400;font-style:italic}
+
+.summary-inventory-material-label,.summary-inventory-material > span{display:block}

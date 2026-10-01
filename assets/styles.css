@@ -4511,8 +4511,11 @@ body.conquest-modal-open{overflow:hidden}
 
 /* v13.9.4.152 — Item Upgrade Summary & Inventory */
 .summary-inventory-page{display:grid;gap:12px}
-.summary-overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.summary-overview-grid>div{padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.summary-inventory-column{display:grid;gap:12px;min-width:0}
+.summary-overview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:hidden}
+.summary-overview-grid>div{padding:12px 14px}
+.summary-overview-grid>div:nth-child(2){border-left:1px solid var(--line-soft)}
+.summary-overview-grid>div:last-child{grid-column:1/-1;border-top:1px solid var(--line-soft)}
 .summary-overview-grid span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
 .summary-overview-grid strong{display:block;margin-top:4px;font-size:20px}
 .summary-columns{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(520px,1.7fr);gap:12px;align-items:start}
@@ -4546,7 +4549,7 @@ body.conquest-modal-open{overflow:hidden}
   .summary-progress-card{grid-template-columns:64px minmax(180px,1fr) minmax(180px,1fr)}
 }
 @media(max-width:620px){
-  .summary-overview-grid{grid-template-columns:1fr}
+  .summary-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .summary-progress-card{grid-template-columns:58px 1fr}
   .summary-progress-materials{grid-column:2}
   .summary-inventory-row{grid-template-columns:1fr}

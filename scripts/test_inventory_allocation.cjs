@@ -49,7 +49,7 @@ function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='
   let source=fs.readFileSync(path.join(__dirname,'../assets/item-upgrade.js'),'utf8').replace(/\r\n/g,'\n');
   source=source.replace('  render();\n})();','  render(); window.testPlan=inventoryPlan; window.testProjection=(key)=>summaryProjectedProgress(inventoryPlan.cards.find(card=>card.key===key)); window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
   vm.runInNewContext(source,ctx);
-  assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.161-summary-projection','fresh tracker replaces the stylesheet from cached HTML');
+  assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.162-summary-layout','fresh tracker replaces the stylesheet from cached HTML');
   assert(!root.innerHTML.includes('Unable to render this tab.'));
   return {ctx,root,saved};
 }

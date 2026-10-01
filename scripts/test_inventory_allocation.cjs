@@ -61,7 +61,7 @@ assert.equal(glasses.find(r=>r.name==="Dorothea's Emerald Bow").allocated,379);
 assert.equal(battle.ctx.window.testRequirements('glasses','battle:glasses').remainingTotal,6946);
 assert.equal(battle.ctx.window.testRequirements('bindi','battle:bindi').remainingTotal,7678);
 assert.equal(battle.ctx.window.testPlan.allocations['battle:bindi'].find(r=>r.name==="Dorothea's Emerald Bow").allocated,0);
-assert(battle.root.innerHTML.includes('readonly title="Allocated by priority'));
+assert(battle.root.innerHTML.includes('readonly title="Edit this quantity using the number field in Summary &amp; Inventory.'));
 assert(!battle.root.innerHTML.includes('value="379"')||battle.root.innerHTML.match(/value="379"/g).length===1);
 const summary=tracker('summary');
 assert.equal(JSON.stringify(summary.ctx.window.testPlan.allocations),JSON.stringify(battle.ctx.window.testPlan.allocations));

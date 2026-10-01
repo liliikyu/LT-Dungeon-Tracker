@@ -4562,3 +4562,12 @@ body.conquest-modal-open{overflow:hidden}
 .summary-inventory-group-head{padding:8px 12px 6px;background:var(--panel-2);color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.035em}
 .summary-inventory-group .summary-inventory-row:first-of-type{border-top:1px solid var(--line-soft)}
 .summary-inventory-copy,.summary-inventory-dungeon{display:none}
+
+
+/* v13.9.4.155 — no dividers inside the same dungeon inventory group */
+.summary-inventory-group .summary-inventory-row{
+  border-top:0;
+}
+.summary-inventory-group+.summary-inventory-group{
+  border-top:1px solid var(--line-soft);
+}

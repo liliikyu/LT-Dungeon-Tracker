@@ -4535,7 +4535,14 @@ body.conquest-modal-open{overflow:hidden}
 .summary-progress-card:first-child{border-top:0}
 .summary-progress-card.maxed{opacity:.66;background:color-mix(in srgb,var(--panel) 94%,var(--badge5-bg) 6%)}
 .summary-priority label{display:grid;gap:4px;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.04em}
-.summary-priority-input{width:58px;text-align:center}
+.summary-priority{display:flex;align-items:flex-end;gap:4px}
+.summary-priority-input{width:43.5px;text-align:center;appearance:textfield;-moz-appearance:textfield}
+.summary-priority-input::-webkit-inner-spin-button,.summary-priority-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.summary-priority-arrows{display:flex;flex-direction:column;width:16px;gap:1px}
+.summary-priority-move{width:16px;height:15px;padding:0;border:1px solid var(--line);border-radius:4px;background:var(--panel-2);color:var(--text);font-size:10px;line-height:1;cursor:pointer}
+.summary-priority-move:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.summary-priority-move:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.summary-priority-move:disabled{opacity:.35;cursor:default}
 .summary-progress-title{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
 .summary-progress-title strong{font-size:12.5px}
 .summary-progress-title span{color:var(--muted);font-size:10px}

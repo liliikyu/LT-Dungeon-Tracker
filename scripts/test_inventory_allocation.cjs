@@ -47,9 +47,9 @@ function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='
     vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets',file),'utf8'),ctx);
   }
   let source=fs.readFileSync(path.join(__dirname,'../assets/item-upgrade.js'),'utf8').replace(/\r\n/g,'\n');
-  source=source.replace('  render();\n})();','  render(); window.testPlan=inventoryPlan; window.testProjection=(key)=>summaryProjectedProgress(inventoryPlan.cards.find(card=>card.key===key)); window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
+  source=source.replace('  render();\n})();','  render(); window.testMove=(key,direction)=>{const moved=moveSummaryPriority(key,direction);render();window.testPlan=inventoryPlan;return moved;}; window.testPlan=inventoryPlan; window.testProjection=(key)=>summaryProjectedProgress(inventoryPlan.cards.find(card=>card.key===key)); window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
   vm.runInNewContext(source,ctx);
-  assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.163-upgrade-guide','fresh tracker replaces the stylesheet from cached HTML');
+  assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.164-priority-arrows','fresh tracker replaces the stylesheet from cached HTML');
   assert(!root.innerHTML.includes('Unable to render this tab.'));
   return {ctx,root,saved};
 }
@@ -103,3 +103,12 @@ const projectedSummary=tracker('summary',1000,false,1000);
 assert.equal(projectedSummary.ctx.window.testProjection('battle:glasses'),33);
 assert.equal(projectedSummary.ctx.window.testProjection('battle:bindi'),0);
 assert(projectedSummary.root.innerHTML.includes('summary-projected-progress'));
+
+const reordered=tracker('summary');
+assert.equal(reordered.ctx.window.testMove('battle:glasses',-1),false);
+for(let step=0;step<3;step++)assert.equal(reordered.ctx.window.testMove('battle:stockings',-1),true);
+assert.equal(reordered.ctx.window.testPlan.allocations['battle:stockings'][0].allocated,379);
+assert.equal(reordered.ctx.window.testPlan.allocations['battle:glasses'][0].allocated,0);
+assert.equal(JSON.parse(reordered.saved['lt-item-upgrade-priority-v1'])['battle:stockings'],1);
+assert.equal(reordered.ctx.window.testMove('battle:stockings',1),true);
+assert.equal(reordered.ctx.window.testPlan.allocations['battle:glasses'][0].allocated,379);

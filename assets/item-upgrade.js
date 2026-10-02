@@ -2,7 +2,7 @@
   // This script loads fresh even when the browser retains an older HTML page.
   // Keep its stylesheet in sync so new controls never use obsolete styles.
   const stylesheet=document.querySelector('link[rel="stylesheet"][href*="assets/styles.css"]');
-  const stylesheetHref='assets/styles.css?v=13.9.4.163-upgrade-guide';
+  const stylesheetHref='assets/styles.css?v=13.9.4.164-priority-arrows';
   if(stylesheet&&stylesheet.getAttribute('href')!==stylesheetHref)stylesheet.setAttribute('href',stylesheetHref);
   const D=window.LT_ITEM_UPGRADE_DATA||{items:[],battleCatalog:[]};
   const $=(id)=>document.getElementById(id);
@@ -1131,7 +1131,7 @@
       if(req.maxed){
         return Object.assign({},card,req);
       }
-      if((Number(req.progress)||0)>=100){
+      if((Number(req.progress)||0)>=100&&!(Number(priorities[card.key])>0)){
         priorities[card.key]=99;
       }else if(!(Number(priorities[card.key])>0)){
         priorities[card.key]=index+1;
@@ -1144,6 +1144,16 @@
     savePriorities();
     const allocations=window.LT_INVENTORY_ALLOCATION.allocate(sortedCards,inventory);
     return {cards,names,sortedCards,allocations};
+  }
+
+  function moveSummaryPriority(key,direction){
+    const order=inventoryPlan.sortedCards.map(card=>card.key);
+    const index=order.indexOf(key),next=index+direction;
+    if(index<0||next<0||next>=order.length)return false;
+    order.splice(index,1);order.splice(next,0,key);
+    order.forEach((itemKey,i)=>priorities[itemKey]=i+1);
+    savePriorities();
+    return true;
   }
 
   function evolutionProgress(plan,index,level){
@@ -1235,18 +1245,18 @@
     if(!inventoryHtml)inventoryHtml='<div class="summary-empty">Select item series and targets in Battle, Specials or Gems to populate materials here.</div>';
 
     let cardsHtml="";
-    sortedCards.forEach(card=>{
+    sortedCards.forEach((card,index)=>{
       const current=Math.max(0,Math.min(100,card.progress||0));
       const projected=summaryProjectedProgress(card);
       const rows=allocations[card.key]||[];
       const remaining=rows.reduce((sum,row)=>sum+row.remaining,0);
       const materials=card.maxed?"No materials required":rows.length?rows.map(row=>esc(row.name)+": "+row.allocated.toLocaleString()+" / "+row.required.toLocaleString()).join("<br>"):"No material requirement available";
-      cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track" title="Current '+current+'% · Projected '+projected+'%" aria-label="Current '+current+'%, projected '+projected+'%"><i class="summary-projected-progress" style="width:'+projected+'%"></i><i class="summary-current-progress" style="width:'+current+'%"></i></div><small>'+(card.maxed?"MAXED":esc(card.status))+' · Projected '+projected+'% · '+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
+      cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label><div class="summary-priority-arrows"><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="-1" aria-label="Move '+esc(card.title)+' up" title="Move up" '+(index===0?"disabled":"")+'>↑</button><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="1" aria-label="Move '+esc(card.title)+' down" title="Move down" '+(index===sortedCards.length-1?"disabled":"")+'>↓</button></div></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track" title="Current '+current+'% · Projected '+projected+'%" aria-label="Current '+current+'%, projected '+projected+'%"><i class="summary-projected-progress" style="width:'+projected+'%"></i><i class="summary-current-progress" style="width:'+current+'%"></i></div><small>'+(card.maxed?"MAXED":esc(card.status))+' · Projected '+projected+'% · '+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
     });
 
     if(!cardsHtml)cardsHtml='<div class="summary-empty">Everything in your current setup is marked MAXED, so there is nothing left to prioritize.</div>';
 
-    return '<section class="summary-inventory-page"><div class="summary-columns"><div class="summary-inventory-column"><div class="summary-overview-grid"><div><span>Overall progress</span><strong>'+overall+'%</strong></div><div><span>Maxed items</span><strong>'+maxedCount+' / '+cards.length+'</strong></div><div><span>Materials allocated</span><strong>'+totalAllocated.toLocaleString()+' / '+totalRequired.toLocaleString()+'</strong></div></div><section class="summary-panel"><div class="summary-panel-head"><div><h2>Inventory</h2><p>Enter each material once. Shared materials are allocated using the priority order.</p></div></div><div class="summary-inventory-list">'+inventoryHtml+'</div></section></div><section class="summary-panel summary-priority-panel"><div class="summary-panel-head"><div><h2>Progress & Priority</h2><p>Lower numbers get shared materials first. This is useful for armor, gems, accessories and other multi-piece sets.</p></div></div><div class="summary-progress-list">'+cardsHtml+'</div></section></div></section>';
+    return '<section class="summary-inventory-page"><div class="summary-columns"><div class="summary-inventory-column"><div class="summary-overview-grid"><div><span>Overall progress</span><strong>'+overall+'%</strong></div><div><span>Maxed items</span><strong>'+maxedCount+' / '+cards.length+'</strong></div><div><span>Materials allocated</span><strong>'+totalAllocated.toLocaleString()+' / '+totalRequired.toLocaleString()+'</strong></div></div><section class="summary-panel"><div class="summary-panel-head"><div><h2>Inventory</h2><p>Enter each material once. Shared materials are allocated using the priority order.</p></div></div><div class="summary-inventory-list">'+inventoryHtml+'</div></section></div><section class="summary-panel summary-priority-panel"><div class="summary-panel-head"><div><h2>Progress & Priority</h2><p>Move items with the arrows or enter a priority number. Items higher in the list get shared materials first.</p></div></div><div class="summary-progress-list">'+cardsHtml+'</div></section></div></section>';
   }
 
   let mode=localStorage.getItem(MODE_KEY)==="detailed"?"detailed":"simple";
@@ -1283,6 +1293,15 @@
 
   $("upgrade-tab-content")?.addEventListener("click",event=>{
     if(event.target.closest(".inventory-edit-link")){tab="summary";localStorage.setItem(TAB_KEY,tab);render();}
+    const move=event.target.closest(".summary-priority-move");
+    if(move&&moveSummaryPriority(move.dataset.key,Number(move.dataset.direction))){
+      const key=move.dataset.key,direction=move.dataset.direction;
+      render();
+      const buttons=document.querySelectorAll('.summary-priority-move');
+      const same=Array.from(buttons).find(button=>button.dataset.key===key&&button.dataset.direction===direction);
+      const fallback=Array.from(buttons).find(button=>button.dataset.key===key&&!button.disabled);
+      (same&&!same.disabled?same:fallback)?.focus();
+    }
   });
   $("upgrade-tab-content")?.addEventListener("change",(event)=>{
     const el=event.target;

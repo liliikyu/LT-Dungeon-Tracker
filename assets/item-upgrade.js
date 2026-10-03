@@ -1187,25 +1187,45 @@
     return Math.min(100,Math.round((index+level/phaseMax(index))/Math.max(1e-9,target)*100));
   }
 
-  function summaryProjectedProgress(card){
-    if(card.maxed)return 100;
+  function evolutionStageLabel(plan,index,level){
+    return (plan.groups[index]?.dungeonName||"Unknown dungeon")+" +"+level;
+  }
+  function summaryStageNames(card){
     if(card.slot==="totem"||card.slot==="badge_5"){
       const plan=evolutionPlan(card.slot,card.key);
-      if(!plan)return card.progress||0;
+      if(!plan)return card.status;
+      return "Current: "+evolutionStageLabel(plan,plan.ci,Number(plan.st.current)||0)+" · Projected: "+summaryProjectedProgress(card,true)+" · Target: "+evolutionStageLabel(plan,plan.ti,Number(plan.st.target)||0);
+    }
+    const sel=selectedEntry(card.slot,card.key),item=sel&&upgradeItemFor(sel.entry);
+    if(!item)return card.status;
+    const label=seq=>{
+      const stage=stagesFor(item,sel.entry).find(s=>Number(s.sequence)===Number(seq));
+      return stage?stageName(item,stage):item.progressionType==="tier"?"Base":"+0";
+    };
+    return "Current: "+label(sel.state.current)+" · Projected: "+approximateReachableStage(card.slot,card.key,item,sel.entry)+" · Target: "+label(sel.state.target);
+  }
+  function summaryProjectedProgress(card,returnStage=false){
+    if(card.maxed)return returnStage?"MAXED":100;
+    if(card.slot==="totem"||card.slot==="badge_5"){
+      const plan=evolutionPlan(card.slot,card.key);
+      if(!plan)return returnStage?"Unknown":card.progress||0;
       const balances={};
       (inventoryPlan.allocations[card.key]||[]).forEach(row=>balances[row.name]=row.allocated);
       let projected=card.progress||0;
+      let reachedIndex=plan.ci,reachedLevel=Number(plan.st.current)||0;
+      const result=()=>returnStage?evolutionStageLabel(plan,reachedIndex,reachedLevel):Math.min(100,projected);
       for(const row of plan.rows){
         if(!row.materialsComplete||!row.stages.length)break;
         for(const stage of row.stages){
           const costs=stageMaterialEntries(stage).map(m=>({name:m.name,cost:m.cost/rate(stage.successRate)}));
           if(number(stage.ascensionStoneCost)>0)costs.push({name:stage.ascensionStoneName||"Ascension Stone",cost:number(stage.ascensionStoneCost)});
-          if(!costs.every(m=>(balances[m.name]||0)+1e-9>=m.cost))return Math.min(100,projected);
+          if(!costs.every(m=>(balances[m.name]||0)+1e-9>=m.cost))return result();
           costs.forEach(m=>balances[m.name]-=m.cost);
           projected=Math.max(projected,evolutionProgress(plan,plan.groups.findIndex(g=>g.id===row.group.id),Number(stage.sequence)||0));
+          reachedIndex=plan.groups.findIndex(g=>g.id===row.group.id);reachedLevel=Number(stage.sequence)||0;
         }
       }
-      return Math.min(100,projected);
+      return result();
     }
     const sel=selectedEntry(card.slot,card.key),item=sel&&upgradeItemFor(sel.entry);
     if(!item)return card.progress||0;
@@ -1273,7 +1293,7 @@
       const rows=allocations[card.key]||[];
       const remaining=rows.reduce((sum,row)=>sum+row.remaining,0);
       const materials=card.maxed?"No materials required":rows.length?rows.map(row=>esc(row.name)+": "+row.allocated.toLocaleString()+" / "+row.required.toLocaleString()).join("<br>"):"No material requirement available";
-      cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label><div class="summary-priority-arrows"><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="-1" aria-label="Move '+esc(card.title)+' up" title="Move up" '+(index===0?"disabled":"")+'>△</button><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="1" aria-label="Move '+esc(card.title)+' down" title="Move down" '+(index===sortedCards.length-1?"disabled":"")+'>▽</button></div></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track" title="Current '+current+'% · Projected '+projected+'%" aria-label="Current '+current+'%, projected '+projected+'%"><i class="summary-projected-progress" style="width:'+projected+'%"></i><i class="summary-current-progress" style="width:'+current+'%"></i></div><small>'+(card.maxed?"MAXED":esc(card.status))+' · Projected '+projected+'% · '+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
+      cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label><div class="summary-priority-arrows"><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="-1" aria-label="Move '+esc(card.title)+' up" title="Move up" '+(index===0?"disabled":"")+'>△</button><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="1" aria-label="Move '+esc(card.title)+' down" title="Move down" '+(index===sortedCards.length-1?"disabled":"")+'>▽</button></div></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track" title="Current '+current+'% · Projected '+projected+'%" aria-label="Current '+current+'%, projected '+projected+'%"><i class="summary-projected-progress" style="width:'+projected+'%"></i><i class="summary-current-progress" style="width:'+current+'%"></i></div><small>'+(card.maxed?"MAXED":esc(summaryStageNames(card)))+' · '+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
     });
 
     if(!cardsHtml)cardsHtml='<div class="summary-empty">Everything in your current setup is marked MAXED, so there is nothing left to prioritize.</div>';

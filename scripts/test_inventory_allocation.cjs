@@ -122,3 +122,7 @@ assert.equal(battle.ctx.window.testRefund('dng_135_ring_mirror','ring_mirror',2)
 assert.equal(battle.ctx.window.testRefund('dng_131_armor_icarus','armor_grendel',2),null);
 assert(battle.root.innerHTML.includes('Is decomposable?: <strong>No</strong>'));
 assert(battle.root.innerHTML.includes('Is decomposable?: <strong>Yes</strong>'));
+
+assert(projectedSummary.root.innerHTML.includes('Current: Base · Projected: Radiant · Target: Lucent'));
+assert(summary.root.innerHTML.includes('Current: +0 · Projected: +0 · Target: +30'));
+assert(summary.root.innerHTML.includes('Current: Sky Coliseum +0 · Projected: Sky Coliseum +0 · Target: Zerenis Training Center +30'));

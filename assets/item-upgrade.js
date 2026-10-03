@@ -541,7 +541,7 @@
     if(refund===null)return `<div class="${className}">Is decomposable?: <strong>No</strong></div>`;
     const total=refund.reduce((sum,m)=>sum+m.quantity,0);
     const breakdown=refund.map(m=>m.quantity.toLocaleString()+" "+m.name).join(" · ");
-    return `<div class="${className}" title="${esc(breakdown||"No upgrade materials used at Base")}">Is decomposable?: <strong>Yes</strong> – ${total.toLocaleString()} materials to be refunded at the current stage (30%)</div>`;
+    return `<div class="${className}" title="${esc(breakdown||"No upgrade materials used at Base")}">Is decomposable?: <strong>Yes</strong> – ${total.toLocaleString()} materials to be refunded at the current stage</div>`;
   }
 
   function battleCalculator(slot,key,title,mode,opts={}){

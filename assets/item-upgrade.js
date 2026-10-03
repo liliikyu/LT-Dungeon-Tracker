@@ -539,9 +539,16 @@
   function decomposableLine(item,entry,current,className="battle-latest-line"){
     const refund=decompositionRefund(item,entry,current);
     if(refund===null)return `<div class="${className}">Is decomposable?: <strong>No</strong></div>`;
-    const total=refund.reduce((sum,m)=>sum+m.quantity,0);
+    const stages=stagesFor(item,entry);
+    const stoneNames=new Set(stages.map(stage=>stage.ascensionStoneName).filter(Boolean));
+    const materials=refund.filter(m=>!stoneNames.has(m.name));
+    const stones=refund.filter(m=>stoneNames.has(m.name)).reduce((sum,m)=>sum+m.quantity,0);
+    const quantities=[...new Set(materials.map(m=>m.quantity))];
+    const materialText=quantities.length<=1?(quantities[0]||0).toLocaleString()+" unique material":materials.map(m=>m.quantity.toLocaleString()+" "+m.name).join(" + ");
+    const ascended=stages.some(stage=>Number(stage.sequence)===Number(current)&&String(stage.name).toLowerCase()==="ascended");
+    const refundText=materialText+(ascended?" and "+stones.toLocaleString()+" ascension stones":"");
     const breakdown=refund.map(m=>m.quantity.toLocaleString()+" "+m.name).join(" · ");
-    return `<div class="${className}" title="${esc(breakdown||"No upgrade materials used at Base")}">Is decomposable?: <strong>Yes</strong> – ${total.toLocaleString()} materials to be refunded at the current stage</div>`;
+    return `<div class="${className}" title="${esc(breakdown||"No upgrade materials used at Base")}">Is decomposable?: <strong>Yes</strong> – ${esc(refundText)} to be refunded at the current stage</div>`;
   }
 
   function battleCalculator(slot,key,title,mode,opts={}){

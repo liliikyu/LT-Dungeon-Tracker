@@ -526,6 +526,24 @@
     }
     return rows.join("");
   }
+  function decompositionRefund(item,entry,current){
+    if(!["armor_icarus","earrings_mirror","ring_mirror","cloak_mirror"].includes(entry?.itemType))return null;
+    const used={};
+    for(const stage of stagesFor(item,entry)){
+      if(Number(stage.sequence)>Number(current))continue;
+      for(const material of stageMaterialEntries(stage))used[material.name]=(used[material.name]||0)+material.cost;
+      if(number(stage.ascensionStoneCost)>0){const name=stage.ascensionStoneName||"Ascension Stone";used[name]=(used[name]||0)+number(stage.ascensionStoneCost);}
+    }
+    return Object.entries(used).map(([name,cost])=>({name,quantity:Math.floor(cost*0.3+1e-9)}));
+  }
+  function decomposableLine(item,entry,current,className="battle-latest-line"){
+    const refund=decompositionRefund(item,entry,current);
+    if(refund===null)return `<div class="${className}">Is decomposable?: <strong>No</strong></div>`;
+    const total=refund.reduce((sum,m)=>sum+m.quantity,0);
+    const breakdown=refund.map(m=>m.quantity.toLocaleString()+" "+m.name).join(" · ");
+    return `<div class="${className}" title="${esc(breakdown||"No upgrade materials used at Base")}">Is decomposable?: <strong>Yes</strong> – ${total.toLocaleString()} materials to be refunded at the current stage (30%)</div>`;
+  }
+
   function battleCalculator(slot,key,title,mode,opts={}){
     const sel=selectedEntry(slot,key);
     if(!sel)return `<article class="battle-item-card unavailable"><header><strong>${esc(title)}</strong></header><p>No series found in dungeon_drop.</p></article>`;
@@ -537,10 +555,10 @@
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select ${esc(opts.seriesLabel||title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
+      ${decomposableLine(item,entry,st.current)}
       ${relatedSpecialDropsHtml(group.id)}
       ${upcomingWarning(entry)}
       ${opts.showTypes?typeChoices(group,key,st):""}
-      ${["armor_icarus","earrings_mirror","ring_mirror","cloak_mirror"].includes(entry.itemType)?'<p class="battle-latest-line"><strong>Decomposition refund:</strong> Returns 30% of the materials used to upgrade this item.</p>':""}
       ${!item?missingUpgradeCopy(latest):`
         <div class="battle-stage-pair">
           <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
@@ -666,6 +684,7 @@
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select gem series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
+      ${decomposableLine(item,entry,st.current)}
       ${!item?missingUpgradeCopy(latest):`
         <div class="battle-stage-pair">
           <label class="battle-field"><span>Current stage</span>${stageSelect(item,entry,key,"current")}</label>
@@ -956,6 +975,7 @@
           <label class="battle-field"><span>Enhancement level</span>${evolutionLevelSelect(slot,key,"current",currentEntry,st.current,st.maxed)}</label>
         </div>
         <small class="evolution-latest-note">Is latest: <strong>${currentLatest?"Yes":"No"}</strong></small>
+        ${decomposableLine(null,currentEntry,st.current,"evolution-latest-note")}
       </div>
       <div class="evolution-stage-block">
         <span class="evolution-stage-title">Target stage</span>
@@ -964,6 +984,7 @@
           <label class="battle-field"><span>Enhancement level</span>${evolutionLevelSelect(slot,key,"target",targetEntry,st.target,st.maxed)}</label>
         </div>
         <small class="evolution-latest-note">Is latest: <strong>${targetLatest?"Yes":"No"}</strong></small>
+        ${decomposableLine(null,targetEntry,st.current,"evolution-latest-note")}
       </div>
       ${[currentEntry,targetEntry].filter((entry,index,arr)=>entry&&upcomingForEntry(entry)&&arr.findIndex(x=>normId(x?.itemId)===normId(entry.itemId))===index).map(upcomingWarning).join("")}
       <details class="evolution-material-details">
@@ -999,6 +1020,7 @@
       <header class="battle-item-head"><strong>${esc(title)}</strong><label class="battle-maxed"><input class="battle-maxed-check" type="checkbox" data-key="${esc(key)}" ${st.maxed?"checked":""}> MAXED</label></header>
       <label class="battle-field full"><span>Select ${esc(title.toLowerCase())} series</span>${seriesSelect(slot,key)}</label>
       <div class="battle-latest-line">Is latest: <strong>${latest?"Yes":"No"}</strong></div>
+      ${decomposableLine(item,entry,st.current)}
       ${upcomingWarning(entry)}
       ${item?.syntheticRule==="badge6_copy_60_70_two_per_run"?`<div class="special-rule-note"><strong>Upgrade rule</strong><span>Each attempt consumes <b>1 × ${esc(entry.itemName)}</b> + <b>100M Ely</b> with a <b>60–70% success rate</b>.</span><small>Unknown Beach gives <b>2 badge copies per successful clear</b>. Expected runs are shown as a range using 70% for the lower estimate and 60% for the upper estimate.</small></div>`:""}
       ${item?.syntheticRule==="badge6_copy_100_two_per_run"?`<div class="special-rule-note"><strong>Upgrade rule</strong><span>Each enhancement consumes <b>1 × ${esc(entry.itemName)}</b>, costs <b>0 Ely</b>, and succeeds at <b>100%</b>.</span><small>This badge drops <b>2 per dungeon run</b>, so +0 → +30 requires 30 copies = 15 runs.</small></div>`:""}

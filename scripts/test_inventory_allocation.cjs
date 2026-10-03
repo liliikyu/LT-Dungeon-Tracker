@@ -47,7 +47,7 @@ function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='
     vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets',file),'utf8'),ctx);
   }
   let source=fs.readFileSync(path.join(__dirname,'../assets/item-upgrade.js'),'utf8').replace(/\r\n/g,'\n');
-  source=source.replace('  render();\n})();','  render(); window.testMove=(key,direction)=>{const moved=moveSummaryPriority(key,direction);render();window.testPlan=inventoryPlan;return moved;}; window.testPlan=inventoryPlan; window.testProjection=(key)=>summaryProjectedProgress(inventoryPlan.cards.find(card=>card.key===key)); window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
+  source=source.replace('  render();\n})();','  render(); window.testMove=(key,direction)=>{const moved=moveSummaryPriority(key,direction);render();window.testRefund=(id,type,current)=>decompositionRefund(D.items.find(item=>item.itemId===id),{itemType:type},current); window.testPlan=inventoryPlan;return moved;}; window.testRefund=(id,type,current)=>decompositionRefund(D.items.find(item=>item.itemId===id),{itemType:type},current); window.testPlan=inventoryPlan; window.testProjection=(key)=>summaryProjectedProgress(inventoryPlan.cards.find(card=>card.key===key)); window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
   vm.runInNewContext(source,ctx);
   assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.164-priority-arrows','fresh tracker replaces the stylesheet from cached HTML');
   assert(!root.innerHTML.includes('Unable to render this tab.'));
@@ -112,3 +112,17 @@ assert.equal(reordered.ctx.window.testPlan.allocations['battle:glasses'][0].allo
 assert.equal(JSON.parse(reordered.saved['lt-item-upgrade-priority-v1'])['battle:stockings'],1);
 assert.equal(reordered.ctx.window.testMove('battle:stockings',1),true);
 assert.equal(reordered.ctx.window.testPlan.allocations['battle:glasses'][0].allocated,379);
+
+assert.equal(battle.ctx.window.testRefund('dng_131_armor_icarus','armor_icarus',0).length,0);
+const armorRefund=battle.ctx.window.testRefund('dng_131_armor_icarus','armor_icarus',2);
+assert.equal(armorRefund.length,2);
+assert.equal(armorRefund[0].quantity,114);
+assert.equal(armorRefund[1].quantity,114);
+assert.equal(battle.ctx.window.testRefund('dng_135_ring_mirror','ring_mirror',2).reduce((sum,m)=>sum+m.quantity,0),342);
+assert.equal(battle.ctx.window.testRefund('dng_131_armor_icarus','armor_grendel',2),null);
+assert(battle.root.innerHTML.includes('Is decomposable?: <strong>No</strong>'));
+assert(battle.root.innerHTML.includes('Is decomposable?: <strong>Yes</strong>'));
+
+assert(projectedSummary.root.innerHTML.includes('Current: Base · Projected: Radiant · Target: Lucent'));
+assert(summary.root.innerHTML.includes('Current: +0 · Projected: +0 · Target: +30'));
+assert(summary.root.innerHTML.includes('Current: Sky Coliseum +0 · Projected: Sky Coliseum +0 · Target: Zerenis Training Center +30'));

@@ -2,7 +2,7 @@
   // This script loads fresh even when the browser retains an older HTML page.
   // Keep its stylesheet in sync so new controls never use obsolete styles.
   const stylesheet=document.querySelector('link[rel="stylesheet"][href*="assets/styles.css"]');
-  const stylesheetHref='assets/styles.css?v=13.9.4.164-priority-arrows';
+  const stylesheetHref='assets/styles.css?v=13.9.4.165-inventory-add';
   if(stylesheet&&stylesheet.getAttribute('href')!==stylesheetHref)stylesheet.setAttribute('href',stylesheetHref);
   const D=window.LT_ITEM_UPGRADE_DATA||{items:[],battleCatalog:[]};
   const $=(id)=>document.getElementById(id);
@@ -1197,6 +1197,15 @@
   function evolutionStageLabel(plan,index,level){
     return (plan.groups[index]?.dungeonName||"Unknown dungeon")+" +"+level;
   }
+  function summaryRunsText(card,rows){
+    const sel=selectedEntry(card.slot,card.key),item=sel&&upgradeItemFor(sel.entry);
+    const stoneNames=new Set(item?stagesFor(item,sel.entry).map(stage=>stage.ascensionStoneName||"Ascension Stone"):[]);
+    const stones=rows.filter(row=>stoneNames.has(row.name)).reduce((sum,row)=>sum+row.remaining,0);
+    const materials=rows.filter(row=>!stoneNames.has(row.name)).reduce((sum,row)=>sum+row.remaining,0);
+    const copies=item?.copiesPerRun||(card.slot==="badge_6"?2:0);
+    const regular=copies?Math.ceil(materials/copies).toLocaleString()+" runs":runsText(materials);
+    return "Approx. "+regular+" · "+Math.ceil(stones/ASCENSION_STONES_PER_D5_RUN).toLocaleString()+" Difficulty V runs";
+  }
   function summaryStageNames(card){
     if(card.slot==="totem"||card.slot==="badge_5"){
       const plan=evolutionPlan(card.slot,card.key);
@@ -1238,6 +1247,21 @@
     if(!item)return card.progress||0;
     const reached=approximateReachableStage(card.slot,card.key,item,sel.entry,true);
     return Math.max(card.progress||0,Math.min(100,Math.round(reached/Math.max(1,Number(sel.state.target)||1)*100)));
+  }
+
+  function addInventoryAmount(name,amount){
+    const added=Number(amount);
+    if(!Number.isSafeInteger(added)||added<=0)return false;
+    const total=(Number(inventory[name])||0)+added;
+    if(!Number.isSafeInteger(total))return false;
+    inventory[name]=total;saveInventory();return true;
+  }
+  function inventoryAddBubble(name){
+    return '<details class="inventory-add"><summary aria-label="Add farmed '+esc(name)+'" title="Add newly farmed materials">+</summary><div class="inventory-add-bubble"><label>To be added<input class="inventory-add-input" aria-label="Amount to add for '+esc(name)+'" type="number" min="1" step="1" placeholder="Amount" data-material="'+esc(name)+'"></label><button type="button" class="inventory-add-apply" data-material="'+esc(name)+'">Add</button></div></details>';
+  }
+  function applyInventoryAddition(input){
+    if(input&&addInventoryAmount(input.dataset.material,input.value))render();
+    else input?.focus();
   }
 
   function renderSummaryInventory(){
@@ -1287,7 +1311,7 @@
         const sourceNote=difficulty?' <small>Difficulty '+esc(difficulty)+'</small>':"";
         const needed=cards.reduce((sum,card)=>sum+Math.max(0,Math.ceil(Number(card.materials?.[name])||0)),0);
         const owned=Math.max(0,Number(inventory[name])||0);
-        inventoryHtml+='<div class="summary-inventory-row"><label><span class="summary-inventory-material"><small class="summary-inventory-material-label">'+esc(materialLabel)+'</small><span>'+esc(name)+sourceNote+'</span></span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label><small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';
+        inventoryHtml+='<div class="summary-inventory-row"><label><span class="summary-inventory-material"><small class="summary-inventory-material-label">'+esc(materialLabel)+'</small><span>'+esc(name)+sourceNote+'</span></span><input class="summary-inventory-input" type="number" min="0" step="1" data-material="'+esc(name)+'" value="'+esc(owned)+'"></label>'+inventoryAddBubble(name)+'<small>'+needed.toLocaleString()+' needed · '+Math.max(0,needed-owned).toLocaleString()+' short</small></div>';
       });
       inventoryHtml+='</section>';
     });
@@ -1300,7 +1324,7 @@
       const rows=allocations[card.key]||[];
       const remaining=rows.reduce((sum,row)=>sum+row.remaining,0);
       const materials=card.maxed?"No materials required":rows.length?rows.map(row=>esc(row.name)+": "+row.allocated.toLocaleString()+" / "+row.required.toLocaleString()).join("<br>"):"No material requirement available";
-      cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label><div class="summary-priority-arrows"><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="-1" aria-label="Move '+esc(card.title)+' up" title="Move up" '+(index===0?"disabled":"")+'>△</button><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="1" aria-label="Move '+esc(card.title)+' down" title="Move down" '+(index===sortedCards.length-1?"disabled":"")+'>▽</button></div></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track" title="Current '+current+'% · Projected '+projected+'%" aria-label="Current '+current+'%, projected '+projected+'%"><i class="summary-projected-progress" style="width:'+projected+'%"></i><i class="summary-current-progress" style="width:'+current+'%"></i></div><small>'+(card.maxed?"MAXED":esc(summaryStageNames(card)))+' · '+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
+      cardsHtml+='<article class="summary-progress-card '+(card.maxed?"maxed":"")+'"><div class="summary-priority"><label>Priority<input class="summary-priority-input" type="number" min="1" step="1" data-key="'+esc(card.key)+'" value="'+esc(priorities[card.key])+'"></label><div class="summary-priority-arrows"><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="-1" aria-label="Move '+esc(card.title)+' up" title="Move up" '+(index===0?"disabled":"")+'>△</button><button class="summary-priority-move" type="button" data-key="'+esc(card.key)+'" data-direction="1" aria-label="Move '+esc(card.title)+' down" title="Move down" '+(index===sortedCards.length-1?"disabled":"")+'>▽</button></div></div><div class="summary-progress-main"><div class="summary-progress-title"><strong>'+esc(card.title)+'</strong><span>'+esc(card.section)+'</span></div><div class="summary-progress-track" title="Current '+current+'% · Projected '+projected+'%" aria-label="Current '+current+'%, projected '+projected+'%"><i class="summary-projected-progress" style="width:'+projected+'%"></i><i class="summary-current-progress" style="width:'+current+'%"></i></div><small>'+(card.maxed?"MAXED":esc(summaryStageNames(card)))+'<br>'+(card.maxed?"0":remaining.toLocaleString())+' mats remaining after priority allocation · '+esc(summaryRunsText(card,rows))+'</small></div><div class="summary-progress-materials">'+materials+'</div></article>';
     });
 
     if(!cardsHtml)cardsHtml='<div class="summary-empty">Everything in your current setup is marked MAXED, so there is nothing left to prioritize.</div>';
@@ -1341,6 +1365,8 @@
   document.querySelectorAll(".upgrade-game-tab").forEach(b=>b.addEventListener("click",()=>{tab=b.dataset.upgradeTab;localStorage.setItem(TAB_KEY,tab);render();}));
 
   $("upgrade-tab-content")?.addEventListener("click",event=>{
+    const add=event.target.closest(".inventory-add-apply");
+    if(add){applyInventoryAddition(add.closest(".inventory-add").querySelector(".inventory-add-input"));return;}
     if(event.target.closest(".inventory-edit-link")){tab="summary";localStorage.setItem(TAB_KEY,tab);render();}
     const move=event.target.closest(".summary-priority-move");
     if(move&&moveSummaryPriority(move.dataset.key,Number(move.dataset.direction))){
@@ -1392,6 +1418,9 @@
       saveInventory();
     }
     saveState();render();
+  });
+  $("upgrade-tab-content")?.addEventListener("keydown",event=>{
+    if(event.key==="Enter"&&event.target.classList.contains("inventory-add-input")){event.preventDefault();applyInventoryAddition(event.target);}
   });
   $("upgrade-tab-content")?.addEventListener("input",(event)=>{
     const el=event.target;

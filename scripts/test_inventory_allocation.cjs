@@ -47,9 +47,9 @@ function tracker(savedTab='battle',stock=379,maxed=false,shoes=353,badgeSeries='
     vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets',file),'utf8'),ctx);
   }
   let source=fs.readFileSync(path.join(__dirname,'../assets/item-upgrade.js'),'utf8').replace(/\r\n/g,'\n');
-  source=source.replace('  render();\n})();','  render(); window.testMove=(key,direction)=>{const moved=moveSummaryPriority(key,direction);render();window.testRefundLine=(id,type,current)=>decomposableLine(D.items.find(item=>item.itemId===id),{itemType:type,itemName:D.items.find(item=>item.itemId===id)?.itemName},current); window.testRefund=(id,type,current)=>decompositionRefund(D.items.find(item=>item.itemId===id),{itemType:type},current); window.testPlan=inventoryPlan;return moved;}; window.testRefundLine=(id,type,current)=>decomposableLine(D.items.find(item=>item.itemId===id),{itemType:type,itemName:D.items.find(item=>item.itemId===id)?.itemName},current); window.testRefund=(id,type,current)=>decompositionRefund(D.items.find(item=>item.itemId===id),{itemType:type},current); window.testPlan=inventoryPlan; window.testProjection=(key)=>summaryProjectedProgress(inventoryPlan.cards.find(card=>card.key===key)); window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
+  source=source.replace('  render();\n})();','  render(); window.testMove=(key,direction)=>{const moved=moveSummaryPriority(key,direction);render();window.testRefundLine=(id,type,current)=>decomposableLine(D.items.find(item=>item.itemId===id),{itemType:type,itemName:D.items.find(item=>item.itemId===id)?.itemName},current); window.testRefund=(id,type,current)=>decompositionRefund(D.items.find(item=>item.itemId===id),{itemType:type},current); window.testPlan=inventoryPlan;return moved;}; window.testRefundLine=(id,type,current)=>decomposableLine(D.items.find(item=>item.itemId===id),{itemType:type,itemName:D.items.find(item=>item.itemId===id)?.itemName},current); window.testRefund=(id,type,current)=>decompositionRefund(D.items.find(item=>item.itemId===id),{itemType:type},current); window.testPlan=inventoryPlan; window.testAdd=addInventoryAmount; window.testRuns=summaryRunsText; window.testProjection=(key)=>summaryProjectedProgress(inventoryPlan.cards.find(card=>card.key===key)); window.testRequirements=(slot,key)=>{const selected=selectedEntry(slot,key);return requirements(slot,key,upgradeItemFor(selected.entry),selected.entry);}; window.testApprox=(slot,key)=>{const selected=selectedEntry(slot,key);return approximateReachableStage(slot,key,upgradeItemFor(selected.entry),selected.entry);};\n})();');
   vm.runInNewContext(source,ctx);
-  assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.164-priority-arrows','fresh tracker replaces the stylesheet from cached HTML');
+  assert.equal(stylesheet.href,'assets/styles.css?v=13.9.4.165-inventory-add','fresh tracker replaces the stylesheet from cached HTML');
   assert(!root.innerHTML.includes('Unable to render this tab.'));
   return {ctx,root,saved};
 }
@@ -132,3 +132,13 @@ assert(mirrorLine.includes('171 unique material to be refunded'));
 assert(!mirrorLine.includes('ascension stones'));
 const ascendedLine=battle.ctx.window.testRefundLine('dng_135_ring_mirror','ring_mirror',7);
 assert(ascendedLine.includes('and 75 ascension stones to be refunded'));
+
+const additions=tracker('summary');
+assert.equal(additions.ctx.window.testAdd('Coin of Restraint',3366),true);
+assert.equal(additions.ctx.window.testAdd('Coin of Restraint',166),true);
+for(const invalid of [0,-1,1.5,'invalid'])assert.equal(additions.ctx.window.testAdd('Coin of Restraint',invalid),false);
+const stockValue=Object.values(additions.saved).find(value=>typeof value==='string'&&value.includes('Coin of Restraint'));
+assert.equal(JSON.parse(stockValue)['Coin of Restraint'],3532);
+assert.match(summary.root.innerHTML, /Target: Lucent<br>/);
+assert.equal(summary.ctx.window.testRuns({slot:'weapon',key:'battle:weapon1'},[{name:'Horn of the Incomplete Demon God',remaining:115},{name:'Demiurge Stone of Ascension',remaining:37}]),'Approx. 1–2 runs · 2 Difficulty V runs');
+console.log('Inventory addition and summary run estimates passed.');

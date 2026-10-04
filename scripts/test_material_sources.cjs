@@ -55,3 +55,5 @@ assert.deepEqual(
 assert.deepEqual(
   ['Dorothea Ascension Stone','Dorothea Stone of Ascension (Event)','Z material'].sort(compare),
   ['Z material','Dorothea Ascension Stone','Dorothea Stone of Ascension (Event)']);
+
+assert.equal(heading(data,catalog,data.dungeons.find(d=>d.id==="dng_67"),["Feather of the Fallen","Token of Faith","Sky's Blessing"]),"227 · Waterfall Forest (Totem)");

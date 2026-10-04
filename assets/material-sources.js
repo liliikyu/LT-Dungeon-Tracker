@@ -48,6 +48,11 @@
       const slot=Object.keys(labels).find(key=>type===key||type.startsWith(key+"_"));
       if(slot)types.add(slot);
     }
+    // Early evolution materials may link to an upgrade ID absent from the catalog.
+    for(const id of targets){
+      const slot=Object.keys(labels).find(key=>id.endsWith("_"+key));
+      if(slot)types.add(slot);
+    }
     const equipment=Object.keys(labels).filter(key=>types.has(key)).map(key=>labels[key]);
     return [dungeon.level,dungeon.name].filter(Boolean).join(" · ")+
       (equipment.length?" ("+equipment.join(" / ")+")":"");

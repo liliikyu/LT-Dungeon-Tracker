@@ -1135,7 +1135,7 @@
       ["yellow_gem","gems:yellow","Yellow First Gem","Gems"],
       ["blue_gem","gems:blue","Blue First Gem","Gems"]
     ];
-    if(Boolean(state["battle:weapon2Enabled"]))cards.splice(1,0,["weapon","battle:weapon2","Second Weapon","Battle"]);
+    if(Boolean(state["battle:weapon2Enabled"]))cards.splice(1,0,["weapon","battle:weapon2","Weapon 2","Battle"]);
     ["charm","totem","relic","watch","necklace","textbook","sticker","belt","brooch","badge_1","badge_2","badge_3","badge_4","badge_5","badge_6"].forEach(slot=>{
       cards.push([slot,"special:"+slot,labels[slot]||slot,"Specials"]);
     });
@@ -1184,7 +1184,7 @@
     });
     const names=new Set(Object.keys(inventory).filter(name=>Number(inventory[name])>0));
     cards.forEach(card=>Object.keys(card.materials||{}).forEach(name=>names.add(name)));
-    const sortedCards=cards.filter(card=>!card.maxed).sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
+    const sortedCards=cards.filter(card=>!card.maxed||card.key==="battle:weapon2").sort((a,b)=>(Number(priorities[a.key])||9999)-(Number(priorities[b.key])||9999)||a.title.localeCompare(b.title));
     savePriorities();
     const allocations=window.LT_INVENTORY_ALLOCATION.allocate(sortedCards,inventory);
     return {cards,names,sortedCards,allocations};

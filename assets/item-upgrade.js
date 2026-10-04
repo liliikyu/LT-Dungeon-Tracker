@@ -2,7 +2,7 @@
   // This script loads fresh even when the browser retains an older HTML page.
   // Keep its stylesheet in sync so new controls never use obsolete styles.
   const stylesheet=document.querySelector('link[rel="stylesheet"][href*="assets/styles.css"]');
-  const stylesheetHref='assets/styles.css?v=13.9.4.166-inventory-width';
+  const stylesheetHref='assets/styles.css?v=13.9.4.167-readonly-materials';
   if(stylesheet&&stylesheet.getAttribute('href')!==stylesheetHref)stylesheet.setAttribute('href',stylesheetHref);
   const D=window.LT_ITEM_UPGRADE_DATA||{items:[],battleCatalog:[]};
   const $=(id)=>document.getElementById(id);

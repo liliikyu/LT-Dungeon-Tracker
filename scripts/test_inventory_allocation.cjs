@@ -140,5 +140,6 @@ for(const invalid of [0,-1,1.5,'invalid'])assert.equal(additions.ctx.window.test
 const stockValue=Object.values(additions.saved).find(value=>typeof value==='string'&&value.includes('Coin of Restraint'));
 assert.equal(JSON.parse(stockValue)['Coin of Restraint'],3532);
 assert.match(summary.root.innerHTML, /Target: Lucent<br>/);
-assert.equal(summary.ctx.window.testRuns({slot:'weapon',key:'battle:weapon1'},[{name:'Horn of the Incomplete Demon God',remaining:115},{name:'Demiurge Stone of Ascension',remaining:37}]),'Approx. 1–2 runs · 2 Difficulty V runs');
-console.log('Inventory addition and summary run estimates passed.');
+assert.equal(summary.ctx.window.testRuns({slot:'weapon',key:'battle:weapon1'},[{name:'Horn of the Incomplete Demon God',remaining:115},{name:'Demiurge Stone of Ascension',required:37,remaining:37}]),'Approx. 1–2 Difficulty IV runs and / or 2 Difficulty V runs');
+console.log('Inventory addition and summary run estimates passed.');assert.equal(summary.ctx.window.testRuns({slot:'weapon',key:'battle:weapon1'},[{name:'Horn of the Incomplete Demon God',required:115,remaining:115}]),'Approx. 1–2 Difficulty IV runs');
+assert.equal(summary.ctx.window.testRuns({slot:'weapon',key:'battle:weapon1'},[{name:'Demiurge Stone of Ascension',required:37,remaining:0}]),'Approx. 0 Difficulty IV runs and / or 0 Difficulty V runs');

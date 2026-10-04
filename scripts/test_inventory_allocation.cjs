@@ -143,3 +143,8 @@ assert.match(summary.root.innerHTML, /Target: Lucent<br>/);
 assert.equal(summary.ctx.window.testRuns({slot:'weapon',key:'battle:weapon1'},[{name:'Horn of the Incomplete Demon God',remaining:115},{name:'Demiurge Stone of Ascension',required:37,remaining:37}]),'Approx. 1–2 Difficulty IV runs and 2 Difficulty V runs');
 console.log('Inventory addition and summary run estimates passed.');assert.equal(summary.ctx.window.testRuns({slot:'weapon',key:'battle:weapon1'},[{name:'Horn of the Incomplete Demon God',required:115,remaining:115}]),'Approx. 1–2 Difficulty IV runs');
 assert.equal(summary.ctx.window.testRuns({slot:'weapon',key:'battle:weapon1'},[{name:'Demiurge Stone of Ascension',required:37,remaining:0}]),'');assert.equal(summary.ctx.window.testRuns({slot:'weapon',key:'battle:weapon1'},[{name:'Horn of the Incomplete Demon God',required:115,remaining:0},{name:'Demiurge Stone of Ascension',required:144,remaining:144}]),'Approx. 4 Difficulty V runs');
+const eve=tracker('summary');
+const badgeMaterials=eve.ctx.window.testPlan.cards.find(card=>card.key==='special:badge_5').materials;
+for(const name of ['Vigor Eve Horn','Vigor Eve Claw','Vigor Eve Feather'])assert.equal(badgeMaterials[name],300);
+assert.equal(badgeMaterials['Material 1'],undefined);
+console.log('Vigor Eve linked material regression passed.');

@@ -225,6 +225,21 @@
       : 0;
     return {group,entry:group.entries[st.typeIndex],state:st};
   }
+  function linkedUpgradeMaterials(item){
+    const names=(window.LT_DATA?.materialSources||[])
+      .filter(source=>(source.upgradeItemIds||[]).some(id=>normId(id)===normId(item.itemId)))
+      .map(source=>source.name).filter(Boolean);
+    const unique=[...new Set(names)];
+    if(!unique.length)return item;
+    return {...item,stages:(item.stages||[]).map(stage=>{
+      const materials=stage.materials||[];
+      if(String(stage.materialName||"").trim()||materials.some(material=>String(material.name||"").trim()))return stage;
+      // An unnamed shared-cost slot applies to each linked material, like named comma-separated slots.
+      if(materials.length>1)return stage;
+      const cost=materials[0]?.cost??stage.materialCost;
+      return {...stage,materialName:unique.join(", "),materials:unique.map((name,index)=>({sequence:index+1,name,cost}))};
+    })};
+  }
   function upgradeItemFor(entry){
     if(!entry)return null;
     const id=normId(entry.itemId);
@@ -254,7 +269,7 @@
         }))
       };
     }
-    if(direct)return direct;
+    if(direct)return linkedUpgradeMaterials(direct);
     if(id==="dng_138_badge_6"){
       return {
         itemId:entry.itemId,

@@ -3,7 +3,7 @@ window.LT_FIELD_DATA = {
     "monsters": "https://latale.wiki.gg/wiki/Monster_Illustrations",
     "codex": "https://latale.wiki.gg/wiki/Item_Codex"
   },
-  "updated": "2026-11-07",
+  "updated": "2026-11-08",
   "fields": {
     "Abyss Ruins": {
       "illustrations": [

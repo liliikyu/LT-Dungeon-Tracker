@@ -1,6 +1,6 @@
 window.LT_FIELD_ACHIEVEMENTS = {
   "source": "https://latale.wiki.gg/wiki/Achievement",
-  "updated": "2026-11-10",
+  "updated": "2026-11-11",
   "fields": {
     "Adrica": [
       {
